@@ -1,2 +1,2 @@
 # saf-planner-frontend
-Frontend repo for Short Animation Planner
+Frontend repo for Short Animation Film Planner
