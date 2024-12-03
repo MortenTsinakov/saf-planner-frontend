@@ -1,0 +1,1 @@
+export { default as SignIn } from 'view/sign-in/SignIn';
