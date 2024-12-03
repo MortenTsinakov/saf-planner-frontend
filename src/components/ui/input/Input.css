@@ -1,0 +1,16 @@
+.input-field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    font-size: 1.8rem;
+}
+
+.input-field-input {
+    padding: 1rem;
+    background-color: var(--text-color);
+    outline: none;
+}
+
+.input-field-input:focus {
+    border: 1px solid var(--primary-color);
+}

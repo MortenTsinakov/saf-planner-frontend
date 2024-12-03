@@ -1,0 +1,22 @@
+.custom-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 8rem;
+    background-color: var(--background-color-low);
+
+    gap: 1.5rem;
+    min-height: 500px;
+    border: 1px solid var(--main-gray);
+}
+
+@media (max-width: 768px) {
+    .custom-form {
+        width: 100%;
+        min-height: 300px;
+        height: 100%;
+        padding: 2em;
+        border-radius: 0;
+    }
+}

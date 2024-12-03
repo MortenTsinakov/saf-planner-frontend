@@ -1,5 +1,6 @@
-.animation {
+.sign-in-background {
     position: fixed;
     width: 100%;
     height: calc(100vh - var(--navbar-height));
+    background-image: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
 }

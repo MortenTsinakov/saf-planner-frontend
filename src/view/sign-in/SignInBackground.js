@@ -60,17 +60,17 @@ const SignInBackground = () => {
     const path3 = generatePath();
 
     return (
-        <div className='animation'>
-            <svg width="100vw" height="100vh" stroke='var(--background-color-lowest)' fill='rgba(200, 0, 54, 0.3)'> 
+        <div className='sign-in-background'>
+            <svg width="100vw" height="100vh" stroke='var(--background-color-lowest)' fill='rgba(250, 163, 7, 0.3)'> 
                 <path d={`
                     ${path1}
                 `}></path>
                 <path d={`
                     ${path2}
-                `}/>
+                `}></path>
                 <path d={`
                     ${path3}
-                `}/>
+                `}></path>
             </svg>
         </div>
     );

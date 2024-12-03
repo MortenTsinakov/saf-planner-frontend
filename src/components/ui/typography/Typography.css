@@ -1,0 +1,31 @@
+.typography {
+    color: var(--text-color);
+}
+
+.typography.font-size-extralarge {
+    font-size: 8rem;
+}
+
+.typography.font-size-large {
+    font-size: 6rem;
+}
+
+.typography.font-size-medium {
+    font-size: 4rem;
+}
+
+.typography.font-size-small {
+    font-size: 2rem;
+}
+
+.typography.font-size-extrasmall {
+    font-size: 1.5rem;
+}
+
+.typography.color-primary {
+    color: var(--primary-color);
+}
+
+.typography.color-dark {
+    color: var(--background-color-lowest);
+}

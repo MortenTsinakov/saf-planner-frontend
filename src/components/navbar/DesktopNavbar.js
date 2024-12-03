@@ -1,9 +1,6 @@
-import Button from "components/ui/Button";
-import Container from "components/ui/Container";
-import Row from "components/ui/Row";
+import { ButtonText, Container, Row } from "components";
 import { useAuth } from "hooks";
 import { useNavigate } from "react-router-dom";
-import { css } from "styled-components";
 
 const DesktopNavbar = () => {
 
@@ -17,42 +14,42 @@ const DesktopNavbar = () => {
     
     return (
         <Row
-            $extrastyles={css`
-                justify-content: space-between;
-                padding: 0 2rem 0 2rem;
-                height: var(--navbar-height);
-                background-color: var(--background-color-ternary);
-                align-items: center;
-                border-bottom: 1px solid var(--main-gray);    
-            `}
-            >
+            style={{
+                justifyContent: 'space-between',
+                padding: '0 2rem 0 2rem',
+                height: 'var(--navbar-height)',
+                backgroundColor: 'var(--background-color-ternary)',
+                alignItems: 'center',
+                borderBottom: '1px solid var(--main-gray)',    
+            }}
+        >
             <Container>
                 Future logo perhaps?
             </Container>
             <Row
-                $extrastyles={css`
-                    gap: 0;    
-                `}
+                style={{
+                    gap: '10' 
+                }}
             >
                 {!authToken &&
-                    <Button $variant={'text'} onClick={(e) => {handleNavigate(e, '/sign-in')}}>
+                    <ButtonText>
                         Login
-                    </Button>
+                    </ButtonText>
                 }
                 {authToken &&
-                    <Button $variant={'text'} onClick={(e) => {}}>
+                    <ButtonText>
                         Dashboard
-                    </Button>
+                    </ButtonText>
                 }
                 {authToken &&
-                    <Button $variant={'text'} onClick={(e) => {}}>
+                    <ButtonText>
                         Projects
-                    </Button>
+                    </ButtonText>
                 }
                 {authToken &&
-                    <Button $variant={'text'} onClick={(e) => {}}>
+                    <ButtonText>
                         Account
-                    </Button>
+                    </ButtonText>
                 }
             </Row>
         </Row>
