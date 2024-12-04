@@ -1,43 +1,36 @@
 import axios from "axios";
 import { API_BASE_URL } from "constants/Constants";
-import { useAuth } from "hooks";
 
+/**
+ * API client.
+ * Defines interceptors for providing JWT to the server
+ * and refreshing the JWT once it's expired. Used in services
+ * to make API calls.
+ */
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
     withCredentials: true,
 });
 
-apiClient.interceptors.request.use((config) => {
-    const { authToken } = useAuth();
-
-    if (authToken) {
-        config.headers.Authorization = `Bearer ${authToken}`;
-    }
-    return config;
-}, (error) => {
-    return Promise.reject(error);
-});
-
 apiClient.interceptors.response.use((response) => {
     return response;
 }, async (error) => {
-
-    const { setAuthToken } = useAuth();
-
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401 && localStorage.getItem('user') && !originalRequest._retry) {
         originalRequest._retry = true;
         try {
             const response = await axios.post(`${API_BASE_URL}/auth/refresh-token`, {}, {
                 withCredentials: true
             });
-            const newToken = response.data.jwt;
-            setAuthToken(newToken);
-            apiClient.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+            localStorage.setItem('user', JSON.stringify(response.data));
             return apiClient(originalRequest);
         } catch (refreshError) {
+            console.log(refreshError);
             return Promise.reject(refreshError);
         }
     }
     return Promise.reject(error);
 });
+
+
+export default apiClient;

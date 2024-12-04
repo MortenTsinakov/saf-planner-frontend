@@ -1,9 +1,9 @@
 import './Button.css';
 
-const ButtonText = ({children, style, $color, ...props}) => {
+const FilledButton = ({children, style, color, ...props}) => {
     return (
         <button
-            className={`button-text color-${$color}`}
+            className={`button-filled color-${color}`}
             style={style}
             {...props}
         >
@@ -12,4 +12,4 @@ const ButtonText = ({children, style, $color, ...props}) => {
     );
 }
  
-export default ButtonText;
+export default FilledButton;

@@ -1,15 +1,35 @@
-import { ButtonText, Container, Row } from "components";
+import { Column,
+         Container,
+         Divider,
+         DropdownMenu,
+         Row,
+         TextButton} from "components";
 import { useAuth } from "hooks";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Navbar for desktop devices.
+ */
 const DesktopNavbar = () => {
 
-    const { authToken } = useAuth();
+    const { user, signOut, error } = useAuth();
     const navigate = useNavigate();
 
-    const handleNavigate = (e, link) => {
-        e.preventDefault();
+    const [accountDropdownIsOpen, setAccountDropdownIsOpen] = useState(false);
+
+    const handleNavigate = (link) => {
+        setAccountDropdownIsOpen(false);
         navigate(link);
+    }
+
+    const handleSignOut = async () => {
+        setAccountDropdownIsOpen(false);
+        signOut();
+    }
+
+    if (error) {
+        console.log(error);
     }
     
     return (
@@ -18,7 +38,7 @@ const DesktopNavbar = () => {
                 justifyContent: 'space-between',
                 padding: '0 2rem 0 2rem',
                 height: 'var(--navbar-height)',
-                backgroundColor: 'var(--background-color-ternary)',
+                backgroundColor: 'var(--background-color-lowest)',
                 alignItems: 'center',
                 borderBottom: '1px solid var(--main-gray)',    
             }}
@@ -31,25 +51,49 @@ const DesktopNavbar = () => {
                     gap: '10' 
                 }}
             >
-                {!authToken &&
-                    <ButtonText>
-                        Login
-                    </ButtonText>
+                {!user &&
+                    <TextButton onClick={() => handleNavigate('/sign-in')}>
+                        Sign In
+                    </TextButton>
                 }
-                {authToken &&
-                    <ButtonText>
+                {user &&
+                    <TextButton onClick={() => handleNavigate('/dashboard')}>
                         Dashboard
-                    </ButtonText>
+                    </TextButton>
                 }
-                {authToken &&
-                    <ButtonText>
+                {user &&
+                    <TextButton onClick={() => handleNavigate('/projects')}>
                         Projects
-                    </ButtonText>
+                    </TextButton>
                 }
-                {authToken &&
-                    <ButtonText>
-                        Account
-                    </ButtonText>
+                {user &&
+                    <Column
+                        style={{position: 'relative'}}
+                    >
+                        <TextButton
+                            onClick={() => {setAccountDropdownIsOpen(!accountDropdownIsOpen)}}
+                        >
+                            Account
+                        </TextButton>
+                        {
+                            accountDropdownIsOpen &&
+                            <DropdownMenu
+                                alignedBy='right'
+                                style={{width: '250px'}}
+                                onMouseLeave={() => {setAccountDropdownIsOpen(false)}}
+                            >
+                                <TextButton onClick={() => handleNavigate('settings')}>
+                                    Settings
+                                </TextButton>
+                                <Divider />
+                                <TextButton
+                                    onClick={handleSignOut}
+                                >
+                                    Sign out
+                                </TextButton>
+                            </DropdownMenu>
+                        }
+                    </Column>
                 }
             </Row>
         </Row>

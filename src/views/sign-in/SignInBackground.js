@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import './SignInBackground.css';
 
+/**
+ * Creates a background of random lines
+ */
 const SignInBackground = () => {
 
     const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -17,7 +20,7 @@ const SignInBackground = () => {
         window.addEventListener("resize", handleResize);
 
         return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [viewportWidth, viewportHeight]);
 
     const generatePath = () => {
         const x_coords = Array.from({ length: nPoints }, (_, i) => i * (viewportWidth / (nPoints - 1)));
@@ -47,9 +50,9 @@ const SignInBackground = () => {
             path += ` C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x3} ${y3}`;
         }
     
-        path += ` L ${x_coords[x_coords.length - 1]} ${y_coords[y_coords.length - 1]}`;  // Line to the last point
-        path += ` L ${x_coords[x_coords.length - 1]} ${viewportHeight}`; // Draw down to the bottom
-        path += ` L ${x_coords[0]} ${viewportHeight}`; // Draw a line back to the starting point at the bottom
+        path += ` L ${x_coords[x_coords.length - 1] + 100} ${y_coords[y_coords.length - 1]}`;  // Line to the last point
+        path += ` L ${x_coords[x_coords.length - 1] + 100} ${viewportHeight * 2 + 100}`; // Draw down to the bottom
+        path += ` L ${x_coords[0]} ${viewportHeight * 2 + 100}`; // Draw a line back to the starting point at the bottom
         path += ` L ${x_coords[0]} ${y_coords[0]}`; // Close the path by returning to the first point
 
         return path;
@@ -65,10 +68,10 @@ const SignInBackground = () => {
                 <path d={`
                     ${path1}
                 `}></path>
-                <path d={`
+                 <path d={`
                     ${path2}
                 `}></path>
-                <path d={`
+                 <path d={`
                     ${path3}
                 `}></path>
             </svg>

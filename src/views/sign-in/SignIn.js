@@ -1,7 +1,32 @@
-import { ButtonFilled, Column, Container, Form, InputField, Typography } from "components";
+import { Column,
+         Container,
+         FilledButton,
+         Form,
+         InputField,
+         Typography } from "components";
+import { useAuth } from "hooks";
+import { useState } from "react";
 import SignInBackground from "./SignInBackground";
 
 const SignIn = (props) => {
+
+    const { signIn, error } = useAuth();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    } 
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+    }
+
+    if (error) {
+        console.log(error);
+    }
+
     return (
         <Container
             style={{
@@ -11,7 +36,7 @@ const SignIn = (props) => {
             {!props.isMobile && <SignInBackground />}
             <Form
                 style={{
-                    height: '75%',
+                    height: props.isMobile ? '100%' : '75%',
                     width: '60rem',
                     zIndex: '1',
                 }}
@@ -23,24 +48,33 @@ const SignIn = (props) => {
                 <InputField
                     label={'Email'}
                     type={'email'}
+                    value={email}
+                    onChange={(e) => handleEmailChange(e)}
                     autoComplete={'off'}
                 />
                 <InputField
                     label={'Password'}
                     type={'password'}
+                    value={password}
+                    onChange={(e) => handlePasswordChange(e)}
                     autoComplete={'off'}
                 />
                 <Column
                     style={{marginTop: '7rem'}}
                 >
-                    <ButtonFilled>
+                    <FilledButton
+                        onClick={(e) => signIn(e, {
+                            email: email,
+                            password: password,
+                        })}
+                    >
                         <Typography
                             color='dark'
                             fontSize='small'
                         >
                             Sign in
                         </Typography>
-                    </ButtonFilled>
+                    </FilledButton>
                 </Column>
             </Form>
         </Container>

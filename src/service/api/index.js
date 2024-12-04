@@ -1,1 +1,0 @@
-export { default as AxiosErrorHandler } from 'service/api/AxiosErrorHandler';

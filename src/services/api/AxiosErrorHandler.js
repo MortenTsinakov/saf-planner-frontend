@@ -10,6 +10,7 @@ const AxiosErrorHandler = ({children}) => {
         const responseInterceptor = axios.interceptors.response.use(
             response => response,
             async (error) => {
+                console.log(error);
                 signOut();
             });
 
