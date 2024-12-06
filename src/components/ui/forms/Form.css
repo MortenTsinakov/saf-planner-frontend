@@ -8,7 +8,6 @@
 
     gap: 1.5rem;
     min-height: 500px;
-    border: 1px solid var(--main-gray);
 }
 
 @media (max-width: 768px) {

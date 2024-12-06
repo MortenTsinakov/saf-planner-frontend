@@ -25,11 +25,10 @@ const DesktopNavbar = () => {
 
     const handleSignOut = async () => {
         setAccountDropdownIsOpen(false);
-        signOut();
-    }
-
-    if (error) {
-        console.log(error);
+        await signOut();
+        if (error) {
+            console.log(error);
+        }
     }
     
     return (

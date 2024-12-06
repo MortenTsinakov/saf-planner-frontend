@@ -4,7 +4,7 @@ import { AuthProvider } from 'contexts/AuthContext';
 import { AxiosErrorHandler } from 'services';
 import { useEffect, useState } from 'react';
 import { AnonymousRoutes, ProtectedRoutes } from 'routes';
-import { SignIn, Dashboard, Page404 } from 'views';
+import { SignIn, Dashboard, Page404, SignUp } from 'views';
 import { Navbar } from 'components';
 
 function App() {
@@ -28,6 +28,7 @@ function App() {
             {/* Anonymous routes */}
             <Route element={<AnonymousRoutes />}>
               <Route path='/sign-in' element={<SignIn {...props}/>} />
+              <Route path='/sign-up' element={<SignUp {...props}/>} />
               <Route path='/' element={<SignIn {...props}/>} />
             </Route>
             {/* Protected routes */}

@@ -1,20 +1,16 @@
-import { Column,
-         Container,
-         FilledButton,
-         Form,
-         InputField,
-         TextButton,
-         Typography } from "components";
+import { Column, Container, FilledButton, Form, InputField, TextButton, Typography } from "components";
 import { useAuth } from "hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SignIn = (props) => {
+const SignUp = (props) => {
 
-    const { signIn, error } = useAuth();
     const navigate = useNavigate();
+    const { signUp, error } = useAuth();
 
     const [email, setEmail] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
 
     useEffect(() => {
@@ -25,22 +21,30 @@ const SignIn = (props) => {
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
-    } 
+    }
+
+    const handleFirstNameChange = (e) => {
+        setFirstName(e.target.value);
+    }
+
+    const handleLastNameChange = (e) => {
+        setLastName(e.target.value);
+    }
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     }
 
-    const handleSubmit = async (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
-        await signIn(email, password);
+        await signUp(email, firstName, lastName, password);
     }
 
     return (
         <Container
             style={{
                 height:'calc(100vh - var(--navbar-height))',
-                backgroundColor:'var(--primary-color)',
+                backgroundColor:'var(--secondary-color)',
             }}
         > 
             <Form
@@ -52,41 +56,63 @@ const SignIn = (props) => {
             >
                 <Column>
                     <Typography fontSize='large'>Welcome</Typography>
-                    <Typography color='primary' style={{marginBottom:'7rem'}}>Sign in to your account</Typography>
+                    <Typography color='secondary' style={{marginBottom:props.isMobile ? '0' : '7rem'}}>Create an account</Typography>
                 </Column>
                 <InputField
                     type={'email'}
                     label={!props.isMobile && 'Email'}
                     placeholder={props.isMobile ? 'Email' : ''}
+                    color='secondary'
                     value={email}
                     onChange={handleEmailChange}
+                    autoComplete={'off'}
+                />
+                <InputField
+                    type={'text'}
+                    label={!props.isMobile && 'First name'}
+                    placeholder={props.isMobile ? 'First name' : ''}
+                    color='secondary'
+                    value={firstName}
+                    onChange={handleFirstNameChange}
+                    autoComplete={'off'}
+                />
+                <InputField
+                    type={'text'}
+                    label={!props.isMobile && 'Last name'}
+                    placeholder={props.isMobile ? 'Last name' : ''}
+                    color='secondary'
+                    value={lastName}
+                    onChange={handleLastNameChange}
                     autoComplete={'off'}
                 />
                 <InputField
                     type={'password'}
                     label={!props.isMobile && 'Password'}
                     placeholder={props.isMobile ? 'Password' : ''}
+                    color='secondary'
                     value={password}
                     onChange={handlePasswordChange}
                     autoComplete={'off'}
                 />
                 <Column
-                    style={{marginTop: '7rem', gap:'2rem'}}
+                    style={{marginTop: props.isMobile ? '2rem' : '7rem', gap:'2rem'}}
                 >
                     <FilledButton
-                        onClick={(e) => handleSubmit(e)}
+                        color='secondary'
+                        onClick={(e) => handleSignUp(e)}
                     >
                         <Typography
                             color='dark'
                             fontSize='small'
                         >
-                            Sign in
+                            Sign up
                         </Typography>
                     </FilledButton>
                     <TextButton
-                        onClick={() => navigate('/sign-up')}
+                        onClick={() => navigate('/sign-in')}
+                        color='secondary'
                     >
-                        Don't have an account yet? Sign up here
+                        Already have an account? Sign in here
                     </TextButton>
                 </Column>
             </Form>
@@ -94,4 +120,4 @@ const SignIn = (props) => {
     );
 }
  
-export default SignIn;
+export default SignUp;

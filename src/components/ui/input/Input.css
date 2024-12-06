@@ -14,3 +14,7 @@
 .input-field-input:focus {
     border: 1px solid var(--primary-color);
 }
+
+.input-field-input.color-secondary:focus {
+    border: 1px solid var(--secondary-color);
+}

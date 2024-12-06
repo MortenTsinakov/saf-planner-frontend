@@ -4,4 +4,5 @@ export { default as AxiosErrorHandler } from 'services/api/AxiosErrorHandler';
 
 // Auth services
 export { signInService,
-         signOutService } from 'services/auth/AuthService';
+         signOutService,
+         signUpService } from 'services/auth/AuthService';

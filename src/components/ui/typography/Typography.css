@@ -26,6 +26,10 @@
     color: var(--primary-color);
 }
 
+.typography.color-secondary {
+    color: var(--secondary-color);
+}
+
 .typography.color-dark {
     color: var(--background-color-lowest);
 }
