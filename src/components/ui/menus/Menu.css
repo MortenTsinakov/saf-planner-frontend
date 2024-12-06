@@ -1,0 +1,23 @@
+.dropdown-menu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    background-color: var(--background-color-lowest);
+    border: 1px solid var(--main-gray);
+    top: 50px;
+    min-width: 100px;
+    padding: 2rem 1rem;
+    border-radius: 5px;
+    pointer-events: auto;
+    align-items: center;
+    gap: 2rem;
+}
+
+.dropdown-menu.aligned-right {
+    right: 0;
+}
+
+.dropdown-menu.aligned-left {
+    left: 0;
+}

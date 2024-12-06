@@ -1,0 +1,35 @@
+button:hover {
+    filter: brightness(110%);
+}
+
+button:active {
+    filter: brightness(90%);
+}
+
+.button-filled {
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    color: var(--background-color-lowest);
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.button-filled.color-secondary {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+}
+
+.button-text {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-color);   
+}
+
+.button-text:hover {
+    color: var(--primary-color);
+}
+
+.button-text.color-secondary:hover {
+    color: var(--secondary-color);
+}
