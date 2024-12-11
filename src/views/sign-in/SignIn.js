@@ -36,6 +36,11 @@ const SignIn = (props) => {
         await signIn(email, password);
     }
 
+    const handleNavigate = (e, link) => {
+        e.preventDefault();
+        navigate(link);
+    }
+
     return (
         <Container
             style={{
@@ -84,7 +89,7 @@ const SignIn = (props) => {
                         </Typography>
                     </FilledButton>
                     <TextButton
-                        onClick={() => navigate('/sign-up')}
+                        onClick={(e) => handleNavigate(e, '/sign-up')}
                     >
                         Don't have an account yet? Sign up here
                     </TextButton>

@@ -40,6 +40,11 @@ const SignUp = (props) => {
         await signUp(email, firstName, lastName, password);
     }
 
+    const handleNavigate = (e, link) => {
+        e.preventDefault();
+        navigate(link);
+    }
+
     return (
         <Container
             style={{
@@ -109,7 +114,7 @@ const SignUp = (props) => {
                         </Typography>
                     </FilledButton>
                     <TextButton
-                        onClick={() => navigate('/sign-in')}
+                        onClick={(e) => handleNavigate(e, '/sign-in')}
                         color='secondary'
                     >
                         Already have an account? Sign in here
