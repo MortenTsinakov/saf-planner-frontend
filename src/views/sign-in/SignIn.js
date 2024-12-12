@@ -49,6 +49,7 @@ const SignIn = (props) => {
             }}
         > 
             <Form
+                ariaLabel={'sign in form'}
                 style={{
                     height: props.isMobile ? '100%' : '75%',
                     width: '60rem',
@@ -60,6 +61,7 @@ const SignIn = (props) => {
                     <Typography color='primary' style={{marginBottom:'7rem'}}>Sign in to your account</Typography>
                 </Column>
                 <InputField
+                    aria-label='email'
                     type={'email'}
                     label={!props.isMobile && 'Email'}
                     placeholder={props.isMobile ? 'Email' : ''}
@@ -68,6 +70,7 @@ const SignIn = (props) => {
                     autoComplete={'off'}
                 />
                 <InputField
+                    aria-label='password'
                     type={'password'}
                     label={!props.isMobile && 'Password'}
                     placeholder={props.isMobile ? 'Password' : ''}
@@ -79,6 +82,7 @@ const SignIn = (props) => {
                     style={{marginTop: '7rem', gap:'2rem'}}
                 >
                     <FilledButton
+                        aria-label='submit'
                         onClick={(e) => handleSubmit(e)}
                     >
                         <Typography
@@ -89,6 +93,7 @@ const SignIn = (props) => {
                         </Typography>
                     </FilledButton>
                     <TextButton
+                        aria-label='navigate to sign up'
                         onClick={(e) => handleNavigate(e, '/sign-up')}
                     >
                         Don't have an account yet? Sign up here

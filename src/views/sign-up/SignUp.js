@@ -53,6 +53,7 @@ const SignUp = (props) => {
             }}
         > 
             <Form
+                ariaLabel={'sign up form'}
                 style={{
                     height: props.isMobile ? '100%' : '75%',
                     width: '60rem',
@@ -64,6 +65,7 @@ const SignUp = (props) => {
                     <Typography color='secondary' style={{marginBottom:props.isMobile ? '0' : '7rem'}}>Create an account</Typography>
                 </Column>
                 <InputField
+                    aria-label='email'
                     type={'email'}
                     label={!props.isMobile && 'Email'}
                     placeholder={props.isMobile ? 'Email' : ''}
@@ -73,6 +75,7 @@ const SignUp = (props) => {
                     autoComplete={'off'}
                 />
                 <InputField
+                    aria-label='first name'
                     type={'text'}
                     label={!props.isMobile && 'First name'}
                     placeholder={props.isMobile ? 'First name' : ''}
@@ -82,6 +85,7 @@ const SignUp = (props) => {
                     autoComplete={'off'}
                 />
                 <InputField
+                    aria-label='last name'
                     type={'text'}
                     label={!props.isMobile && 'Last name'}
                     placeholder={props.isMobile ? 'Last name' : ''}
@@ -91,6 +95,7 @@ const SignUp = (props) => {
                     autoComplete={'off'}
                 />
                 <InputField
+                    aria-label='password'
                     type={'password'}
                     label={!props.isMobile && 'Password'}
                     placeholder={props.isMobile ? 'Password' : ''}
@@ -103,6 +108,7 @@ const SignUp = (props) => {
                     style={{marginTop: props.isMobile ? '2rem' : '7rem', gap:'2rem'}}
                 >
                     <FilledButton
+                        aria-label='submit'
                         color='secondary'
                         onClick={(e) => handleSignUp(e)}
                     >
@@ -114,6 +120,7 @@ const SignUp = (props) => {
                         </Typography>
                     </FilledButton>
                     <TextButton
+                        aria-label='navigate to sign in'
                         onClick={(e) => handleNavigate(e, '/sign-in')}
                         color='secondary'
                     >

@@ -1,3 +1,4 @@
+import { MAIN_PAGE_PROTECTED } from 'constants/Constants';
 import { useAuth } from "hooks";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -14,7 +15,7 @@ const AnonymousRoutes = ({ component: Component, ...rest }) => {
     }
 
     return (
-        !user ? <Outlet /> : <Navigate to='/dashboard' replace />
+        !user ? <Outlet /> : <Navigate to={`${MAIN_PAGE_PROTECTED}`} replace />
     );
 }
  

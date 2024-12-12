@@ -1,9 +1,13 @@
 import './Form.css';
 
 
-const Form = ({children, style, ...props}) => {
+const Form = ({children, ariaLabel, style, ...props}) => {
     return (
-        <form className="custom-form" style={style} {...props}>
+        <form
+            className="custom-form"
+            style={style} {...props}
+            aria-label={ariaLabel}
+        >
             {children}
         </form>
     );
