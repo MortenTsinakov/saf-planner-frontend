@@ -33,3 +33,11 @@ button:active {
 .button-text.color-secondary:hover {
     color: var(--secondary-color);
 }
+
+.button-icon {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}

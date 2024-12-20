@@ -81,7 +81,7 @@ const DesktopNavbar = () => {
                                 style={{width: '250px'}}
                                 onMouseLeave={() => {setAccountDropdownIsOpen(false)}}
                             >
-                                <TextButton onClick={() => handleNavigate('settings')}>
+                                <TextButton onClick={() => handleNavigate('/settings')}>
                                     Settings
                                 </TextButton>
                                 <Divider />
