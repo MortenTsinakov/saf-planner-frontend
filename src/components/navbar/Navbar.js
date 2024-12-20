@@ -3,7 +3,11 @@ import MobileNavbar from "./MobileNavbar";
 
 const Navbar = (props) => {
     return (
-        <nav>
+        <nav
+            style={{
+                zIndex: '10'
+            }}
+        >
             {props.isMobile && <MobileNavbar {...props} />}
             {!props.isMobile && <DesktopNavbar {...props} />}
         </nav>
