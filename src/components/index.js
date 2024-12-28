@@ -21,3 +21,4 @@ export { default as Typography } from 'components/ui/typography/Typography';
 
 // COMPONENTS USING OTHER COMPONENTS
 export { default as Navbar } from 'components/navbar/Navbar';
+export { default as AlertTray } from 'components/alert/AlertTray';

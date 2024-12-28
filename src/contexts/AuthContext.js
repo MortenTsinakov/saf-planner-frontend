@@ -48,12 +48,12 @@ export const AuthProvider = ({children}) => {
      */
     const signIn = useCallback( async (email, password) => {
         if (!validateEmail(email)) {
-            setError("Sign in failed: incorrect email format")
+            setError("Email is not in the correct format")
             return;
         }
 
         if (password.length === 0) {
-            setError("Sign in failed: password not provided");
+            setError("Password was not provided");
             return;
         }
 
@@ -88,22 +88,22 @@ export const AuthProvider = ({children}) => {
      */
     const signUp = useCallback(async (email, firstName, lastName, password) => {
         if (!validateEmail(email)) {
-            setError('Sign up failed: Email is not in the correct format');
+            setError('Email is not in the correct format');
             return;
         }
 
         if (!firstName) {
-            setError('Sign up failed: First name is missing');
+            setError('First name is missing');
             return;
         }
 
         if (!lastName) {
-            setError('Sign up failed: Last name is missing');
+            setError('Last name is missing');
             return;
         }
 
         if (!(password.length >= 8)) {
-            setError('Sign up failed: Password has to be at least 8 characters long');
+            setError('Password has to be at least 8 characters long');
             return;
         }
 

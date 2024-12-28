@@ -11,10 +11,10 @@
   --background-color-high: #333333;
   --background-color-highest: #444444;
   
-  --main-green: #19837e;
-  --main-red: #C7253E;
-  --main-yellow: #d29a00;
-  --main-blue: #46a1b5;
+  --color-success: #44ff7c;
+  --color-error: #ff405c;
+  --color-warning: #ffcc3e;
+  --color-info: #42ddff;
   --main-gray: #444444;
 
   --navbar-height: 55px;
