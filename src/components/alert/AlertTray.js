@@ -3,6 +3,9 @@ import { useAlerts } from 'hooks';
 import Alert from './Alert';
 import './Alert.css';
 
+/**
+ * Displays a list of alerts.
+ */
 const AlertTray = ({props}) => {
 
     const { alerts } = useAlerts();

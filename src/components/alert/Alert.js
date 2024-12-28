@@ -2,6 +2,11 @@ import { Typography } from 'components';
 import './Alert.css';
 import { MdError, MdInfo, MdWarning, MdCheckCircle } from "react-icons/md";
 
+/**
+ * Pop-up alert.
+ * The alert pops up inside the alert tray and displays an icon
+ * indicating the type of alert and a message.
+ */
 const Alert = ({message, level, ...props}) => {
     return (
         <div
