@@ -1,0 +1,33 @@
+.alert {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    background-color: var(--background-color-lowest);
+    padding: 15px 25px;
+    border-radius: 10px;
+    border: 1px solid var(--main-gray);
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.alert-icon {
+    font-size: 2em;
+    display: flex;
+}
+
+.alert-icon.success {
+    color: var(--color-success);
+}
+
+.alert-icon.error {
+    color: var(--color-error);
+}
+
+.alert-icon.info {
+    color: var(--color-info);
+}
+
+.alert-icon.warning {
+    color: var(--color-warning);
+}

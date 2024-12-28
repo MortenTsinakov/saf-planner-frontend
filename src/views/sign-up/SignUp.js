@@ -1,12 +1,13 @@
 import { Column, Container, FilledButton, Form, InputField, TextButton, Typography } from "components";
-import { useAuth } from "hooks";
+import { useAlerts, useAuth } from "hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = (props) => {
 
     const navigate = useNavigate();
-    const { signUp, error } = useAuth();
+    const { signUp, error, setError } = useAuth();
+    const { addAlert } = useAlerts();
 
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -15,9 +16,10 @@ const SignUp = (props) => {
 
     useEffect(() => {
         if (error) {
-            console.log(error);
+            addAlert(error, 'error');
+            setError(null);
         }
-    }, [error]);
+    }, [error, setError, addAlert]);
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);

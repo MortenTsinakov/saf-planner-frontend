@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App';
-import { useAuth } from 'hooks';
+import { useAlerts, useAuth } from 'hooks';
 
 jest.mock('hooks', () => ({
-  useAuth: jest.fn()
+  useAuth: jest.fn(),
+  useAlerts: jest.fn(),
 }));
 
 const defaultUseAuthValue = {
@@ -11,7 +12,16 @@ const defaultUseAuthValue = {
   signOut: function() {},
 }
 
+const defaultUseAlertsValue = {
+  alerts: [],
+  addAlert: jest.fn(),
+}
+
 describe('App', () => {
+
+  beforeEach(() => {
+    useAlerts.mockReturnValue(defaultUseAlertsValue);
+  });
 
   test('renders Navbar component', () => {
     useAuth.mockReturnValue(defaultUseAuthValue);
@@ -92,7 +102,4 @@ describe('App', () => {
 
     expect(screen.queryByText(/sign in/i)).not.toBeInTheDocument();
   });
-
-  // AxiosErrorHandler is working
-
 });

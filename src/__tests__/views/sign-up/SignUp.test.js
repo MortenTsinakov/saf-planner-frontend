@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { useAuth } from 'hooks';
+import { useAlerts, useAuth } from 'hooks';
 import { useNavigate } from 'react-router-dom';
 import { SignUp } from 'views';
 
@@ -11,16 +11,23 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('hooks', () => ({
-    useAuth: jest.fn()
+    useAuth: jest.fn(),
+    useAlerts: jest.fn(),
 }));
 
 const defaultUseAuthValue = {
     signUp: jest.fn()
 }
 
+const defaultUseAlertsValue = {
+    alerts: [],
+    addAlert: jest.fn(),
+}
+
 describe('SignUp', () => {
     beforeEach(() => {
         useAuth.mockReturnValue(defaultUseAuthValue);
+        useAlerts.mockReturnValue(defaultUseAlertsValue);
         useNavigate.mockReturnValue(mockedUseNavigate);
     });
 

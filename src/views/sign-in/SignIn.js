@@ -5,13 +5,14 @@ import { Column,
          InputField,
          TextButton,
          Typography } from "components";
-import { useAuth } from "hooks";
+import { useAlerts, useAuth } from "hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = (props) => {
 
-    const { signIn, error } = useAuth();
+    const { signIn, error, setError } = useAuth();
+    const { addAlert } = useAlerts();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
@@ -19,9 +20,10 @@ const SignIn = (props) => {
 
     useEffect(() => {
         if (error) {
-            console.log(error);
+            addAlert(error, 'error');
+            setError(null);
         }
-    }, [error]);
+    }, [error, addAlert, setError]);
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
