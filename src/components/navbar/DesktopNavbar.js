@@ -40,6 +40,8 @@ const DesktopNavbar = () => {
                 backgroundColor: 'var(--background-color-lowest)',
                 alignItems: 'center',
                 borderBottom: '1px solid var(--main-gray)',    
+                position: 'fixed',
+                width: '100vw',
             }}
         >
             <Container>

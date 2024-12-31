@@ -6,3 +6,6 @@ export { default as AxiosErrorHandler } from 'services/api/AxiosErrorHandler';
 export { signInService,
          signOutService,
          signUpService } from 'services/auth/AuthService';
+
+// Project services
+export { fetchUserProjectsService,} from 'services/project/ProjectService';
