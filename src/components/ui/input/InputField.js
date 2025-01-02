@@ -14,6 +14,7 @@ const InputField = ({style,
             <label className="input-field-label">{label}</label>
             <input
                 className={`input-field-input color-${color ? color : 'primary'}`}
+                style={style}
                 type={type}
                 placeholder={placeholder}
                 value={value}

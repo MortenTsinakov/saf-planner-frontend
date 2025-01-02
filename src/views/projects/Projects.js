@@ -1,8 +1,8 @@
 import { Column, Row, TextButton, Typography } from 'components';
 import { useEffect, useState } from 'react';
-import UserProjects from './UserProjects';
-import SharedProjects from './SharedProjects';
-import { useProjects } from 'hooks';
+import UserProjects from './userProjects/UserProjects';
+import SharedProjects from './sharedProjects/SharedProjects';
+import { useAlerts, useProjects } from 'hooks';
 
 const Projects = (props) => {
 
@@ -12,11 +12,25 @@ const Projects = (props) => {
     });
 
     const [selectedTab, setSelectedTab] = useState(Tabs.USER_PROJECTS);
-    const { userProjects, fetchUserProjects } = useProjects();
+    const {
+        userProjects,
+        fetchUserProjects,
+        createNewProject,
+        deleteProject,
+        error,
+        setError } = useProjects();
+    const { addAlert } = useAlerts();
 
     useEffect(() => {
         fetchUserProjects();
     }, [fetchUserProjects]);
+
+    useEffect(() => {
+        if (error) {
+            addAlert(error, 'error');
+            setError(null);
+        }
+    }, [setError, error, addAlert]);
 
     return (
         <Column
@@ -70,7 +84,7 @@ const Projects = (props) => {
                     </Typography>
                 </TextButton>
             </Row>
-            {selectedTab === Tabs.USER_PROJECTS && <UserProjects userProjects={userProjects} {...props} />}
+            {selectedTab === Tabs.USER_PROJECTS && <UserProjects userProjects={userProjects} createNewProject={createNewProject} deleteProject={deleteProject} {...props} />}
             {selectedTab === Tabs.SHARED_PROJECTS && <SharedProjects {...props} />}
         </Column>
     );
