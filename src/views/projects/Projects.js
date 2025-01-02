@@ -1,7 +1,8 @@
 import { Column, Row, TextButton, Typography } from 'components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserProjects from './UserProjects';
 import SharedProjects from './SharedProjects';
+import { useProjects } from 'hooks';
 
 const Projects = (props) => {
 
@@ -11,6 +12,11 @@ const Projects = (props) => {
     });
 
     const [selectedTab, setSelectedTab] = useState(Tabs.USER_PROJECTS);
+    const { userProjects, fetchUserProjects } = useProjects();
+
+    useEffect(() => {
+        fetchUserProjects();
+    }, [fetchUserProjects]);
 
     return (
         <Column
@@ -64,7 +70,7 @@ const Projects = (props) => {
                     </Typography>
                 </TextButton>
             </Row>
-            {selectedTab === Tabs.USER_PROJECTS && <UserProjects {...props} />}
+            {selectedTab === Tabs.USER_PROJECTS && <UserProjects userProjects={userProjects} {...props} />}
             {selectedTab === Tabs.SHARED_PROJECTS && <SharedProjects {...props} />}
         </Column>
     );

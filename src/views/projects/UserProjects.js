@@ -5,14 +5,10 @@ import { Column, Row, TextButton, Typography } from 'components';
 import { MdAdd } from "react-icons/md";
 
 
-const UserProjects = (props) => {
+const UserProjects = ({userProjects, props}) => {
 
-    const { fetchUserProjects, userProjects, loading, error, setError } = useProjects();
+    const { loading, error, setError } = useProjects();
     const { addAlert } = useAlerts();
-
-    useEffect(() => {
-        fetchUserProjects();
-    }, [fetchUserProjects]);
 
     useEffect(() => {
         if (error) {

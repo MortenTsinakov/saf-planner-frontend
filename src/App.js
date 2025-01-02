@@ -27,22 +27,22 @@ function App() {
           <AxiosErrorHandler>
             <Navbar {...props}/>
             <AlertTray {...props}/>
-            <Page {...props}>
+            <Page>
               <Routes>
                 
                 {/* Route not found */}
-                <Route path='/404' element={<Page404 />} />
+                <Route path='/404' element={<Page404 {...props}/>} />
 
                 {/* Anonymous routes */}
                 <Route element={<AnonymousRoutes />}>
-                  <Route path='/sign-in' element={<SignIn />} />
-                  <Route path='/sign-up' element={<SignUp />} />
+                  <Route path='/sign-in' element={<SignIn {...props} />} />
+                  <Route path='/sign-up' element={<SignUp {...props} />} />
                   <Route path='/' element={<SignIn />} />
                 </Route>
                 {/* Protected routes */}
                 <Route element={<ProtectedRoutes />}>
-                  <Route path='/dashboard' element={<Dashboard />} />
-                  <Route path='/projects' element={<Projects />} />
+                  <Route path='/dashboard' element={<Dashboard {...props} />} />
+                  <Route path='/projects' element={<Projects {...props} />} />
                 </Route>
                 {/* Redirect to 404 if page is not found */}
                 <Route path="*" element={<Navigate to="/404" replace />} />
