@@ -12,6 +12,6 @@ export {
 // Project services
 export {
     fetchUserProjectsService,
-    createNewProjectService,
+    createProjectService,
     deleteProjectService,
 } from 'services/project/ProjectService';

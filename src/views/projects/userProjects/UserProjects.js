@@ -4,27 +4,35 @@ import { Column, Row, TextButton, Typography } from 'components';
 import { MdAdd } from "react-icons/md";
 import CreateProject from './CreateProject';
 import DeleteProject from './DeleteProject';
+import UpdateProject from './UpdateProject';
 
 
-const UserProjects = ({userProjects, createNewProject, deleteProject, props}) => {
+const UserProjects = ({userProjects, createProject, updateProject, deleteProject, props}) => {
 
     const [creatingProject, setCreatingProject] = useState(false);
-    const [deleteModalisOpen, setDeleteModalIsOpen] = useState(false);
+    const [updatingProject, setUpdatingProject] = useState(false);
+    const [deletingProject, setDeletingProject] = useState(false);
     const [projectToDelete, setProjectToDelete] = useState(null);
+    const [projectToUpdate, setProjectToUpdate] = useState(null);
 
-    const handleDelete = (projectId) => {
-        setProjectToDelete(projectId);
-        setDeleteModalIsOpen(true);
+    const handleDelete = (project) => {
+        setProjectToDelete(project.id);
+        setDeletingProject(true);
+    }
+
+    const handleUpdate = (project) => {
+        setProjectToUpdate(project);
+        setUpdatingProject(true);
     }
 
     return (
         <Column style={{gap: '2rem'}}>
             {
-                deleteModalisOpen && 
+                deletingProject && 
                 <DeleteProject 
                     projectToDelete={projectToDelete}
                     setProjectToDelete={setProjectToDelete}
-                    setDeleteModalIsOpen={setDeleteModalIsOpen}
+                    setDeletingProject={setDeletingProject}
                     deleteProject={deleteProject}
                     {...props}
                 />
@@ -32,10 +40,19 @@ const UserProjects = ({userProjects, createNewProject, deleteProject, props}) =>
             {
                 creatingProject &&
                 <CreateProject
-                setCreatingProject={setCreatingProject}
-                createNewProject={createNewProject}
-                {...props}
+                    setCreatingProject={setCreatingProject}
+                    createProject={createProject}
+                    {...props}
                 />}
+            {
+                updatingProject &&
+                <UpdateProject
+                    projectToUpdate={projectToUpdate}
+                    setProjectToUpdate={setProjectToUpdate}
+                    setUpdatingProject={setUpdatingProject}
+                    updateProject={updateProject}
+                />
+            }
             {
             !creatingProject && 
             <TextButton
@@ -49,7 +66,13 @@ const UserProjects = ({userProjects, createNewProject, deleteProject, props}) =>
             </TextButton>
             }
             {userProjects.map((project) => (
-                <UserProjectCard key={project.id} project={project} handleDelete={handleDelete} {...props}/>
+                <UserProjectCard
+                    key={project.id}
+                    project={project}
+                    handleUpdate={handleUpdate}
+                    handleDelete={handleDelete}
+                    {...props}
+                />
             ))}
         </Column>
     );

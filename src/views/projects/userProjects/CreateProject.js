@@ -3,7 +3,7 @@ import { useAlerts } from 'hooks';
 import { useState } from 'react';
 import { clampNumber, timeInMinsSecsToTimeInSeconds } from 'utils';
 
-const CreateProject = (props) => {
+const CreateProject = ({createProject, setCreatingProject, props}) => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -39,12 +39,11 @@ const CreateProject = (props) => {
         const formattedTitle = title.trim();
         const formattedDescription = description.trim();
         const estimatedLengthInSeconds = timeInMinsSecsToTimeInSeconds(estLenMin, estLenSec);
-        const saveWasSuccessful = await props.createNewProject(
+        const saveWasSuccessful = await createProject(
             formattedTitle,
             formattedDescription,
             estimatedLengthInSeconds
         );
-        console.log(saveWasSuccessful);
         if (saveWasSuccessful) {
             handleCancelClick();
             addAlert('Project created', 'success');
@@ -52,7 +51,7 @@ const CreateProject = (props) => {
     }
 
     const handleCancelClick = () => {
-        props.setCreatingProject(false);
+        setCreatingProject(false);
     }
 
     return (

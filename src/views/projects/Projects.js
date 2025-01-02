@@ -15,7 +15,7 @@ const Projects = (props) => {
     const {
         userProjects,
         fetchUserProjects,
-        createNewProject,
+        createProject,
         deleteProject,
         error,
         setError } = useProjects();
@@ -84,7 +84,7 @@ const Projects = (props) => {
                     </Typography>
                 </TextButton>
             </Row>
-            {selectedTab === Tabs.USER_PROJECTS && <UserProjects userProjects={userProjects} createNewProject={createNewProject} deleteProject={deleteProject} {...props} />}
+            {selectedTab === Tabs.USER_PROJECTS && <UserProjects userProjects={userProjects} createProject={createProject} deleteProject={deleteProject} {...props} />}
             {selectedTab === Tabs.SHARED_PROJECTS && <SharedProjects {...props} />}
         </Column>
     );

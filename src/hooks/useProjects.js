@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { createNewProjectService, deleteProjectService, fetchUserProjectsService } from 'services';
+import { createProjectService, deleteProjectService, fetchUserProjectsService } from 'services';
 
 /**
  * Hook for operations with projects
@@ -39,14 +39,14 @@ export const useProjects = () => {
      * Return true if the project was successfully saved to database,
      * else false.
      */
-    const createNewProject = useCallback(async (title, description, estimatedLengthInSeconds) => {
+    const createProject = useCallback(async (title, description, estimatedLengthInSeconds) => {
         if (!validateProjectTitle(title)) {
             setError('Project title cannot be blank');
             return false;
         }
         try {
             setError(null);
-            const response = await createNewProjectService(title, description, estimatedLengthInSeconds);
+            const response = await createProjectService(title, description, estimatedLengthInSeconds);
             setUserProjects((prev) => [response, ...prev]);
             return true;
         } catch (err) {
@@ -72,7 +72,7 @@ export const useProjects = () => {
 
     return {
         fetchUserProjects,
-        createNewProject,
+        createProject,
         deleteProject,
         userProjects,
         loading,

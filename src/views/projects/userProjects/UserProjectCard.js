@@ -5,7 +5,8 @@ import { formatDate, formatSecondsToHMS } from 'utils';
 const UserProjectCard = (props) => {
 
     const project = props.project;
-    const deleteProject = props.handleDelete;
+    const handleDelete = props.handleDelete;
+    const handleUpdate = props.handleUpdate;
     const dateOptions = ['day', 'month', 'year', 'hour', 'minute', 'second'];
 
     const titleStyle = {
@@ -28,7 +29,11 @@ const UserProjectCard = (props) => {
     }
 
     const handleDeleteProject = () => {
-        deleteProject(project.id);
+        handleDelete(project);
+    }
+
+    const handleUpdateProject = () => {
+        handleUpdate(project);
     }
 
     return (
@@ -56,7 +61,7 @@ const UserProjectCard = (props) => {
                         </Column>
                     </Clickable>
                     <Row style={{justifyContent: 'right'}}>
-                        <IconButton title='Project settings' style={{fontSize: '3rem'}} icon={<MdSettings />} onClick={() => {console.log("Settings button pressed")}}/>
+                        <IconButton title='Project settings' style={{fontSize: '3rem'}} icon={<MdSettings />} onClick={handleUpdateProject}/>
                         <IconButton title='Share project' style={{fontSize: '3rem'}} icon={<MdShare />} onClick={() => {console.log("Share button pressed")}}/>
                         <IconButton title='Delete project' style={{fontSize: '3rem'}} icon={<MdDelete />} onClick={handleDeleteProject}/>
                     </Row>

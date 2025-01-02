@@ -1,13 +1,13 @@
 import { FilledButton, Modal, OutlineButton, Row, Typography } from 'components';
 import { useAlerts } from 'hooks';
 
-const DeleteProject = ({projectToDelete, setProjectToDelete, setDeleteModalIsOpen, deleteProject, ...props}) => {
+const DeleteProject = ({projectToDelete, setProjectToDelete, setDeletingProject, deleteProject, ...props}) => {
 
     const { addAlert } = useAlerts();
 
     const handleCancelDelete = () => {
         setProjectToDelete(null);
-        setDeleteModalIsOpen(false);
+        setDeletingProject(false);
     }
 
     const confirmDelete = () => {
@@ -15,7 +15,7 @@ const DeleteProject = ({projectToDelete, setProjectToDelete, setDeleteModalIsOpe
         if (deleteWasSuccessful) {
             addAlert('Project deleted', 'success');
         }
-        setDeleteModalIsOpen(false);
+        setDeletingProject(false);
         setProjectToDelete(null);
     }
 

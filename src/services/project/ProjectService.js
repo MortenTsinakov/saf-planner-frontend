@@ -11,7 +11,7 @@ export const fetchUserProjectsService = async () => {
 /**
  * Post request for creating a new project.
  */
-export const createNewProjectService = async (title, description, estimatedLengthInSeconds) => {
+export const createProjectService = async (title, description, estimatedLengthInSeconds) => {
     const postData = {
         title: title,
         description: description,
