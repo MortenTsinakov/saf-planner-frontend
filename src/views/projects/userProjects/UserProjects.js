@@ -7,7 +7,15 @@ import DeleteProject from './DeleteProject';
 import UpdateProject from './UpdateProject';
 
 
-const UserProjects = ({userProjects, createProject, updateProject, deleteProject, props}) => {
+const UserProjects = ({
+    userProjects,
+    createProject,
+    updateProjectTitle,
+    updateProjectDescription,
+    updateProjectEstimatedLength,
+    deleteProject,
+    ...props}
+) => {
 
     const [creatingProject, setCreatingProject] = useState(false);
     const [updatingProject, setUpdatingProject] = useState(false);
@@ -50,7 +58,9 @@ const UserProjects = ({userProjects, createProject, updateProject, deleteProject
                     projectToUpdate={projectToUpdate}
                     setProjectToUpdate={setProjectToUpdate}
                     setUpdatingProject={setUpdatingProject}
-                    updateProject={updateProject}
+                    updateProjectTitle={updateProjectTitle}
+                    updateProjectDescription={updateProjectDescription}
+                    updateProjectEstimatedLength={updateProjectEstimatedLength}
                 />
             }
             {

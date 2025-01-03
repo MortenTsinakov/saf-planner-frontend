@@ -64,7 +64,7 @@ export const AuthProvider = ({children}) => {
             setError(null);
             navigate('/');
         } catch (err) {
-            setError(err.response.data.message);   
+            setError(err.response?.data?.message || "Sign in failed");   
         }
     }, [navigate]);
 
@@ -79,7 +79,7 @@ export const AuthProvider = ({children}) => {
             setError(null);
             navigate('/');
         } catch (err) {
-            setError(err.response.data.message || "Sign out failed");
+            setError(err.response?.data?.message || "Sign out failed");
         }
     }, [navigate]);
 
@@ -114,7 +114,7 @@ export const AuthProvider = ({children}) => {
             setError(null);
             navigate('/');
         } catch (err) {
-            setError(err.response.data.message || "Sign up failed");
+            setError(err.response?.data?.message || "Sign up failed");
         }
     }, [navigate]);
 

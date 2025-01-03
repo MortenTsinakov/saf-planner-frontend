@@ -1,9 +1,17 @@
 import { Column, Divider, FilledButton, InputArea, InputField, Modal, OutlineButton, Row, TextButton, Typography } from 'components';
+import { useAlerts } from 'hooks';
 import { useState } from 'react';
 import { MdEdit } from 'react-icons/md';
-import { clampNumber, formatSecondsToHMS } from 'utils';
+import { clampNumber, formatSecondsToHMS, timeInMinsSecsToTimeInSeconds } from 'utils';
 
-const UpdateProject = ({projectToUpdate, setProjectToUpdate, setUpdatingProject, updateProject}) => {
+const UpdateProject = ({
+    projectToUpdate,
+    setProjectToUpdate,
+    setUpdatingProject,
+    updateProjectTitle,
+    updateProjectDescription,
+    updateProjectEstimatedLength,
+}) => {
 
     const Fields = Object.freeze({
         TITLE: 0,
@@ -16,39 +24,97 @@ const UpdateProject = ({projectToUpdate, setProjectToUpdate, setUpdatingProject,
     const [activeField, setActiveField] = useState(null);
     const [fieldToUpdate, setFieldToUpdate] = useState(null);
 
+    const [oldTitle, setOldTitle] = useState(projectToUpdate.title);
+    const [oldDescription, setOldDescrpition] = useState(projectToUpdate.description || "-");
+    const [oldEstLen, setOldEstLen] = useState(projectToUpdate.estimatedLengthInSeconds);
+
     const [newTitle, setNewTitle] = useState(projectToUpdate.title);
     const [newDescription, setNewDescription] = useState(projectToUpdate.description);
     const [estLenMin, setEstLenMin] = useState(Math.floor(projectToUpdate.estimatedLengthInSeconds / 60));
     const [estLenSec, setEstLenSec] = useState(projectToUpdate.estimatedLengthInSeconds - (60 * Math.floor(projectToUpdate.estimatedLengthInSeconds / 60)));
+
+    const { addAlert } = useAlerts();
 
     const handleCloseUpdateWindow = () => {
         setProjectToUpdate(null);
         setUpdatingProject(false);
     }
 
+    const closeUpdateWindow = () => {
+        setFieldToUpdate(null);
+    }
+
+    const handleUpdateTitle = async () => {
+        const updateSucceeded = await updateProjectTitle(projectToUpdate.id, newTitle);
+        if (updateSucceeded) {
+            setOldTitle(newTitle);
+            closeUpdateWindow();
+            addAlert("Project title was updated", "success");
+        }
+    }
+
+    const handleUpdateDescription = async () => {
+        const updateSucceeded = await updateProjectDescription(projectToUpdate.id, newDescription);
+        if (updateSucceeded) {
+            setOldDescrpition(newDescription);
+            closeUpdateWindow();
+            addAlert("Project description was updated", "success");
+        }
+    }
+
+    const handleUpdateEstimatedLength = async () => {
+        const estimatedLength = timeInMinsSecsToTimeInSeconds(estLenMin, estLenSec);
+        const updateSuceeded = await updateProjectEstimatedLength(projectToUpdate.id, estimatedLength);
+        if (updateSuceeded) {
+            setOldEstLen(estimatedLength);
+            closeUpdateWindow();
+            addAlert("Project's estimated length was updated", "success");
+        } else {
+
+        }
+    }
+
+    const getModalButtons = (updateFunction) => {
+        return (
+            <Row
+                style={{justifyContent: 'center', gap: '3rem'}}
+            >
+                <FilledButton style={{width: '100px'}} onClick={updateFunction}>Update</FilledButton>
+                <OutlineButton style={{width: '100px'}} onClick={closeUpdateWindow}>Close</OutlineButton>
+            </Row>
+        )
+    }
+
     const titleUpdateWindow = () => {
         return (
-            <InputField
-                label='Update project title'
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-            />
+            <Column style={{gap: '3rem'}}>
+                <InputField
+                    label='Update project title'
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                />
+                {getModalButtons(handleUpdateTitle)}
+            </Column>
         );
     }
 
     const descriptionUpdateWindow = () => {
         return (
-            <InputArea
-                label='Update project description'
-                value={newDescription}
-                onChange={(e) => setNewDescription(e.target.value)}
-            />
+            <Column style={{gap: '3rem'}}>
+                <InputArea
+                    label='Update project description'
+                    value={newDescription}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                />
+                {getModalButtons(handleUpdateDescription)}
+            </Column>
         )
     }
 
     const estimatedLengthUpdateWindow = () => {
         return (
-            <Column
+            <Column style={{gap: '3rem'}}>
+                <Column
                     style={{
                         gap: 0,
                     }}
@@ -86,7 +152,27 @@ const UpdateProject = ({projectToUpdate, setProjectToUpdate, setUpdatingProject,
                         <Typography>sec</Typography>
                     </Row>
                 </Column>
+                {getModalButtons(handleUpdateEstimatedLength)}
+            </Column>
         );
+    }
+
+    const labelsUpdateWindow = () => {
+        return (
+            <Column>
+                <Typography>Update labels</Typography>
+                {getModalButtons(() => {})}
+            </Column>
+        )
+    }
+
+    const sharedUpdateWindow = () => {
+        return (
+            <Column>
+                <Typography>Update shared with</Typography>
+                {getModalButtons(() => {})}
+            </Column>
+        )
     }
 
     const handleEstLenMinChange = (e) => {
@@ -114,20 +200,21 @@ const UpdateProject = ({projectToUpdate, setProjectToUpdate, setUpdatingProject,
             case (Fields.ESTIMATED_LENGTH):
                 return estimatedLengthUpdateWindow()
             case (Fields.LABELS):
-                return 'Labels'
+                return labelsUpdateWindow()
             case (Fields.SHARED):
-                return 'Shared'
+                return sharedUpdateWindow()
             default:
-                return 'Error';
+                return "ERROR";
         }
     }
 
-    const getProjectField = (label, data, fieldType) => {
+    const getRowInProjectSettings = (label, data, fieldType) => {
         return(
         <Column
             style={{gap: 0}}
             onMouseOver={() => setActiveField(fieldType)}
             onMouseLeave={() => setActiveField(null)}
+            onClick={() => setActiveField(fieldType)}
         >
             <Typography fontSize='small' color='label'>{label}</Typography>
             <Row style={{justifyContent: 'space-between'}}>
@@ -167,14 +254,8 @@ const UpdateProject = ({projectToUpdate, setProjectToUpdate, setUpdatingProject,
             {
                 fieldToUpdate !== null
                 && 
-                <Modal style={{gap: '3rem', minWidth: '250px', width: '500px'}}>
-                    {getCorrectUpdatingWindow()}
-                    <Row
-                        style={{justifyContent: 'center', gap: '3rem'}}
-                    >
-                        <FilledButton style={{width: '100px'}}>Update</FilledButton>
-                        <OutlineButton style={{width: '100px'}} onClick={() => setFieldToUpdate(null)}>Close</OutlineButton>
-                    </Row>
+                <Modal style={{minWidth: '250px', width: '500px'}}>
+                        {getCorrectUpdatingWindow()}
                 </Modal>
             }
             <Column
@@ -182,11 +263,11 @@ const UpdateProject = ({projectToUpdate, setProjectToUpdate, setUpdatingProject,
             >
                 <Typography fontSize='medium'>Project settings</Typography>
                 <Divider style={{backgroundColor: 'var(--primary-color)', marginBottom: '3rem'}}/>
-                {getProjectField('Title', projectToUpdate.title, Fields.TITLE)}
-                {getProjectField('Description', projectToUpdate.description, Fields.DESCRIPTION)}
-                {getProjectField('Estimated length', formatSecondsToHMS(projectToUpdate.estimatedLengthInSeconds), Fields.ESTIMATED_LENGTH)}
-                {getProjectField('Labels', 'TODO: Display labels created for the project and let user to add/update/delete them', Fields.LABELS)}
-                {getProjectField('Shared with', 'TODO: Display users the project is shared with and let user add/delete them', Fields.SHARED)}
+                {getRowInProjectSettings('Title', oldTitle, Fields.TITLE)}
+                {getRowInProjectSettings('Description', oldDescription, Fields.DESCRIPTION)}
+                {getRowInProjectSettings('Estimated length', formatSecondsToHMS(oldEstLen), Fields.ESTIMATED_LENGTH)}
+                {getRowInProjectSettings('Labels', 'TODO: Display labels created for the project and let user to add/update/delete them', Fields.LABELS)}
+                {getRowInProjectSettings('Shared with', 'TODO: Display users the project is shared with and let user add/delete them', Fields.SHARED)}
             </Column>
             <OutlineButton
                 style={{

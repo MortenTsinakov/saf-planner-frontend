@@ -16,6 +16,9 @@ const Projects = (props) => {
         userProjects,
         fetchUserProjects,
         createProject,
+        updateProjectTitle,
+        updateProjectDescription,
+        updateProjectEstimatedLength,
         deleteProject,
         error,
         setError } = useProjects();
@@ -84,7 +87,17 @@ const Projects = (props) => {
                     </Typography>
                 </TextButton>
             </Row>
-            {selectedTab === Tabs.USER_PROJECTS && <UserProjects userProjects={userProjects} createProject={createProject} deleteProject={deleteProject} {...props} />}
+            {
+                selectedTab === Tabs.USER_PROJECTS && 
+                <UserProjects
+                    userProjects={userProjects}
+                    createProject={createProject}
+                    updateProjectTitle={updateProjectTitle}
+                    updateProjectDescription={updateProjectDescription}
+                    updateProjectEstimatedLength={updateProjectEstimatedLength}
+                    deleteProject={deleteProject}
+                    {...props}
+                />}
             {selectedTab === Tabs.SHARED_PROJECTS && <SharedProjects {...props} />}
         </Column>
     );

@@ -43,7 +43,7 @@ const UserProjectCard = (props) => {
                     <Clickable onClick={() => navigateToProjectPage(project.id)}>
                         <Column>
                             <Typography fontSize='medium' style={titleStyle}>{project.title}</Typography>
-                            <Typography fontSize='small' style={descriptionStyle}>{project.description || 'No description...'}</Typography>
+                            <Typography fontSize='small' style={descriptionStyle}>{project.description || '-'}</Typography>
                             <Column style={{gap:0}}>
                                 <Row>
                                     <Typography fontSize='extrasmall' color='label'>Created: </Typography>

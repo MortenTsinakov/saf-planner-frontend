@@ -13,5 +13,8 @@ export {
 export {
     fetchUserProjectsService,
     createProjectService,
+    updateProjectTitleService,
+    updateProjectDescriptionService,
+    updateProjectEstimatedLengthService,
     deleteProjectService,
 } from 'services/project/ProjectService';
