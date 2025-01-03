@@ -6,7 +6,11 @@ import CreateProject from './CreateProject';
 import DeleteProject from './DeleteProject';
 import UpdateProject from './UpdateProject';
 
-
+/**
+ * Displays a list of projects that the user has created.
+ * Passes down functions/variables for creating/updating/deleting
+ * projects to necessary sub-components.
+ */
 const UserProjects = ({
     userProjects,
     createProject,
@@ -24,7 +28,7 @@ const UserProjects = ({
     const [projectToUpdate, setProjectToUpdate] = useState(null);
 
     const handleDelete = (project) => {
-        setProjectToDelete(project.id);
+        setProjectToDelete(project);
         setDeletingProject(true);
     }
 
@@ -66,6 +70,7 @@ const UserProjects = ({
             {
             !creatingProject && 
             <TextButton
+                data-testid='create-project-button'
                 style={{width: 'fit-content'}}
                 onClick={() => setCreatingProject(true)}
             >

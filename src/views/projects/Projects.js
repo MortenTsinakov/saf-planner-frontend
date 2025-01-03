@@ -4,6 +4,13 @@ import UserProjects from './userProjects/UserProjects';
 import SharedProjects from './sharedProjects/SharedProjects';
 import { useAlerts, useProjects } from 'hooks';
 
+/**
+ * Page that renders either of the following sub-components depending
+ * on which tab is selected:
+ *      - user projects
+ *      - shared projects
+ * Passes down necessary hooks for creating/updating/deleting projects.
+ */
 const Projects = (props) => {
 
     const Tabs = Object.freeze({
@@ -51,6 +58,7 @@ const Projects = (props) => {
                 }}
             >
                 <TextButton
+                    data-testid='user-projects-tab-button'
                     onClick={() => setSelectedTab(Tabs.USER_PROJECTS)}
                     style={{
                         width: '100%',
@@ -69,6 +77,7 @@ const Projects = (props) => {
                     </Typography>
                 </TextButton>
                 <TextButton
+                    data-testid='shared-projects-tab-button'
                     onClick={() => setSelectedTab(Tabs.SHARED_PROJECTS)}
                     style={{
                         width: '100%',
@@ -98,7 +107,11 @@ const Projects = (props) => {
                     deleteProject={deleteProject}
                     {...props}
                 />}
-            {selectedTab === Tabs.SHARED_PROJECTS && <SharedProjects {...props} />}
+            {selectedTab === Tabs.SHARED_PROJECTS &&
+                <SharedProjects
+                    data-testid='shared-projects'
+                    {...props}
+                />}
         </Column>
     );
 }

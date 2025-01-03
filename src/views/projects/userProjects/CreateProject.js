@@ -3,6 +3,10 @@ import { useAlerts } from 'hooks';
 import { useState } from 'react';
 import { clampNumber, timeInMinsSecsToTimeInSeconds } from 'utils';
 
+/**
+ * Renders an input form for creating a new project.
+ * Call the necessary hook when a project is created.
+ */
 const CreateProject = ({createProject, setCreatingProject, props}) => {
 
     const [title, setTitle] = useState('');
@@ -19,6 +23,10 @@ const CreateProject = ({createProject, setCreatingProject, props}) => {
         setDescription(e.target.value);
     }
 
+    /**
+     * Change the value inside the input field
+     * for minutes in estimated duration
+     */
     const handleEstLenMinChange = (e) => {
         if (isNaN(e.target.value) && e.target.value !== '') {
             return;
@@ -27,6 +35,10 @@ const CreateProject = ({createProject, setCreatingProject, props}) => {
         setEstLenMin(clampNumber(value, 0, 180));
     }
 
+    /**
+     * Change the value inside the input field
+     * for seconds in estimated duration
+     */
     const handleEstLenSecChange = (e) => {
         if (isNaN(e.target.value) && e.target.value !== '') {
             return;
@@ -91,7 +103,7 @@ const CreateProject = ({createProject, setCreatingProject, props}) => {
                         }}
                     >
                         <InputField
-                            aria-label='estimated duration'
+                            aria-label='estimated duration minutes'
                             type='text'
                             value={estLenMin}
                             onChange={handleEstLenMinChange}
@@ -101,7 +113,7 @@ const CreateProject = ({createProject, setCreatingProject, props}) => {
                         />
                         <Typography>min</Typography>
                         <InputField
-                            aria-label='estimated duration'
+                            aria-label='estimated duration seconds'
                             type='text'
                             value={estLenSec}
                             onChange={handleEstLenSecChange}
@@ -119,12 +131,14 @@ const CreateProject = ({createProject, setCreatingProject, props}) => {
                     }}
                 >
                     <FilledButton
+                        data-testid='save-button'
                         style={{width: '100px'}}
                         onClick={handleSaveClick}
                     >
                         Save
                     </FilledButton>
                     <OutlineButton
+                        data-testid='cancel-button'
                         style={{width: '100px'}}
                         onClick={handleCancelClick}
                     >

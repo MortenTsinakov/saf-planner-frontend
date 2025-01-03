@@ -122,9 +122,9 @@ export const useProjects = () => {
      * Delete project with given id.
      * Return true if deletion was successful, else false.
      */
-    const deleteProject = useCallback(async (projectId) => {
+    const deleteProject = useCallback(async (project) => {
         try {
-            const response = await deleteProjectService(projectId);
+            const response = await deleteProjectService(project.id);
             setUserProjects((prev) => prev.filter(proj => proj.id !== response.projectId));
             return true;
         } catch (err) {

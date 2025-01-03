@@ -4,6 +4,11 @@ import { useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { clampNumber, formatSecondsToHMS, timeInMinsSecsToTimeInSeconds } from 'utils';
 
+/**
+ * Renders a modal with project information and necessary
+ * buttons for updating project information.
+ * Calls necessary hooks when some field is updated.
+ */
 const UpdateProject = ({
     projectToUpdate,
     setProjectToUpdate,
@@ -35,12 +40,14 @@ const UpdateProject = ({
 
     const { addAlert } = useAlerts();
 
-    const handleCloseUpdateWindow = () => {
+    // Closes the modal that displays project information
+    const closeEntireUpdateModal = () => {
         setProjectToUpdate(null);
         setUpdatingProject(false);
     }
 
-    const closeUpdateWindow = () => {
+    // Closes the modal for updating a specific field
+    const closeFieldUpdateModal = () => {
         setFieldToUpdate(null);
     }
 
@@ -48,7 +55,7 @@ const UpdateProject = ({
         const updateSucceeded = await updateProjectTitle(projectToUpdate.id, newTitle);
         if (updateSucceeded) {
             setOldTitle(newTitle);
-            closeUpdateWindow();
+            closeFieldUpdateModal();
             addAlert("Project title was updated", "success");
         }
     }
@@ -57,7 +64,7 @@ const UpdateProject = ({
         const updateSucceeded = await updateProjectDescription(projectToUpdate.id, newDescription);
         if (updateSucceeded) {
             setOldDescrpition(newDescription);
-            closeUpdateWindow();
+            closeFieldUpdateModal();
             addAlert("Project description was updated", "success");
         }
     }
@@ -67,28 +74,40 @@ const UpdateProject = ({
         const updateSuceeded = await updateProjectEstimatedLength(projectToUpdate.id, estimatedLength);
         if (updateSuceeded) {
             setOldEstLen(estimatedLength);
-            closeUpdateWindow();
+            closeFieldUpdateModal();
             addAlert("Project's estimated length was updated", "success");
         } else {
 
         }
     }
 
+    /**
+     * Renders 'save' and 'cancel' buttons on the bottom of the modal
+     * for updating a specific field.
+     */
     const getModalButtons = (updateFunction) => {
         return (
             <Row
                 style={{justifyContent: 'center', gap: '3rem'}}
             >
-                <FilledButton style={{width: '100px'}} onClick={updateFunction}>Update</FilledButton>
-                <OutlineButton style={{width: '100px'}} onClick={closeUpdateWindow}>Close</OutlineButton>
+                <FilledButton data-testid='save-button' style={{width: '100px'}} onClick={updateFunction}>Update</FilledButton>
+                <OutlineButton data-testid='cancel-button' style={{width: '100px'}} onClick={closeFieldUpdateModal}>Close</OutlineButton>
             </Row>
         )
     }
 
+    /**
+     * Renders necessary input field inside an update modal
+     * for updating the project title
+     */
     const titleUpdateWindow = () => {
         return (
-            <Column style={{gap: '3rem'}}>
+            <Column
+                data-testid='title-update-modal'
+                style={{gap: '3rem'}}
+            >
                 <InputField
+                    aria-label='update title'
                     label='Update project title'
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
@@ -98,10 +117,18 @@ const UpdateProject = ({
         );
     }
 
+    /**
+     * Renders necessary input area inside an update modal
+     * for updating the project description
+     */
     const descriptionUpdateWindow = () => {
         return (
-            <Column style={{gap: '3rem'}}>
+            <Column
+                data-testid='description-update-modal'
+                style={{gap: '3rem'}}
+            >
                 <InputArea
+                    aria-label='update description'
                     label='Update project description'
                     value={newDescription}
                     onChange={(e) => setNewDescription(e.target.value)}
@@ -111,9 +138,16 @@ const UpdateProject = ({
         )
     }
 
+    /**
+     * Renders necessary input fields inside an update modal
+     * for updating the project's estimated length
+     */
     const estimatedLengthUpdateWindow = () => {
         return (
-            <Column style={{gap: '3rem'}}>
+            <Column
+                data-testid='estimated-length-update-modal'
+                style={{gap: '3rem'}}
+            >
                 <Column
                     style={{
                         gap: 0,
@@ -131,7 +165,7 @@ const UpdateProject = ({
                         }}
                     >
                         <InputField
-                            aria-label='estimated duration'
+                            aria-label='update estimated duration minutes'
                             type='text'
                             value={estLenMin}
                             onChange={handleEstLenMinChange}
@@ -141,7 +175,7 @@ const UpdateProject = ({
                         />
                         <Typography>min</Typography>
                         <InputField
-                            aria-label='estimated duration'
+                            aria-label='update estimated duration seconds'
                             type='text'
                             value={estLenSec}
                             onChange={handleEstLenSecChange}
@@ -157,24 +191,40 @@ const UpdateProject = ({
         );
     }
 
+    /**
+     * TODO: implement updating labels
+     * Temporary placeholder for updating labels.
+     */
     const labelsUpdateWindow = () => {
         return (
-            <Column>
+            <Column
+                data-testid='label-update-modal'
+            >
                 <Typography>Update labels</Typography>
                 {getModalButtons(() => {})}
             </Column>
         )
     }
 
+    /**
+     * TODO: implement updating users who the project has been shared with
+     * Temporary placeholder for updating 'shared with'.
+     */
     const sharedUpdateWindow = () => {
         return (
-            <Column>
+            <Column
+                data-testid='shared-with-update-modal'
+            >
                 <Typography>Update shared with</Typography>
                 {getModalButtons(() => {})}
             </Column>
         )
     }
 
+    /**
+     * Change the value of the minutes input on
+     * estimated duration update modal
+     */
     const handleEstLenMinChange = (e) => {
             if (isNaN(e.target.value) && e.target.value !== '') {
                 return;
@@ -183,6 +233,10 @@ const UpdateProject = ({
             setEstLenMin(clampNumber(value, 0, 180));
         }
 
+        /**
+     * Change the value of the seconds input on
+     * estimated duration update modal
+     */
     const handleEstLenSecChange = (e) => {
         if (isNaN(e.target.value) && e.target.value !== '') {
             return;
@@ -191,6 +245,10 @@ const UpdateProject = ({
         setEstLenSec(clampNumber(value, 0, 59));
     }
 
+    /**
+     * Choose which inputs to render depending on
+     * which field the user has chosen to update
+     */
     const getCorrectUpdatingWindow = () => {
         switch (fieldToUpdate) {
             case Fields.TITLE:
@@ -208,9 +266,14 @@ const UpdateProject = ({
         }
     }
 
+    /**
+     * Render the label and data for each field in the
+     * project information/settings modal
+     */
     const getRowInProjectSettings = (label, data, fieldType) => {
         return(
         <Column
+            aria-label={`project ${label.toLowerCase()}`}
             style={{gap: 0}}
             onMouseOver={() => setActiveField(fieldType)}
             onMouseLeave={() => setActiveField(null)}
@@ -220,10 +283,13 @@ const UpdateProject = ({
             <Row style={{justifyContent: 'space-between'}}>
                     <Typography
                         style={{maxWidth: '80%'}}
-                    >{data}</Typography>
+                    >
+                        {data}
+                    </Typography>
                 {
                     activeField === fieldType &&
                     <TextButton
+                        data-testid={`edit-${label.toLowerCase()}-button`}
                         style={{display: 'flex', gap:'0.8rem', height: 'fit-content'}}
                         onClick={() => setFieldToUpdate(fieldType)}
                     >
@@ -254,8 +320,11 @@ const UpdateProject = ({
             {
                 fieldToUpdate !== null
                 && 
-                <Modal style={{minWidth: '250px', width: '500px'}}>
-                        {getCorrectUpdatingWindow()}
+                <Modal
+                    data-testid='update-modal'
+                    style={{minWidth: '250px', width: '500px'}}
+                >
+                    {getCorrectUpdatingWindow()}
                 </Modal>
             }
             <Column
@@ -270,11 +339,12 @@ const UpdateProject = ({
                 {getRowInProjectSettings('Shared with', 'TODO: Display users the project is shared with and let user add/delete them', Fields.SHARED)}
             </Column>
             <OutlineButton
+                data-testid='close-button'
                 style={{
                     width: 'fit-content',
                     bottom: 0,
                 }}
-                onClick={handleCloseUpdateWindow}
+                onClick={closeEntireUpdateModal}
             >
                 Close
             </OutlineButton>
