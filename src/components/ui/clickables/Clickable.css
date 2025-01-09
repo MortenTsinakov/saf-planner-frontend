@@ -1,0 +1,11 @@
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    filter: brightness(105%);
+}
+
+.clickable:active {
+    filter: brightness(95%);
+}

@@ -9,6 +9,7 @@
     padding: 1rem;
     background-color: var(--text-color);
     outline: none;
+    border-radius: 5px;
 }
 
 .input-field-input:focus {
@@ -16,5 +17,28 @@
 }
 
 .input-field-input.color-secondary:focus {
+    border: 1px solid var(--secondary-color);
+}
+
+.input-area-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    font-size: 1.8rem;
+}
+
+.input-area-input {
+    padding: 1rem;
+    background-color: var(--text-color);
+    outline: none;
+    resize: none;
+    border-radius: 5px;
+}
+
+.input-area-input:focus {
+    border: 1px solid var(--primary-color);
+}
+
+.input-area-input.color-secondary:focus {
     border: 1px solid var(--secondary-color);
 }

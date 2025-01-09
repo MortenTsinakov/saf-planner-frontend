@@ -26,6 +26,7 @@ apiClient.interceptors.response.use((response) => {
             return apiClient(originalRequest);
         } catch (refreshError) {
             console.log(refreshError);
+            localStorage.clear();
             return Promise.reject(refreshError);
         }
     }

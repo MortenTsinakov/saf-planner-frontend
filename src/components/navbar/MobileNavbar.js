@@ -16,7 +16,7 @@ const MobileNavbar = () => {
 
     const { user, signOut, error } = useAuth();
     const navigate = useNavigate();
-    const [sidebarIsOpen, setSidebarIsOpen] = useState(true);
+    const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
 
     const handleNavigate = (link) => {
         setSidebarIsOpen(false);
@@ -42,6 +42,8 @@ const MobileNavbar = () => {
                     borderBottom: '1px solid var(--main-gray)',  
                     width: '100%',
                     paddingLeft: '0.5rem',
+                    position: 'fixed',
+                    top: 0,
                 }}
             >
                 <IconButton
