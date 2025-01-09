@@ -73,13 +73,14 @@ export const AuthProvider = ({children}) => {
      */
     const signOut = useCallback(async () => {
         try {
-            await signOutService();
-            localStorage.removeItem('user');
+            localStorage.clear();
             setUser(null);
+            await signOutService();
             setError(null);
-            navigate('/');
         } catch (err) {
-            setError(err.response?.data?.message || "Sign out failed");
+            setError("Please log in again");
+        } finally {
+            navigate("/");
         }
     }, [navigate]);
 

@@ -25,8 +25,6 @@ apiClient.interceptors.response.use((response) => {
             localStorage.setItem('user', JSON.stringify(response.data));
             return apiClient(originalRequest);
         } catch (refreshError) {
-            console.log(refreshError);
-            localStorage.clear();
             return Promise.reject(refreshError);
         }
     }
