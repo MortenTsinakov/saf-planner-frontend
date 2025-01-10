@@ -1,4 +1,4 @@
-import { Column, IconButton, InputArea, InputField, Modal, OutlineButton, Row, Typography } from 'components';
+import { Column, IconButton, InputArea, InputField, Modal, OutlineButton, Row, Switch, Typography } from 'components';
 import { useState } from 'react';
 import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import { clampNumber } from 'utils';
@@ -28,9 +28,7 @@ const CreateFragment = ({previousFragment, setShowCreateFragmentModal, ...props}
                 <Column>
                     <Typography>Short description</Typography>
                     <Typography fontSize='extrasmall' color='label'>
-                        Write a short description for your fragment. It's used to give
-                        an overview of your idea without having to read through a long 
-                        piece of text.
+                        Enter a quick summary of your idea to make it easy to recognize.
                     </Typography>
                 </Column>
                 <InputArea
@@ -48,9 +46,7 @@ const CreateFragment = ({previousFragment, setShowCreateFragmentModal, ...props}
                 <Column>
                     <Typography>Long description</Typography>
                     <Typography fontSize='extrasmall' color='label'>
-                        Write a long description for your fragment. This description
-                        can be as detailed as you wish and should describe your idea
-                        as precisely as possible.
+                        Write a detailed explanation of your idea, including all the important elements.
                     </Typography>
                 </Column>
                 <InputArea
@@ -69,10 +65,8 @@ const CreateFragment = ({previousFragment, setShowCreateFragmentModal, ...props}
                 <Column>
                     <Typography>Duration</Typography>
                     <Typography fontSize='extrasmall' color='label'>
-                        Set a duration for your fragment. It will determine 
-                        how long the fragment will last on the timeline.
-                        NB! If duration is not defined (0), it will be set to
-                        5 seconds by default.
+                        Specify how long this fragment should last on the timeline.
+                        If not specified, a default duration of 5 seconds will be used.
                     </Typography>
                 </Column>
                 <Row style={{alignItems: 'end'}}>
@@ -95,11 +89,21 @@ const CreateFragment = ({previousFragment, setShowCreateFragmentModal, ...props}
                 <Column>
                     <Typography>On timeline</Typography>
                     <Typography fontSize='extrasmall' color='label'>
-                        Decide whether you want the new fragment to appear
-                        on the timeline or not.
+                        Decide if this fragment should be shown on the timeline or kept as a draft.
                     </Typography>
                 </Column>
-                <div>TODO: Create a selection switch </div>
+                <Switch
+                    style={{marginTop: '2rem', marginBottom: '2rem'}}
+                    selected={onTimeline}
+                    onClick={() => setOnTimeline(!onTimeline)}
+                />
+                {
+                onTimeline 
+                ?
+                <Typography color='label'>The scene will appear on the timeline</Typography>
+                :
+                <Typography color='label'>The scene will not appear on the timeline</Typography>
+                }
             </Column>
         );
     }
