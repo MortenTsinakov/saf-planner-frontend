@@ -1,8 +1,11 @@
 import { Card, Clickable, Column, Container, IconButton, Row, Typography } from 'components';
 import { MdSettings, MdShare, MdDelete } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 import { formatDate, formatSecondsToHMS } from 'utils';
 
 const UserProjectCard = (props) => {
+
+    const navigate = useNavigate();
 
     const project = props.project;
     const handleDelete = props.handleDelete;
@@ -26,6 +29,7 @@ const UserProjectCard = (props) => {
 
     const navigateToProjectPage = (projectId) => {
         console.log(`Navigating to project page. Project id: ${projectId}`);
+        navigate(`/project?id=${project.id}`);
     }
 
     const handleDeleteProject = () => {
