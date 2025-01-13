@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createFragmentService, fetchFragmentsService, updateFragmentOnTimelineStatusService } from 'services';
+import { createFragmentService, deleteFragmentService, fetchFragmentsService, updateFragmentOnTimelineStatusService } from 'services';
 
 export const useFragments = () => {
     const [fragments, setFragments] = useState([]);
@@ -31,6 +31,15 @@ export const useFragments = () => {
         return prev;
     }, []);
 
+    const decrementFragmentPositions = useCallback((prev, position) => {
+        prev.forEach(f => {
+            if (f.position >= position) {
+                f.position -= 1;
+            }
+        });
+        return prev;
+    }, []);
+
     /**
      * Create new fragment
      */
@@ -50,21 +59,38 @@ export const useFragments = () => {
     /**
      * Update fragment on timeline status
      */
-    const updateFragmentOnTimelineStatus = useCallback(async (fragmentId, onTimeline) => {
+    const updateFragmentOnTimelineStatus = useCallback(async (fragment, onTimeline) => {
         try {
             setError(null);
-            const response = await updateFragmentOnTimelineStatusService(fragmentId, onTimeline);
-            setFragments(f => f.map((item) => (item.id === fragmentId ? response : item)));
+            const response = await updateFragmentOnTimelineStatusService(fragment.id, onTimeline);
+            setFragments(f => f.map((item) => (item.id === fragment.id ? response : item)));
         } catch (err) {
             setError(err.response?.data?.message || "Updating fragment failed");
         }
     }, []);
+
+    /**
+     * Delete fragment.
+     * Return true if fragment was successfully deleted, else false.
+     */
+    const deleteFragment = useCallback(async (fragment) => {
+        try {
+            setError(null);
+            await deleteFragmentService(fragment.id);
+            setFragments(prev => decrementFragmentPositions(prev.filter((f) => f.id !== fragment.id), fragment.position));
+            return true;
+        } catch (err) {
+            setError(err.response?.data?.message || "Deleting fragment failed");
+            return false;
+        }
+    }, [decrementFragmentPositions]);
 
     return {
         fragments,
         fetchFragments,
         createFragment,
         updateFragmentOnTimelineStatus,
+        deleteFragment,
         loading,
         error,
         setError,

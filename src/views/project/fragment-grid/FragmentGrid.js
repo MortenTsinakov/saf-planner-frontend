@@ -1,7 +1,15 @@
 import { Container, Typography } from 'components';
 import FragmentCard from './FragmentCard';
 
-const FragmentGrid = ({fragmentGridHeight, fragments, createFragment, updateFragmentOnTimelineStatus, ...props}) => {
+const FragmentGrid = (
+    {
+        fragmentGridHeight,
+        fragments,
+        createFragment,
+        updateFragmentOnTimelineStatus,
+        deleteFragment,
+        ...props}) => 
+    {
     return (
             <Container
                 style={{
@@ -24,6 +32,7 @@ const FragmentGrid = ({fragmentGridHeight, fragments, createFragment, updateFrag
                             fragment={f}
                             createFragment={createFragment}
                             updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
+                            deleteFragment={deleteFragment}
                             {...props}
                         />
                     ))

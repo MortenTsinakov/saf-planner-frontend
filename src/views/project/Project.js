@@ -7,7 +7,7 @@ import Toolbar from './toolbar/Toolbar';
 import ReadAll from './read-all/ReadAll';
 import Timeline from './timeline/Timeline';
 
-const Project = (props) => {
+const Project = ({...props}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -23,6 +23,7 @@ const Project = (props) => {
         fetchFragments,
         createFragment,
         updateFragmentOnTimelineStatus,
+        deleteFragment,
         fragments,
         loading,
         error,
@@ -91,6 +92,7 @@ const Project = (props) => {
                         fragments={fragments}
                         createFragment={createFragment}
                         updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
+                        deleteFragment={deleteFragment}
                         projectId={projectId}
                         {...props}
                     />

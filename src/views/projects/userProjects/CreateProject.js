@@ -127,16 +127,10 @@ const CreateProject = ({createProject, setCreatingProject, props}) => {
                 <Row
                     style={{
                         marginTop: '3rem',
-                        gap: '2rem'
+                        gap: '2rem',
+                        justifyContent: 'space-between'
                     }}
                 >
-                    <FilledButton
-                        data-testid='save-button'
-                        style={{width: '100px'}}
-                        onClick={handleSaveClick}
-                    >
-                        Save
-                    </FilledButton>
                     <OutlineButton
                         data-testid='cancel-button'
                         style={{width: '100px'}}
@@ -144,6 +138,13 @@ const CreateProject = ({createProject, setCreatingProject, props}) => {
                     >
                         Cancel
                     </OutlineButton>
+                    <FilledButton
+                        data-testid='save-button'
+                        style={{width: '100px'}}
+                        onClick={handleSaveClick}
+                    >
+                        Save
+                    </FilledButton>
                 </Row>
             </Column>
         </Card>

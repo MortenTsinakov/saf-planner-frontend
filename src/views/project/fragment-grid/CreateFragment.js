@@ -17,8 +17,8 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
 
     const { addAlert } = useAlerts();
 
-    const handleSaveClick = () => {
-        const creationWasSuccessful = createFragment(
+    const handleSaveClick = async () => {
+        const creationWasSuccessful = await createFragment(
             shortDescription.trim(),
             longDescription.trim(),
             durationInSeconds <= 0 ? 5 : durationInSeconds,

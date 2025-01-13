@@ -11,8 +11,16 @@ import {
 } from 'react-icons/md';
 import FragmentDetails from './FragmentDetails';
 import CreateFragment from './CreateFragment';
+import DeleteFragment from './DeleteFragment';
 
-const FragmentCard = ({fragment, createFragment, updateFragmentOnTimelineStatus, ...props}) => {
+const FragmentCard = (
+    {
+        fragment,
+        createFragment,
+        updateFragmentOnTimelineStatus,
+        deleteFragment,
+        ...props}) => 
+    {
 
     const [displayButtons, setDisplayButtons] = useState(false);
     const iconStyle = {
@@ -22,6 +30,7 @@ const FragmentCard = ({fragment, createFragment, updateFragmentOnTimelineStatus,
 
     const [showFragmentDetails, setShowFragmentDetails] = useState(false);
     const [showCreateFragmentModal, setShowCreateFragmentModal] = useState(false);
+    const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
 
     return (
         <Card
@@ -62,10 +71,10 @@ const FragmentCard = ({fragment, createFragment, updateFragmentOnTimelineStatus,
                     >
                         <IconButton onClick={() => setShowCreateFragmentModal(true)}title='Add new fragment after this one' style={iconStyle} icon={<MdAddCircleOutline />} />
                         <IconButton title='Edit the fragment' style={iconStyle} icon={<MdOutlineEdit />} />
-                        <IconButton onClick={() => updateFragmentOnTimelineStatus(fragment.id, !fragment.onTimeline)}title={`${fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}`} style={iconStyle} icon={<MdAccessTime />} />
+                        <IconButton onClick={() => updateFragmentOnTimelineStatus(fragment, !fragment.onTimeline)}title={`${fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}`} style={iconStyle} icon={<MdAccessTime />} />
                         <IconButton title='Add comment' style={iconStyle} icon={<MdOutlineModeComment />} />
                         <IconButton onClick={() => setShowFragmentDetails(true)} title='See details' style={iconStyle} icon={<MdInfoOutline />} />
-                        <IconButton title='Delete fragment' style={iconStyle} icon={<MdDeleteOutline />} />
+                        <IconButton onClick={() => setShowDeleteFragmentModal(true)}title='Delete fragment' style={iconStyle} icon={<MdDeleteOutline />} />
                     </Row>
                 }
             </Row>
@@ -82,7 +91,15 @@ const FragmentCard = ({fragment, createFragment, updateFragmentOnTimelineStatus,
                     setShowCreateFragmentModal={setShowCreateFragmentModal}
                     previousFragment={fragment}
                     {...props}/>
-                    }
+            }
+            { showDeleteFragmentModal &&
+                <DeleteFragment
+                    fragment={fragment}
+                    setShowDeleteFragmentModal={setShowDeleteFragmentModal}
+                    deleteFragment={deleteFragment}
+                    {...props}
+                />
+            }
         </Card>
     );
 }

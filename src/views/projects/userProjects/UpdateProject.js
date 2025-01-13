@@ -88,10 +88,10 @@ const UpdateProject = ({
     const getModalButtons = (updateFunction) => {
         return (
             <Row
-                style={{justifyContent: 'center', gap: '3rem'}}
+                style={{justifyContent: 'space-between', gap: '3rem'}}
             >
-                <FilledButton data-testid='save-button' style={{width: '100px'}} onClick={updateFunction}>Update</FilledButton>
                 <OutlineButton data-testid='cancel-button' style={{width: '100px'}} onClick={closeFieldUpdateModal}>Close</OutlineButton>
+                <FilledButton data-testid='save-button' style={{width: '100px'}} onClick={updateFunction}>Update</FilledButton>
             </Row>
         )
     }
