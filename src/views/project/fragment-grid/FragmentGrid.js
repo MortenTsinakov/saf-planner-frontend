@@ -7,6 +7,9 @@ const FragmentGrid = (
         fragments,
         createFragment,
         updateFragmentOnTimelineStatus,
+        updateFragmentShortDescription,
+        updateFragmentLongDescription,
+        updateFragmentDuration,
         deleteFragment,
         ...props}) => 
     {
@@ -32,6 +35,9 @@ const FragmentGrid = (
                             fragment={f}
                             createFragment={createFragment}
                             updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
+                            updateFragmentShortDescription={updateFragmentShortDescription}
+                            updateFragmentLongDescription={updateFragmentLongDescription}
+                            updateFragmentDuration={updateFragmentDuration}
                             deleteFragment={deleteFragment}
                             {...props}
                         />

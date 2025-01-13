@@ -44,6 +44,42 @@ export const updateFragmentOnTimelineStatusService = async (fragmentId, onTimeli
 }
 
 /**
+ * Update fragment's short description
+ */
+export const updateFragmentShortDescriptionService = async (fragmentId, shortDescription) => {
+    const putData = {
+        fragmentId: fragmentId,
+        shortDescription: shortDescription
+    }
+    const response = await apiClient.put('/fragment/short-description', putData);
+    return response.data;
+}
+
+/**
+ * Update fragment's long description
+ */
+export const updateFragmentLongDescriptionService = async (fragmentId, longDescription) => {
+    const putData = {
+        fragmentId: fragmentId,
+        longDescription: longDescription
+    }
+    const response = await apiClient.put('/fragment/long-description', putData);
+    return response.data;
+}
+
+/**
+ * Update fragment's duration (in seconds)
+ */
+export const updateFragmentDurationService = async (fragmentId, durationInSeconds) => {
+    const putData = {
+        fragmentId: fragmentId,
+        durationInSeconds: durationInSeconds
+    }
+    const response = await apiClient.put('/fragment/duration', putData);
+    return response.data;
+}
+
+/**
  * Delete the fragment with given id.
  */
 export const deleteFragmentService = async (fragmentId) => {

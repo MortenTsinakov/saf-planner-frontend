@@ -23,6 +23,9 @@ const Project = ({...props}) => {
         fetchFragments,
         createFragment,
         updateFragmentOnTimelineStatus,
+        updateFragmentShortDescription,
+        updateFragmentLongDescription,
+        updateFragmentDuration,
         deleteFragment,
         fragments,
         loading,
@@ -92,6 +95,9 @@ const Project = ({...props}) => {
                         fragments={fragments}
                         createFragment={createFragment}
                         updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
+                        updateFragmentShortDescription={updateFragmentShortDescription}
+                        updateFragmentLongDescription={updateFragmentLongDescription}
+                        updateFragmentDuration={updateFragmentDuration}
                         deleteFragment={deleteFragment}
                         projectId={projectId}
                         {...props}

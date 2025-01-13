@@ -1,4 +1,4 @@
-import { Column, IconButton, InputArea, InputField, Modal, OutlineButton, Row, Switch, Typography } from 'components';
+import { Column, FilledButton, IconButton, InputArea, InputField, Modal, OutlineButton, Row, Switch, Typography } from 'components';
 import { useAlerts } from 'hooks';
 import { useState } from 'react';
 import { MdArrowBack, MdArrowForward } from 'react-icons/md';
@@ -159,12 +159,12 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
                     </OutlineButton>
                         {
                         page === 4 ?
-                        <OutlineButton
+                        <FilledButton
                             onClick={handleSaveClick}
                             style={{width: '100px'}}
                         >
                             Save
-                        </OutlineButton>
+                        </FilledButton>
                         :
                         <div />
                         }

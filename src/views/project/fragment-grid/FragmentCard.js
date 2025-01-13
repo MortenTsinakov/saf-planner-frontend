@@ -12,12 +12,16 @@ import {
 import FragmentDetails from './FragmentDetails';
 import CreateFragment from './CreateFragment';
 import DeleteFragment from './DeleteFragment';
+import EditFragment from './EditFragment';
 
 const FragmentCard = (
     {
         fragment,
         createFragment,
         updateFragmentOnTimelineStatus,
+        updateFragmentShortDescription,
+        updateFragmentLongDescription,
+        updateFragmentDuration,
         deleteFragment,
         ...props}) => 
     {
@@ -30,6 +34,7 @@ const FragmentCard = (
 
     const [showFragmentDetails, setShowFragmentDetails] = useState(false);
     const [showCreateFragmentModal, setShowCreateFragmentModal] = useState(false);
+    const [showEditFragmentModal, setShowEditFragmentModal] = useState(false);
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
 
     return (
@@ -70,7 +75,7 @@ const FragmentCard = (
                         }}
                     >
                         <IconButton onClick={() => setShowCreateFragmentModal(true)}title='Add new fragment after this one' style={iconStyle} icon={<MdAddCircleOutline />} />
-                        <IconButton title='Edit the fragment' style={iconStyle} icon={<MdOutlineEdit />} />
+                        <IconButton onClick={() => setShowEditFragmentModal(true)} title='Edit the fragment' style={iconStyle} icon={<MdOutlineEdit />} />
                         <IconButton onClick={() => updateFragmentOnTimelineStatus(fragment, !fragment.onTimeline)}title={`${fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}`} style={iconStyle} icon={<MdAccessTime />} />
                         <IconButton title='Add comment' style={iconStyle} icon={<MdOutlineModeComment />} />
                         <IconButton onClick={() => setShowFragmentDetails(true)} title='See details' style={iconStyle} icon={<MdInfoOutline />} />
@@ -91,6 +96,16 @@ const FragmentCard = (
                     setShowCreateFragmentModal={setShowCreateFragmentModal}
                     previousFragment={fragment}
                     {...props}/>
+            }
+            { showEditFragmentModal &&
+                <EditFragment
+                    fragment={fragment}
+                    updateFragmentShortDescription={updateFragmentShortDescription}
+                    updateFragmentLongDescription={updateFragmentLongDescription}
+                    updateFragmentDuration={updateFragmentDuration}
+                    setShowEditFragmentModal={setShowEditFragmentModal}
+                    {...props}
+                />
             }
             { showDeleteFragmentModal &&
                 <DeleteFragment

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createFragmentService, deleteFragmentService, fetchFragmentsService, updateFragmentOnTimelineStatusService } from 'services';
+import { createFragmentService, deleteFragmentService, fetchFragmentsService, updateFragmentDurationService, updateFragmentLongDescriptionService, updateFragmentOnTimelineStatusService, updateFragmentShortDescriptionService } from 'services';
 
 export const useFragments = () => {
     const [fragments, setFragments] = useState([]);
@@ -70,6 +70,51 @@ export const useFragments = () => {
     }, []);
 
     /**
+     * Update fragment's short description
+     */
+    const updateFragmentShortDescription = useCallback(async (fragment, shortDescription) => {
+        try {
+            setError(null);
+            const response = await updateFragmentShortDescriptionService(fragment.id, shortDescription);
+            setFragments(f => f.map((item) => (item.id === fragment.id ? response : item)));
+            return true;
+        } catch (err) {
+            setError(err.response?.data?.message || "Updating fragment failed");
+            return false;
+        }
+    }, []);
+
+    /**
+     * Update fragment's long description
+     */
+    const updateFragmentLongDescription = useCallback(async (fragment, longDescription) => {
+        try {
+            setError(null);
+            const response = await updateFragmentLongDescriptionService(fragment.id, longDescription);
+            setFragments(f => f.map((item) => (item.id === fragment.id ? response : item)));
+            return true;
+        } catch (err) {
+            setError(err.response?.data?.message || "Updating fragment failed");
+            return false;
+        }
+    }, []);
+
+    /**
+     * Update fragment's duration (in seconds)
+     */
+    const updateFragmentDuration = useCallback(async (fragment, durationInSeconds) => {
+        try {
+            setError(null);
+            const response = await updateFragmentDurationService(fragment.id, durationInSeconds);
+            setFragments(f => f.map((item) => (item.id === fragment.id ? response : item)));
+            return true;
+        } catch (err) {
+            setError(err.response?.data?.message || "Updating fragment failed");
+            return false;
+        }
+    }, []);
+
+    /**
      * Delete fragment.
      * Return true if fragment was successfully deleted, else false.
      */
@@ -90,6 +135,9 @@ export const useFragments = () => {
         fetchFragments,
         createFragment,
         updateFragmentOnTimelineStatus,
+        updateFragmentShortDescription,
+        updateFragmentLongDescription,
+        updateFragmentDuration,
         deleteFragment,
         loading,
         error,
