@@ -1,5 +1,5 @@
 import { useAlerts, useFragments } from 'hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FragmentGrid from './fragment-grid/FragmentGrid';
 import { Column, Row } from 'components';
@@ -14,8 +14,14 @@ const Project = (props) => {
     const searchParams = new URLSearchParams(location.search);
     const projectId = searchParams.get('id');
 
+    const toolBarHeight = 55;
+    const timelineHeight = 120;
+    const timelineToolsHeight = 55;
+    const [readAllWidth, setReadAllWidth] = useState(350);
+
     const {
         fetchFragments,
+        createFragment,
         updateFragmentOnTimelineStatus,
         fragments,
         loading,
@@ -56,23 +62,34 @@ const Project = (props) => {
                 gap: 0,
             }}
         >
-            <Toolbar />
+            <Toolbar
+                height={toolBarHeight}
+            />
             <Row
                 style={{
                     gap: 0,
-                    flex: 1,
                 }}
             >
-                <ReadAll {...props} />
+                <ReadAll
+                    readAllHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px)`}
+                    {...props}
+                />
                 <Column
                     style={{
                         gap: 0,
-                        flex: 1,
+                        minWidth: `calc(100vw - ${readAllWidth}px)`,
                     }}
                 >
-                    <Timeline fragments={fragments} {...props} />
-                    <FragmentGrid
+                    <Timeline
+                        timelineHeight={timelineHeight}
+                        timelineToolsHeight={timelineToolsHeight}
                         fragments={fragments}
+                        {...props}
+                    />
+                    <FragmentGrid
+                        fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${timelineHeight + timelineToolsHeight}px)`}
+                        fragments={fragments}
+                        createFragment={createFragment}
                         updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
                         projectId={projectId}
                         {...props}

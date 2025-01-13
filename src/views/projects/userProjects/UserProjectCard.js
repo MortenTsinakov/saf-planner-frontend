@@ -27,8 +27,7 @@ const UserProjectCard = (props) => {
         overflow: 'hidden',
     };
 
-    const navigateToProjectPage = (projectId) => {
-        console.log(`Navigating to project page. Project id: ${projectId}`);
+    const navigateToProjectPage = () => {
         navigate(`/project?id=${project.id}`);
     }
 
@@ -66,7 +65,7 @@ const UserProjectCard = (props) => {
                     </Clickable>
                     <Row style={{justifyContent: 'right'}}>
                         <IconButton title='Project settings' style={{fontSize: '3rem'}} icon={<MdSettings />} onClick={handleUpdateProject}/>
-                        <IconButton title='Share project' style={{fontSize: '3rem'}} icon={<MdShare />} onClick={() => {console.log("Share button pressed")}}/>
+                        <IconButton title='Share project' style={{fontSize: '3rem'}} icon={<MdShare />} onClick={() => {}}/>
                         <IconButton title='Delete project' style={{fontSize: '3rem'}} icon={<MdDelete />} onClick={handleDeleteProject}/>
                     </Row>
                 </Card>

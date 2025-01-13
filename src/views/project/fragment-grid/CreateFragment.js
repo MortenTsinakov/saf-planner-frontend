@@ -1,18 +1,36 @@
 import { Column, IconButton, InputArea, InputField, Modal, OutlineButton, Row, Switch, Typography } from 'components';
+import { useAlerts } from 'hooks';
 import { useState } from 'react';
 import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import { clampNumber } from 'utils';
 
-const CreateFragment = ({previousFragment, setShowCreateFragmentModal, ...props}) => {
+const CreateFragment = ({createFragment, previousFragment, setShowCreateFragmentModal, ...props}) => {
 
-    // const position = previousFragment.position + 1;
-    // const projectId = props.projectId;
+    const position = previousFragment.position + 1;
+    const projectId = props.projectId;
 
     const [page, setPage] = useState(1);
     const [shortDescription, setShortDescription] = useState('');
     const [longDescription, setLongDescription] = useState('');
     const [durationInSeconds, setDurationInSeconds] = useState(5);
     const [onTimeline, setOnTimeline] = useState(false);
+
+    const { addAlert } = useAlerts();
+
+    const handleSaveClick = () => {
+        const creationWasSuccessful = createFragment(
+            shortDescription.trim(),
+            longDescription.trim(),
+            durationInSeconds <= 0 ? 5 : durationInSeconds,
+            onTimeline,
+            position,
+            projectId
+        );
+        if (creationWasSuccessful) {
+            addAlert("Fragment created", "success");
+            setShowCreateFragmentModal(false);
+        }
+    }
 
     const handleDurationChange = (e) => {
         if (isNaN(e.target.value)) {
@@ -136,12 +154,15 @@ const CreateFragment = ({previousFragment, setShowCreateFragmentModal, ...props}
                     <OutlineButton
                         onClick={() => setShowCreateFragmentModal(false)}
                         style={{width: '100px'}}
-                        >
+                    >
                         Cancel
                     </OutlineButton>
                         {
                         page === 4 ?
-                        <OutlineButton style={{width: '100px'}}>
+                        <OutlineButton
+                            onClick={handleSaveClick}
+                            style={{width: '100px'}}
+                        >
                             Save
                         </OutlineButton>
                         :

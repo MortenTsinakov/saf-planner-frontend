@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { fetchFragmentsService, updateFragmentOnTimelineStatusService } from 'services';
+import { createFragmentService, fetchFragmentsService, updateFragmentOnTimelineStatusService } from 'services';
 
 export const useFragments = () => {
     const [fragments, setFragments] = useState([]);
@@ -22,16 +22,30 @@ export const useFragments = () => {
         }
     }, []);
 
+    const incrementFragmentPositions = useCallback((prev, position) => {
+        prev.forEach(f => {
+            if (f.position >= position) {
+                f.position += 1;
+            }
+        });
+        return prev;
+    }, []);
+
     /**
      * Create new fragment
      */
-    const createFragment = useCallback(async () => {
+    const createFragment = useCallback(async (shortDescription, longDescription, durationInSeconds, onTimeline, position, projectId) => {
         try {
             setError(null);
+            const response = await createFragmentService(shortDescription, longDescription, durationInSeconds, onTimeline, position, projectId);
+            setFragments(prev => [...incrementFragmentPositions(prev, position)]);
+            setFragments(prev => [...prev, response].sort((a, b) => {return a.position - b.position}));
+            return true;
         } catch (err) {
             setError(err.response?.data?.message || "Creating fragment failed");
+            return false;
         }
-    }, []);
+    }, [incrementFragmentPositions]);
 
     /**
      * Update fragment on timeline status
@@ -49,6 +63,7 @@ export const useFragments = () => {
     return {
         fragments,
         fetchFragments,
+        createFragment,
         updateFragmentOnTimelineStatus,
         loading,
         error,

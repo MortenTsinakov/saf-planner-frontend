@@ -22,5 +22,6 @@ export {
 // Fragment services
 export {
     fetchFragmentsService,
+    createFragmentService,
     updateFragmentOnTimelineStatusService,
 } from 'services/fragment/FragmentService';

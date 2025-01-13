@@ -1,13 +1,13 @@
 import { Row } from 'components';
 
-const Toolbar = (props) => {
+const Toolbar = ({height, ...props}) => {
     return (
         <Row
             style={{
                 border: '1px solid white',
                 alignItems: 'center',
                 padding: '2rem',
-                height: 'var(--navbar-height)'
+                height: height,
             }}
         >
             Panel for buttons, tools etc.

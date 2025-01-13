@@ -12,7 +12,7 @@ import {
 import FragmentDetails from './FragmentDetails';
 import CreateFragment from './CreateFragment';
 
-const FragmentCard = ({fragment, updateFragmentOnTimelineStatus, ...props}) => {
+const FragmentCard = ({fragment, createFragment, updateFragmentOnTimelineStatus, ...props}) => {
 
     const [displayButtons, setDisplayButtons] = useState(false);
     const iconStyle = {
@@ -70,8 +70,19 @@ const FragmentCard = ({fragment, updateFragmentOnTimelineStatus, ...props}) => {
                 }
             </Row>
 
-            {showFragmentDetails && <FragmentDetails setShowFragmentDetails={setShowFragmentDetails} fragment={fragment} {...props}/>}
-            {showCreateFragmentModal && <CreateFragment setShowCreateFragmentModal={setShowCreateFragmentModal} previousFragment={fragment} {...props}/>}
+            {showFragmentDetails &&
+                <FragmentDetails
+                    setShowFragmentDetails={setShowFragmentDetails}
+                    fragment={fragment}
+                    {...props}/>
+            }
+            {showCreateFragmentModal &&
+                <CreateFragment
+                    createFragment={createFragment}
+                    setShowCreateFragmentModal={setShowCreateFragmentModal}
+                    previousFragment={fragment}
+                    {...props}/>
+                    }
         </Card>
     );
 }
