@@ -19,6 +19,16 @@ button:active {
     border: 1px solid var(--secondary-color);
 }
 
+.button-filled.color-error {
+    background-color: var(--color-error);
+    border: 1px solid var(--color-error);
+}
+
+.button-filled.color-success {
+    background-color: var(--color-success);
+    border: 1px solid var(--color-success);
+}
+
 .button-text {
     background: none;
     border: none;
@@ -34,6 +44,14 @@ button:active {
     color: var(--secondary-color);
 }
 
+.button-text.color-error:hover {
+    color: var(--color-error);
+}
+
+.button-text.color-success:hover {
+    color: var(--color-success);
+}
+
 .button-icon {
     color: var(--text-color);
     display: flex;
@@ -41,6 +59,15 @@ button:active {
     justify-content: center;
     font-size: 4rem;
 }
+
+.button-icon.color-error {
+    color: var(--color-error);
+}
+
+.button-icon.color-success {
+    color: var(--color-success);
+}
+
 
 .button-icon:hover {
     color: var(--primary-color);
@@ -63,4 +90,14 @@ button:active {
 .button-outline.color-secondary {
     border: 1px solid var(--secondary-color);
     color: var(--secondary-color);
+}
+
+.button-outline.color-error {
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+}
+
+.button-outline.color-success {
+    border: 1px solid var(--color-success);
+    color: var(--color-success);
 }

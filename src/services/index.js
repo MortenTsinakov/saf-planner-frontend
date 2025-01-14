@@ -18,3 +18,14 @@ export {
     updateProjectEstimatedLengthService,
     deleteProjectService,
 } from 'services/project/ProjectService';
+
+// Fragment services
+export {
+    fetchFragmentsService,
+    createFragmentService,
+    updateFragmentOnTimelineStatusService,
+    updateFragmentShortDescriptionService,
+    updateFragmentLongDescriptionService,
+    updateFragmentDurationService,
+    deleteFragmentService,
+} from 'services/fragment/FragmentService';

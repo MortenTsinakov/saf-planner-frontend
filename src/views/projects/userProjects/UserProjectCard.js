@@ -1,8 +1,11 @@
 import { Card, Clickable, Column, Container, IconButton, Row, Typography } from 'components';
 import { MdSettings, MdShare, MdDelete } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 import { formatDate, formatSecondsToHMS } from 'utils';
 
 const UserProjectCard = (props) => {
+
+    const navigate = useNavigate();
 
     const project = props.project;
     const handleDelete = props.handleDelete;
@@ -24,8 +27,8 @@ const UserProjectCard = (props) => {
         overflow: 'hidden',
     };
 
-    const navigateToProjectPage = (projectId) => {
-        console.log(`Navigating to project page. Project id: ${projectId}`);
+    const navigateToProjectPage = () => {
+        navigate(`/project?id=${project.id}`);
     }
 
     const handleDeleteProject = () => {
@@ -62,7 +65,7 @@ const UserProjectCard = (props) => {
                     </Clickable>
                     <Row style={{justifyContent: 'right'}}>
                         <IconButton title='Project settings' style={{fontSize: '3rem'}} icon={<MdSettings />} onClick={handleUpdateProject}/>
-                        <IconButton title='Share project' style={{fontSize: '3rem'}} icon={<MdShare />} onClick={() => {console.log("Share button pressed")}}/>
+                        <IconButton title='Share project' style={{fontSize: '3rem'}} icon={<MdShare />} onClick={() => {}}/>
                         <IconButton title='Delete project' style={{fontSize: '3rem'}} icon={<MdDelete />} onClick={handleDeleteProject}/>
                     </Row>
                 </Card>

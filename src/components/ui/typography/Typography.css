@@ -1,3 +1,7 @@
+.typography {
+    white-space: pre-wrap;
+}
+
 .typography.font-size-extralarge {
     font-size: 6rem;
 }

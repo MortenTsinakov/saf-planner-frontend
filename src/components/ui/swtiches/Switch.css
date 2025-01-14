@@ -1,0 +1,32 @@
+.switch {
+    height: 40px;
+    width: 80px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    background-color: var(--background-color-lowest);
+    border: 1px solid var(--text-color);
+    transition: translateX 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.switch-selector {
+    width: 20px;
+    height: 20px;
+    margin: 10px;
+    border-radius: 5px;
+    transform: translateX(0);
+    background-color: var(--text-color);
+    border: 1px solid var(--text-color);
+    transition: all 0.2s ease-in-out;
+}
+
+.switch.selected {
+    border: 1px solid var(--primary-color);
+}
+
+.switch-selector.selected {
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    transform: translateX(40px);
+}

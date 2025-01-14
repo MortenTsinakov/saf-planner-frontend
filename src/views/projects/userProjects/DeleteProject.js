@@ -27,9 +27,9 @@ const DeleteProject = ({projectToDelete, setProjectToDelete, setDeletingProject,
         <Modal>
             <Typography fontSize='small'> Are you sure you want to delete this project? </Typography>
             <Typography fontSize='small'>The project will be deleted permanently. </Typography>
-            <Row style={{marginTop: '40px', gap: '4rem', justifyContent: 'center'}}>
-                <FilledButton data-testid='delete-button' onClick={handleConfirmDelete}>Delete</FilledButton>
+            <Row style={{marginTop: '40px', gap: '4rem', justifyContent: 'space-between'}}>
                 <OutlineButton data-testid='cancel-button' onClick={handleCancelDelete}>Cancel</OutlineButton>
+                <FilledButton data-testid='delete-button' color='error' onClick={handleConfirmDelete}>Delete</FilledButton>
             </Row>
         </Modal>
     );

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { AnonymousRoutes, ProtectedRoutes } from 'routes';
 import { SignIn, Dashboard, Page404, SignUp, Projects } from 'views';
 import { Navbar, AlertTray, Page } from 'components';
+import Project from 'views/project/Project';
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
                 <Route element={<ProtectedRoutes />}>
                   <Route path='/dashboard' element={<Dashboard {...props} />} />
                   <Route path='/projects' element={<Projects {...props} />} />
+                  <Route path='/project' element={<Project {...props} />} />
                 </Route>
                 {/* Redirect to 404 if page is not found */}
                 <Route path="*" element={<Navigate to="/404" replace />} />

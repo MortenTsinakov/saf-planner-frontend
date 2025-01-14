@@ -27,7 +27,9 @@ export { default as InputArea } from 'components/ui/input/InputArea';
 // menu
 export { default as DropdownMenu } from 'components/ui/menus/DropdownMenu';
 // modal
-export {default as Modal } from 'components/ui/modals/Modal';
+export { default as Modal } from 'components/ui/modals/Modal';
+// swtich
+export { default as Switch } from 'components/ui/swtiches/Switch';
 // typography
 export { default as Typography } from 'components/ui/typography/Typography';
 
