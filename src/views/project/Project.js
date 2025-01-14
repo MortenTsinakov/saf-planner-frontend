@@ -18,6 +18,7 @@ const Project = ({...props}) => {
     const timelineHeight = 120;
     const timelineToolsHeight = 55;
     const [readAllWidth, setReadAllWidth] = useState(350);
+    const [showReadAllPanel, setShowReadAllPanel] = useState(true);
 
     const {
         fetchFragments,
@@ -68,20 +69,28 @@ const Project = ({...props}) => {
         >
             <Toolbar
                 height={toolBarHeight}
+                showReadAllPanel={showReadAllPanel}
+                setShowReadAllPanel={setShowReadAllPanel}
             />
             <Row
                 style={{
                     gap: 0,
                 }}
             >
-                <ReadAll
-                    readAllHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px)`}
-                    {...props}
-                />
+                {showReadAllPanel &&                
+                    <ReadAll
+                        fragments={fragments}
+                        readAllWidth={readAllWidth}
+                        setReadAllWidth={setReadAllWidth}
+                        readAllHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px)`}
+                        {...props}
+                    />
+                }
                 <Column
                     style={{
                         gap: 0,
-                        minWidth: `calc(100vw - ${readAllWidth}px)`,
+                        // minWidth: `calc(100vw - ${readAllWidth}px)`,
+                        flex: 1,
                     }}
                 >
                     <Timeline

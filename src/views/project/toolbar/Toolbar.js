@@ -1,16 +1,20 @@
-import { Row } from 'components';
+import { IconButton, Row } from 'components';
+import { MdOutlineArticle } from "react-icons/md";
 
-const Toolbar = ({height, ...props}) => {
+const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, ...props}) => {
     return (
         <Row
             style={{
-                border: '1px solid white',
                 alignItems: 'center',
                 padding: '2rem',
                 height: height,
             }}
         >
-            Panel for buttons, tools etc.
+            <IconButton
+                icon={<MdOutlineArticle />}
+                title='Read detailed descriptions'
+                onClick={() => setShowReadAllPanel(!showReadAllPanel)}
+            />
         </Row>
     );
 }
