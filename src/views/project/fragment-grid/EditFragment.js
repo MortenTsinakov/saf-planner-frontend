@@ -27,11 +27,11 @@ const EditFragment = (
 
     const [oldShortDescription, setOldShortDescription] = useState(fragment.shortDescription);
     const [oldLongDescription, setOldLongDescription] = useState(fragment.longDescription);
-    const [oldDurationInSeconds, setOldDurationInSeconds] = useState(fragment.durationInSeconds);
+    const [oldDurationInSeconds, setOldDurationInSeconds] = useState(`${fragment.durationInSeconds}`);
 
     const [shortDescription, setShortDescription] = useState(fragment.shortDescription);
     const [longDescription, setLongDescription] = useState(fragment.longDescription);
-    const [durationInSeconds, setDurationInSeconds] = useState(fragment.durationInSeconds);
+    const [durationInSeconds, setDurationInSeconds] = useState(`${fragment.durationInSeconds}`);
 
     const handleUpdateShortDescription = async () => {
         const value = shortDescription.trim();
@@ -62,8 +62,8 @@ const EditFragment = (
     }
 
     const handleUpdateDuration = async () => {
-        const value = durationInSeconds;
-        if (value === oldDurationInSeconds) {
+        const value = Number(durationInSeconds);
+        if (value === Number(oldDurationInSeconds)) {
             addAlert('Nothing to update', 'info')
             return;
         }
@@ -73,7 +73,7 @@ const EditFragment = (
         }
         const updateWasSuccessful = await updateFragmentDuration(fragment, value);
         if (updateWasSuccessful) {
-            setOldDurationInSeconds(value);
+            setOldDurationInSeconds(`${value}`);
             addAlert('Fragment duration was updated', 'success');
             setFieldToUpdate(null);
         }
@@ -124,10 +124,11 @@ const EditFragment = (
      */
     const handleEditDuration = (newValue) => {
         if (isNaN(newValue)) {
+            setDurationInSeconds('0');
             return;
         }
         const value = Number(newValue);
-        setDurationInSeconds(clampNumber(value, 0, 999));
+        setDurationInSeconds(`${clampNumber(value, 0, 999)}`);
     }
 
      /**
@@ -233,6 +234,7 @@ const EditFragment = (
             >
                 <Row style={{alignItems: 'end'}}>
                     <InputField
+                        aria-label='update duration'
                         style={{
                             width: '60px'
                         }}

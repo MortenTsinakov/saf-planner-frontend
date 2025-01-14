@@ -31,12 +31,14 @@ const DeleteFragment = (
                 <Row style={{justifyContent: 'space-between'}}>
                     <OutlineButton
                         onClick={() => setShowDeleteFragmentModal(false)}
+                        data-testid='cancel-button'
                     >
                         Cancel
                     </OutlineButton>
                     <FilledButton
                         color='error'
                         onClick={handleDeleteClick}
+                        data-testid='delete-button'
                     >
                         Delete
                     </FilledButton>

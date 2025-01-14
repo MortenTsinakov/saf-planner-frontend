@@ -42,7 +42,9 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
 
     const shortDescriptionPage = () => {
         return (
-            <Column>
+            <Column
+                data-testid='create-fragment-short-description'
+            >
                 <Column>
                     <Typography>Short description</Typography>
                     <Typography fontSize='extrasmall' color='label'>
@@ -60,7 +62,9 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
 
     const longDescriptionPage = () => {
         return (
-            <Column>
+            <Column
+                data-testid='create-fragment-long-description'
+            >
                 <Column>
                     <Typography>Long description</Typography>
                     <Typography fontSize='extrasmall' color='label'>
@@ -79,7 +83,9 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
 
     const durationPage = () => {
         return (
-            <Column>
+            <Column
+                data-testid='create-fragment-duration'
+            >
                 <Column>
                     <Typography>Duration</Typography>
                     <Typography fontSize='extrasmall' color='label'>
@@ -103,7 +109,9 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
 
     const addToTimelinePage = () => {
         return (
-            <Column>
+            <Column
+                data-testid='create-fragment-timeline-status'
+            >
                 <Column>
                     <Typography>On timeline</Typography>
                     <Typography fontSize='extrasmall' color='label'>
@@ -114,6 +122,7 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
                     style={{marginTop: '2rem', marginBottom: '2rem'}}
                     selected={onTimeline}
                     onClick={() => setOnTimeline(!onTimeline)}
+                    data-testid='on-timeline-toggle'
                 />
                 {
                 onTimeline 
@@ -133,6 +142,7 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
                 width: '500px',
                 minHeight: '650px',
             }}
+            data-testid='create-fragment-modal'
         >
             <Column
                 style={{gap: '3rem', flex:1}}
@@ -146,14 +156,15 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
                 </Column>
                 
                 <Row style={{justifyContent: 'space-between'}}>
-                    {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={() => setPage(Math.max(1, page - 1))} /> : <div />}
-                    {page < 4 ? <IconButton icon={<MdArrowForward />} onClick={() => setPage(Math.min(4, page + 1))} /> : <div />}
+                    {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={() => setPage(Math.max(1, page - 1))} data-testid='backward-button'/> : <div />}
+                    {page < 4 ? <IconButton icon={<MdArrowForward />} onClick={() => setPage(Math.min(4, page + 1))} data-testid='forward-button'/> : <div />}
                 </Row>
 
                 <Row style={{gap: '3rem', justifyContent: 'space-between'}}>
                     <OutlineButton
                         onClick={() => setShowCreateFragmentModal(false)}
                         style={{width: '100px'}}
+                        data-testid='create-fragment-cancel-button'
                     >
                         Cancel
                     </OutlineButton>
@@ -162,6 +173,7 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
                         <FilledButton
                             onClick={handleSaveClick}
                             style={{width: '100px'}}
+                            data-testid='create-fragment-save-button'
                         >
                             Save
                         </FilledButton>

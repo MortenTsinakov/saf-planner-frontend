@@ -27,7 +27,11 @@ const FragmentGrid = (
                 {
                     fragments.length === 0
                     ?
-                    <Typography>This project has no fragments yet...</Typography>
+                    <Typography
+                        data-testid='no-fragments-error-message'
+                    >
+                        This project has no fragments yet...
+                    </Typography>
                     :
                     fragments.map(f => (
                         <FragmentCard

@@ -49,6 +49,7 @@ const FragmentCard = (
             }}
             onMouseEnter={() => {setDisplayButtons(true)}}
             onMouseLeave={() => {setDisplayButtons(false)}}
+            data-testid={'fragment-card'}
         >
             <Column
                 style={{gap:'0.2rem', flex: 1}}
@@ -57,7 +58,7 @@ const FragmentCard = (
                     <Typography fontSize='extrasmall' color='label'>
                         Short description
                     </Typography>
-                    {fragment.onTimeline && <MdCheck title='On timeline'/>}
+                    {fragment.onTimeline && <MdCheck title='On timeline' data-testid={'fragment-on-timeline-marker'}/>}
                 </Row>
                 <Typography>
                     {fragment.shortDescription}
@@ -73,13 +74,14 @@ const FragmentCard = (
                             height: '2rem',
                             gap: '0.5rem',
                         }}
+                        data-testid={'fragment-card-action-buttons'}
                     >
-                        <IconButton onClick={() => setShowCreateFragmentModal(true)}title='Add new fragment after this one' style={iconStyle} icon={<MdAddCircleOutline />} />
-                        <IconButton onClick={() => setShowEditFragmentModal(true)} title='Edit the fragment' style={iconStyle} icon={<MdOutlineEdit />} />
-                        <IconButton onClick={() => updateFragmentOnTimelineStatus(fragment, !fragment.onTimeline)}title={`${fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}`} style={iconStyle} icon={<MdAccessTime />} />
-                        <IconButton title='Add comment' style={iconStyle} icon={<MdOutlineModeComment />} />
-                        <IconButton onClick={() => setShowFragmentDetails(true)} title='See details' style={iconStyle} icon={<MdInfoOutline />} />
-                        <IconButton onClick={() => setShowDeleteFragmentModal(true)}title='Delete fragment' style={iconStyle} icon={<MdDeleteOutline />} />
+                        <IconButton onClick={() => setShowCreateFragmentModal(true)}title='Add new fragment after this one' style={iconStyle} icon={<MdAddCircleOutline />} data-testid={'create-fragment-action-button'}/>
+                        <IconButton onClick={() => setShowEditFragmentModal(true)} title='Edit the fragment' style={iconStyle} icon={<MdOutlineEdit />} data-testid={'edit-fragment-action-button'}/>
+                        <IconButton onClick={() => updateFragmentOnTimelineStatus(fragment, !fragment.onTimeline)}title={`${fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}`} style={iconStyle} icon={<MdAccessTime />} data-testid={'on-timeline-action-button'}/>
+                        <IconButton title='Add comment' style={iconStyle} icon={<MdOutlineModeComment />} data-testid={'add-comment-action-button'}/>
+                        <IconButton onClick={() => setShowFragmentDetails(true)} title='See details' style={iconStyle} icon={<MdInfoOutline />} data-testid={'details-action-button'}/>
+                        <IconButton onClick={() => setShowDeleteFragmentModal(true)}title='Delete fragment' style={iconStyle} icon={<MdDeleteOutline />} data-testid={'delete-fragment-action-button'}/>
                     </Row>
                 }
             </Row>
