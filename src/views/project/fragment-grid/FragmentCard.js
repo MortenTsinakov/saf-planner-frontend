@@ -57,6 +57,7 @@ const FragmentCard = (
             <Row
                 style={{height: '2rem', gap: '1rem', justifyContent: 'space-between'}}
                 onMouseLeave={() => setDisplayButtons(false)}
+                data-testid='button-row'
             >
                 <Row>
                     <IconButton
@@ -66,6 +67,7 @@ const FragmentCard = (
                             transform: displayButtons ? 'rotate(90deg)' : 'rotate(0)'
                         }}
                         onClick={() => setDisplayButtons((prev) => !prev)}
+                        data-testid='show-action-icons-button'
                     />
                     <Row
                         style={{
@@ -145,6 +147,7 @@ const FragmentCard = (
                     icon={<MdAccessTime />}
                     title={fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}
                     onClick={() => updateFragmentOnTimelineStatus(fragment, !fragment.onTimeline)}
+                    data-testid='on-timeline-button'
                 />
             </Row>
             <Column

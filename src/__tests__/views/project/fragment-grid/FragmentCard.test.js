@@ -21,41 +21,61 @@ describe('fragment-card', () => {
 
     test('renders no action icons by default', () => {
         render(<FragmentCard fragment={defaultFragment} />);
-        expect(screen.queryAllByTestId('fragment-card-action-buttons').length).toBe(0);
+        const createButton = screen.getByTestId('create-fragment-action-button');
+        const editButton = screen.getByTestId('edit-fragment-action-button');
+        const commentButton = screen.getByTestId('add-comment-action-button');
+        const detailsButton = screen.getByTestId('details-action-button');
+        const deleteButton = screen.getByTestId('delete-fragment-action-button');
+        expect(createButton.style.visibility).toEqual('hidden');
+        expect(editButton.style.visibility).toEqual('hidden');
+        expect(commentButton.style.visibility).toEqual('hidden');
+        expect(detailsButton.style.visibility).toEqual('hidden');
+        expect(deleteButton.style.visibility).toEqual('hidden');
     });
 
-    test('renders action icons on mouse enter', () => {
+    test('renders action icons when expand button is clicked', () => {
         render(<FragmentCard fragment={defaultFragment} />);
 
-        const fragmentCard = screen.getByTestId('fragment-card');
-        fireEvent.mouseEnter(fragmentCard);
+        const createButton = screen.getByTestId('create-fragment-action-button');
+        const editButton = screen.getByTestId('edit-fragment-action-button');
+        const commentButton = screen.getByTestId('add-comment-action-button');
+        const detailsButton = screen.getByTestId('details-action-button');
+        const deleteButton = screen.getByTestId('delete-fragment-action-button');
+        
+        const showIconsButton = screen.getByTestId('show-action-icons-button');
+        fireEvent.click(showIconsButton);
 
-        expect(screen.getByTestId('fragment-card-action-buttons')).toBeInTheDocument();
+        expect(createButton.style.visibility).toEqual('visible');
+        expect(editButton.style.visibility).toEqual('visible');
+        expect(commentButton.style.visibility).toEqual('visible');
+        expect(detailsButton.style.visibility).toEqual('visible');
+        expect(deleteButton.style.visibility).toEqual('visible');
     });
 
     test('renders no action icons on mouse leave', () => {
         render(<FragmentCard fragment={defaultFragment} />);
 
-        const fragmentCard = screen.getByTestId('fragment-card');
-        fireEvent.mouseEnter(fragmentCard);
-        fireEvent.mouseLeave(fragmentCard);
+        const createButton = screen.getByTestId('create-fragment-action-button');
+        const editButton = screen.getByTestId('edit-fragment-action-button');
+        const commentButton = screen.getByTestId('add-comment-action-button');
+        const detailsButton = screen.getByTestId('details-action-button');
+        const deleteButton = screen.getByTestId('delete-fragment-action-button');
 
-        expect(screen.queryAllByTestId('fragment-card-action-buttons').length).toBe(0);
+        const showIconsButton = screen.getByTestId('show-action-icons-button');
+        const buttonRow = screen.getByTestId('button-row');
+        fireEvent.click(showIconsButton);
+        fireEvent.mouseLeave(buttonRow);
+
+        expect(createButton.style.visibility).toEqual('hidden');
+        expect(editButton.style.visibility).toEqual('hidden');
+        expect(commentButton.style.visibility).toEqual('hidden');
+        expect(detailsButton.style.visibility).toEqual('hidden');
+        expect(deleteButton.style.visibility).toEqual('hidden');
     });
 
-    test('renders on-timeline icon if on timeline', () => {
+    test('renders on-timeline icon', () => {
         render(<FragmentCard fragment={defaultFragment} />);
-        expect(screen.getByTestId('fragment-on-timeline-marker')).toBeInTheDocument();
-    });
-
-    test('renders no on-timeline icon if not on timline', () => {
-        const notOnTimelineFragment = {
-            id: 1,
-            shortDescription: 'Short description',
-            onTimeline: false,
-        };
-        render(<FragmentCard fragment={notOnTimelineFragment} />);
-        expect(screen.queryAllByTestId('fragment-on-timeline-marker').length).toBe(0);
+        expect(screen.getByTestId('on-timeline-button')).toBeInTheDocument();
     });
 
     test('renders short description if present', () => {
@@ -66,8 +86,6 @@ describe('fragment-card', () => {
     test('renders create-fragment when icon is clicked', () => {
         render(<FragmentCard fragment={defaultFragment} />);
 
-        const fragmentCard = screen.getByTestId('fragment-card');
-        fireEvent.mouseEnter(fragmentCard);
         const createFragmentButton = screen.getByTestId('create-fragment-action-button');
         fireEvent.click(createFragmentButton);
 
@@ -77,8 +95,6 @@ describe('fragment-card', () => {
     test('renders fragment-details when icon is clicked', () => {
         render(<FragmentCard fragment={defaultFragment} />);
 
-        const fragmentCard = screen.getByTestId('fragment-card');
-        fireEvent.mouseEnter(fragmentCard);
         const fragmentDetailsButton = screen.getByTestId('details-action-button');
         fireEvent.click(fragmentDetailsButton);
 
@@ -88,8 +104,6 @@ describe('fragment-card', () => {
     test('renders edit-fragment when icon is clicked', () => {
         render(<FragmentCard fragment={defaultFragment} />);
 
-        const fragmentCard = screen.getByTestId('fragment-card');
-        fireEvent.mouseEnter(fragmentCard);
         const editFragmentButton = screen.getByTestId('edit-fragment-action-button');
         fireEvent.click(editFragmentButton);
 
@@ -99,8 +113,6 @@ describe('fragment-card', () => {
     test('renders delete-fragment when icon is clicked', () => {
         render(<FragmentCard fragment={defaultFragment} />);
 
-        const fragmentCard = screen.getByTestId('fragment-card');
-        fireEvent.mouseEnter(fragmentCard);
         const deleteFragmentButton = screen.getByTestId('delete-fragment-action-button');
         fireEvent.click(deleteFragmentButton);
 
@@ -111,9 +123,7 @@ describe('fragment-card', () => {
         const mockUpdateTimelineStatus = jest.fn();
         render(<FragmentCard fragment={defaultFragment} updateFragmentOnTimelineStatus={mockUpdateTimelineStatus}/>);
 
-        const fragmentCard = screen.getByTestId('fragment-card');
-        fireEvent.mouseEnter(fragmentCard);
-        const onTimelineActionButton = screen.getByTestId('on-timeline-action-button');
+        const onTimelineActionButton = screen.getByTestId('on-timeline-button');
         fireEvent.click(onTimelineActionButton);
 
         expect(mockUpdateTimelineStatus).toHaveBeenCalledWith(defaultFragment, false);        
@@ -128,9 +138,7 @@ describe('fragment-card', () => {
         };
         render(<FragmentCard fragment={notOnTimelineFragment} updateFragmentOnTimelineStatus={mockUpdateTimelineStatus}/>);
 
-        const fragmentCard = screen.getByTestId('fragment-card');
-        fireEvent.mouseEnter(fragmentCard);
-        const onTimelineActionButton = screen.getByTestId('on-timeline-action-button');
+        const onTimelineActionButton = screen.getByTestId('on-timeline-button');
         fireEvent.click(onTimelineActionButton);
 
         expect(mockUpdateTimelineStatus).toHaveBeenCalledWith(notOnTimelineFragment, true);        
