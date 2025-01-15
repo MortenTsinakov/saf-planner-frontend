@@ -65,7 +65,7 @@ const FragmentCard = (
                             ...iconStyle,
                             transform: displayButtons ? 'rotate(90deg)' : 'rotate(0)'
                         }}
-                        onClick={() => setDisplayButtons(true)}
+                        onClick={() => setDisplayButtons((prev) => !prev)}
                     />
                     <Row
                         style={{
@@ -143,6 +143,7 @@ const FragmentCard = (
                         color: fragment.onTimeline ? 'var(--text-color)' : 'var(--main-gray)'
                     }}
                     icon={<MdAccessTime />}
+                    title={fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}
                     onClick={() => updateFragmentOnTimelineStatus(fragment, !fragment.onTimeline)}
                 />
             </Row>
