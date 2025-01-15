@@ -29,7 +29,7 @@ export { default as DropdownMenu } from 'components/ui/menus/DropdownMenu';
 // modal
 export { default as Modal } from 'components/ui/modals/Modal';
 // swtich
-export { default as Switch } from 'components/ui/swtiches/Switch';
+export { default as Switch } from 'components/ui/switches/Switch';
 // typography
 export { default as Typography } from 'components/ui/typography/Typography';
 
