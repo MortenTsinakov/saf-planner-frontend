@@ -89,7 +89,6 @@ const Project = ({...props}) => {
                 <Column
                     style={{
                         gap: 0,
-                        // minWidth: `calc(100vw - ${readAllWidth}px)`,
                         flex: 1,
                     }}
                 >

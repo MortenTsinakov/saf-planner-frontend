@@ -32,12 +32,15 @@ const ReadAll = ({fragments, readAllHeight, readAllWidth, setReadAllWidth, ...pr
                 minWidth: '250px',
                 height: readAllHeight,
                 overflowY: 'auto',
+                gap: 0,
             }}
+            data-testid='read-all'
         >
             <Column
                 style={{
-                    padding: '4rem 2rem',
+                    padding: '4rem 2rem 4rem 2rem',
                     flex: 1,
+                    overflowY: 'scroll',
                 }}
             >
                 <Typography></Typography>
@@ -47,6 +50,7 @@ const ReadAll = ({fragments, readAllHeight, readAllWidth, setReadAllWidth, ...pr
                 fragments.map(f => (
                     <Column
                         key={f.id}
+                        data-testid='fragment'
                     >
                         <Typography>
                             {f.longDescription}
@@ -62,12 +66,12 @@ const ReadAll = ({fragments, readAllHeight, readAllWidth, setReadAllWidth, ...pr
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 style={{
-                    // backgroundColor: (isResizing || isHovered) ? 'var(--primary-color)' : 'var(--main-gray)',
                     height: readAllHeight,
                     width: '5px',
                     borderRight: (isHovered || isResizing) ? '5px solid var(--primary-color)' : '1px solid var(--main-gray)',
                     cursor: 'col-resize',
                 }}
+                data-testid='resize-handle'
             />
         </Row>
     );
