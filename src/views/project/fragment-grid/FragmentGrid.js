@@ -66,6 +66,8 @@ const FragmentGrid = (
         }
     }
 
+    const fragmentIds = fragments.map(f => f.id);
+
     return (
         <DndContext
             modifiers={[restrictToParentElement]}
@@ -75,7 +77,7 @@ const FragmentGrid = (
         >
             <DroppableSortable
                 id='fragment-grid'
-                items={fragments}
+                items={fragmentIds}
             >
                 <Container
                     style={{
