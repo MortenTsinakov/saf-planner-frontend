@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createFragmentService, deleteFragmentService, fetchFragmentsService, updateFragmentDurationService, updateFragmentLongDescriptionService, updateFragmentOnTimelineStatusService, updateFragmentShortDescriptionService } from 'services';
+import { createFragmentService, deleteFragmentService, fetchFragmentsService, moveFragmentService, updateFragmentDurationService, updateFragmentLongDescriptionService, updateFragmentOnTimelineStatusService, updateFragmentShortDescriptionService } from 'services';
 
 export const useFragments = () => {
     const [fragments, setFragments] = useState([]);
@@ -114,6 +114,42 @@ export const useFragments = () => {
         }
     }, []);
 
+    const moveFragmentOptimistically = useCallback((fragment, newPosition) => {
+        const previousPosition = fragment.position;
+        const updatedFragments = [...fragments]
+
+        const [movedFragment] = updatedFragments.splice(previousPosition - 1, 1);
+        updatedFragments.splice(newPosition - 1, 0, movedFragment);
+
+        return updatedFragments.map((f, index) => ({
+            ...f,
+            position: index + 1
+        }));
+    }, [fragments]);
+
+    /**
+     * Move fragment to new position
+     */
+    const moveFragment = useCallback(async (fragment, newPosition) => {
+        if (fragment.position === newPosition) {
+            setError("Fragment is already in the requested position", "error");
+            return;
+        }
+        if (newPosition > fragments.length) {
+            setError("Invalid position for moving the fragment", "error");
+            return;
+        }
+        const oldState = [...fragments];
+        setFragments(moveFragmentOptimistically(fragment, newPosition));
+        try {
+            setError(null);
+            await moveFragmentService(fragment.id, newPosition);
+        } catch (err) {
+            setError(err);
+            setFragments(oldState);
+        }
+    }, [fragments, moveFragmentOptimistically]);
+
     /**
      * Delete fragment.
      * Return true if fragment was successfully deleted, else false.
@@ -138,6 +174,7 @@ export const useFragments = () => {
         updateFragmentShortDescription,
         updateFragmentLongDescription,
         updateFragmentDuration,
+        moveFragment,
         deleteFragment,
         loading,
         error,

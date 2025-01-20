@@ -80,6 +80,18 @@ export const updateFragmentDurationService = async (fragmentId, durationInSecond
 }
 
 /**
+ * Move fragment to new position
+ */
+export const moveFragmentService = async (fragmentId, newPosition) => {
+    const putData = {
+        fragmentId: fragmentId,
+        newPosition: newPosition
+    }
+    const response = await apiClient.put('/fragment/move', putData);
+    return response.data;
+}
+
+/**
  * Delete the fragment with given id.
  */
 export const deleteFragmentService = async (fragmentId) => {

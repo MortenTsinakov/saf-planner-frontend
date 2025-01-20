@@ -19,6 +19,11 @@ export { default as Row } from 'components/ui/containers/Row';
 export { default as Sidebar } from 'components/ui/containers/Sidebar';
 // decoration
 export { default as Divider } from 'components/ui/decorations/Divider';
+//drag-and-drop
+export { default as Draggable } from 'components/drag-and-drop/Draggable';
+export { default as Droppable } from 'components/drag-and-drop/Droppable';
+export { default as Sortable } from 'components/drag-and-drop/Sortable';
+export { default as DroppableSortable } from 'components/drag-and-drop/DroppableSortable';
 // form
 export { default as Form } from 'components/ui/forms/Form';
 // input
