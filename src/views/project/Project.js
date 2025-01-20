@@ -30,6 +30,7 @@ const Project = ({...props}) => {
         moveFragment,
         deleteFragment,
         fragments,
+        setFragments,
         loading,
         error,
         setError} = useFragments();
@@ -102,6 +103,7 @@ const Project = ({...props}) => {
                     <FragmentGrid
                         fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${timelineHeight + timelineToolsHeight}px)`}
                         fragments={fragments}
+                        setFragments={setFragments}
                         createFragment={createFragment}
                         updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
                         updateFragmentShortDescription={updateFragmentShortDescription}

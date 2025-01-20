@@ -1,4 +1,4 @@
-import { Card, Column, IconButton, Row, Sortable, Typography } from 'components';
+import { Card, Column, IconButton, Row, SortableItem, Typography } from 'components';
 import { useState } from 'react';
 import { 
     MdAccessTime,
@@ -16,6 +16,7 @@ import EditFragment from './EditFragment';
 
 const FragmentCard = (
     {
+        activeId,
         fragment,
         createFragment,
         updateFragmentOnTimelineStatus,
@@ -43,8 +44,9 @@ const FragmentCard = (
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
 
     return (
-        <Sortable
+        <SortableItem
             id={fragment.id}
+            activeId={activeId}
         >
             {({ listeners, attributes }) => (
                 <Card
@@ -212,7 +214,7 @@ const FragmentCard = (
             )}
 
 
-        </Sortable>
+        </SortableItem>
     );
 }
  

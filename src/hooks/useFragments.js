@@ -168,6 +168,7 @@ export const useFragments = () => {
 
     return {
         fragments,
+        setFragments,
         fetchFragments,
         createFragment,
         updateFragmentOnTimelineStatus,
