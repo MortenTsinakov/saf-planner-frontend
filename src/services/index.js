@@ -27,5 +27,6 @@ export {
     updateFragmentShortDescriptionService,
     updateFragmentLongDescriptionService,
     updateFragmentDurationService,
+    moveFragmentService,
     deleteFragmentService,
 } from 'services/fragment/FragmentService';

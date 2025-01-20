@@ -12,6 +12,7 @@ const FragmentGrid = (
         updateFragmentShortDescription,
         updateFragmentLongDescription,
         updateFragmentDuration,
+        moveFragment,
         deleteFragment,
         ...props}) => 
     {
@@ -26,43 +27,12 @@ const FragmentGrid = (
 
         const {active, over} = e;
 
-        // TODO: Save changes to backend, you can use the following logic in
-        // in the hook.
-
         if (active.id !== over.id) {
             const movedFragment = fragments.find(f => f.id === active.id);
             const overFragment = fragments.find(f => f.id === over.id);
-
-            const previousPosition = movedFragment.position;
             const newPosition = overFragment.position;
 
-            if (movedFragment.position < overFragment.position) {
-                const updatedFragments = fragments.map(f => {
-                    if (f.id === movedFragment.id) {
-                        f.position = newPosition;
-                        return f;
-                    }
-                    if (f.position < previousPosition || f.position > newPosition) {
-                        return f;
-                    }
-                    f.position -= 1;
-                    return f;
-                });
-                console.log(updatedFragments);
-            } else {
-                const updatedFragments = fragments.map(f => {
-                    if (f.id === movedFragment.id) {
-                        f.position = newPosition;
-                        return f;
-                    }
-                    if (f.position > previousPosition || f.position < newPosition) {
-                        return f;
-                    }
-                    f.position += 1;
-                    return f;
-                });
-                console.log(updatedFragments);
-            }
+            moveFragment(movedFragment, newPosition);
         }
     }
 

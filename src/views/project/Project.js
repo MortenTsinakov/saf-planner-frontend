@@ -27,6 +27,7 @@ const Project = ({...props}) => {
         updateFragmentShortDescription,
         updateFragmentLongDescription,
         updateFragmentDuration,
+        moveFragment,
         deleteFragment,
         fragments,
         loading,
@@ -108,6 +109,7 @@ const Project = ({...props}) => {
                         updateFragmentDuration={updateFragmentDuration}
                         deleteFragment={deleteFragment}
                         projectId={projectId}
+                        moveFragment={moveFragment}
                         {...props}
                     />
                 </Column>
