@@ -7,13 +7,13 @@ import { Column,
          Row,
          Switch,
          Typography } from 'components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdArrowBack, MdArrowForward, MdClose } from 'react-icons/md';
 import { clampNumber } from 'utils';
 import NewCard from './NewCard';
 import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from 'constants/Constants';
 
-const CreateFragment = ({activeId, newCards, setNewCards, createFragment, previousFragment, fragmentGridHeight, setShowCreateFragmentPanel, ...props}) => {
+const CreateFragment = ({activeId, newCards, setNewCards, createFragment, fragmentGridHeight, setShowCreateFragmentPanel, ...props}) => {
 
     const projectId = props.projectId;
     const panelWidth = 420;
@@ -23,6 +23,27 @@ const CreateFragment = ({activeId, newCards, setNewCards, createFragment, previo
     const [longDescription, setLongDescription] = useState('');
     const [durationInSeconds, setDurationInSeconds] = useState(5);
     const [onTimeline, setOnTimeline] = useState(false);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            switch (e.key) {
+                case "ArrowLeft":
+                    handleDecrementPage();
+                    break;
+                case "ArrowRight":
+                    handleIncrementPage();
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+    });
 
     const handleDurationChange = (e) => {
         if (isNaN(e.target.value)) {
@@ -125,9 +146,9 @@ const CreateFragment = ({activeId, newCards, setNewCards, createFragment, previo
                 {
                 onTimeline 
                 ?
-                <Typography color='label'>The scene will appear on the timeline</Typography>
+                <Typography color='label'>The fragment will appear on the timeline</Typography>
                 :
-                <Typography color='label'>The scene will not appear on the timeline</Typography>
+                <Typography color='label'>The fragment will not appear on the timeline</Typography>
                 }
             </Column>
         );
@@ -182,12 +203,17 @@ const CreateFragment = ({activeId, newCards, setNewCards, createFragment, previo
         }
     }
 
+    const handleDecrementPage = () => {
+        setPage(Math.max(1, page - 1))
+    }
     return (
         <SortableContextWrapper
             id={NEW_FRAGMENT_PANEL_ID}
             items={newCards}
         >
+        {({setNodeRef}) =>         
             <Column
+                ref={setNodeRef}
                 style={{
                     width: 'fit-content',
                     padding: '5rem 2rem',
@@ -220,10 +246,11 @@ const CreateFragment = ({activeId, newCards, setNewCards, createFragment, previo
                 </Column>
                 
                 <Row style={{justifyContent: 'space-between', width: '100%'}}>
-                    {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={() => setPage(Math.max(1, page - 1))} data-testid='backward-button'/> : <div />}
+                    {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
                     {page < 5 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
                 </Row>
             </Column>
+        }
         </SortableContextWrapper>
     );
 }

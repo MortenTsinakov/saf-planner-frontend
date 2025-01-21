@@ -1,6 +1,8 @@
-import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
+import { rectSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
 
 const SortableContextWrapper = ({id, items, children}) => {
+
+    const {setNodeRef} = useSortable({id});
 
     return (
         <SortableContext
@@ -9,7 +11,7 @@ const SortableContextWrapper = ({id, items, children}) => {
             items={items}
             strategy={rectSortingStrategy}
         >
-            {children}
+            {children({setNodeRef})}
         </SortableContext>
     );
 }

@@ -1,6 +1,6 @@
-import { Container, SortableContextWrapper, Row, Typography } from 'components';
+import { Container, SortableContextWrapper, Row, Typography, Column, TextButton } from 'components';
 import FragmentCard from './FragmentCard';
-import { closestCorners, DndContext, DragOverlay, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragOverlay, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useState } from 'react';
 import { restrictOnlyFragments } from 'utils';
 import CreateFragment from './CreateFragment';
@@ -8,6 +8,7 @@ import CreateFragmentDragOverlay from './drag_overlays/CreateFragmentDragOverlay
 import FragmentDragOverlay from './drag_overlays/FragmentDragOverlay';
 import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from 'constants/Constants';
 import { useAlerts } from 'hooks';
+import { MdAdd } from 'react-icons/md';
 
 /**
  * Grid that displays project fragments.
@@ -37,6 +38,7 @@ const FragmentGrid = (
     );
 
     const [activeId, setActiveId] = useState(null);
+    const [firstFragmentHovering, setFirstFragmentHovering] = useState(false);
     const {addAlert} = useAlerts();
 
     /**
@@ -58,10 +60,31 @@ const FragmentGrid = (
      * to the database. Otherwise it will be returned to it's initial position.
      */
     const handleFragmentCreationDrop = async (active, over) => {
+
+        if (active.data.current.sortable.containerId === NEW_FRAGMENT_PANEL_ID && over.id === FRAGMENT_GRID_ID) {
+            const newCard = newCards.find(f => f.id === NEW_FRAGMENT_ID);
+            const data = {
+                shortDescription: newCard.shortDescription.trim(),
+                longDescription: newCard.longDescription.trim(),
+                durationInSeconds: newCard.durationInSeconds <= 0 ? 5 : newCard.durationInSeconds,
+                onTimeline: newCard.onTimeline,
+                position: 1,
+                projectId: props.projectId,
+            }
+            const fragmentCreatedSuccessfully = await createFragment(data);
+            if (fragmentCreatedSuccessfully) {
+                addAlert("Fragment created", "success");
+                setShowCreateFragmentPanel(false);
+            }
+            return;
+        }
+
         if (active.data.current.sortable.containerId === NEW_FRAGMENT_PANEL_ID) {
             setNewCards(newCards.filter(f => f.id === NEW_FRAGMENT_ID));
             return;
-        } else if (over.data.current.sortable.containerId === FRAGMENT_GRID_ID) {
+        }
+        
+        if (over.data.current.sortable.containerId === FRAGMENT_GRID_ID) {
             const newCard = fragments.find(f => f.id === NEW_FRAGMENT_ID);
             const overCard = fragments.find(f => f.id === over.id);
             const data = {
@@ -80,6 +103,7 @@ const FragmentGrid = (
             }
             return;
         }
+
         setFragments(prev => prev.filter(f => f.id !== NEW_FRAGMENT_ID));
         setNewCards([...fragments.filter(f => f.id === NEW_FRAGMENT_ID), ...newCards.filter(f => f.id === NEW_FRAGMENT_ID)]);
     }
@@ -94,8 +118,6 @@ const FragmentGrid = (
      */
     const handleDragEnd = async ({active, over}) => {
         setActiveId(null);
-
-        console.log(active, over);
 
         if (!active || !over) {return;}
 
@@ -127,6 +149,12 @@ const FragmentGrid = (
         const overContainer = over.data.current?.sortable.containerId;
 
         if (!activeContainer || !overContainer) {return;}
+
+        if (active.id === NEW_FRAGMENT_ID && over.id === FRAGMENT_GRID_ID) {
+            setFirstFragmentHovering(true);
+        } else {
+            setFirstFragmentHovering(false);
+        }
 
         if (activeContainer === NEW_FRAGMENT_PANEL_ID && overContainer === FRAGMENT_GRID_ID) {
             if (fragments.filter(f => f.id === NEW_FRAGMENT_ID).length === 0) {
@@ -193,7 +221,6 @@ const FragmentGrid = (
     return (
         <DndContext
             modifiers={[restrictOnlyFragments]}
-            collisionDetection={closestCorners}
             sensors={sensors}
             onDragEnd={handleDragEnd}
             onDragOver={handleDragOver}
@@ -204,44 +231,88 @@ const FragmentGrid = (
                 <SortableContextWrapper
                     id={FRAGMENT_GRID_ID}
                     items={fragments}
-                >
+                > 
+                {({setNodeRef}) =>                 
                     <Container
+                        ref={setNodeRef}
                         style={{
-                            padding: '2rem',
-                            gap: '1.5rem',
-                            flexWrap: 'wrap',
-                            justifyContent: 'start',
-                            alignContent: 'flex-start',
-                            maxHeight: fragmentGridHeight,
-                            overflow: 'auto',
-                            flex: '1 1 0',
+                            width: '100%',
+                            height: fragmentGridHeight,
+                            alignItems: 'flex-start',
                         }}
                     >
                         {
                             fragments.length === 0
                             ?
-                            <Typography
-                                data-testid='no-fragments-error-message'
+                            <Container
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: fragmentGridHeight,
+                                    width: '100%',
+                                }}
                             >
-                                This project has no fragments yet...
-                            </Typography>
+                                <Column
+                                    style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        height: '80%',
+                                        width: '80%',
+                                        borderRadius: '50px',
+                                        border: `1px dashed ${firstFragmentHovering ? 'var(--primary-color)' : 'gray'}`,
+                                    }}
+                                >
+                                    <Typography fontSize='medium'>This project has no fragments yet...</Typography>
+                                    {
+                                        !showCreateFragmentPanel &&
+                                        <TextButton
+                                            onClick={() => setShowCreateFragmentPanel(true)}
+                                            style={{display: 'flex', alignContent:'center', gap: '5px'}}
+                                        >
+                                            {<MdAdd/>} Create new fragment
+                                        </TextButton>
+                                    }
+                                    {
+                                        showCreateFragmentPanel &&
+                                        <Typography color='label'>
+                                            Once you have filled in the
+                                            details, drop the fragment card
+                                            here
+                                        </Typography>
+                                    }
+                                </Column>
+                            </Container>
                             :
-                            fragments.map(f => (
-                                <FragmentCard
-                                    key={f.id}
-                                    activeId={activeId}
-                                    fragment={f}
-                                    createFragment={createFragment}
-                                    updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
-                                    updateFragmentShortDescription={updateFragmentShortDescription}
-                                    updateFragmentLongDescription={updateFragmentLongDescription}
-                                    updateFragmentDuration={updateFragmentDuration}
-                                    deleteFragment={deleteFragment}
-                                    {...props}
-                                />
-                            ))
+                            <Container
+                                style={{
+                                    gap: '1.5rem',
+                                    padding: '2rem',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'start',
+                                    alignContent: 'flex-start',
+                                    maxHeight: fragmentGridHeight,
+                                    overflow: 'auto',
+                                    flex: '1 1 0',
+                                }}
+                            >
+                                {fragments.map(f => (
+                                    <FragmentCard
+                                        key={f.id}
+                                        activeId={activeId}
+                                        fragment={f}
+                                        createFragment={createFragment}
+                                        updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
+                                        updateFragmentShortDescription={updateFragmentShortDescription}
+                                        updateFragmentLongDescription={updateFragmentLongDescription}
+                                        updateFragmentDuration={updateFragmentDuration}
+                                        deleteFragment={deleteFragment}
+                                        {...props}
+                                    />
+                                ))}
+                            </Container>
                         }
                     </Container>
+                }
                     </SortableContextWrapper>
                         {
                             showCreateFragmentPanel
