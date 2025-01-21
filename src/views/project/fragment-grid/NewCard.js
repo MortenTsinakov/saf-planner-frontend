@@ -1,9 +1,10 @@
 import { Card, Column, Row, SortableItem, Typography } from 'components';
+import { NEW_FRAGMENT_ID } from 'constants/Constants';
 
 const NewCard = ({fragment, activeId}) => {
     return (
         <SortableItem
-            id={'new-card'}
+            id={NEW_FRAGMENT_ID}
             key={fragment.id}
             activeId={activeId}
         >

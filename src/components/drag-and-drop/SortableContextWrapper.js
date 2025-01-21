@@ -1,6 +1,6 @@
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 
-const DroppableItem = ({id, items, children}) => {
+const SortableContextWrapper = ({id, items, children}) => {
 
     return (
         <SortableContext
@@ -14,4 +14,4 @@ const DroppableItem = ({id, items, children}) => {
     );
 }
  
-export default DroppableItem;
+export default SortableContextWrapper;

@@ -18,16 +18,8 @@ export const fetchFragmentsService = async (projectId) => {
  *  position: position where the fragment will be added
  *  projectId: project where the fragment is added
  */
-export const createFragmentService = async (shortDescription, longDescription, durationInSeconds, onTimeline, position, projectId) => {
-    const postData = {
-        shortDescription: shortDescription,
-        longDescription: longDescription,
-        durationInSeconds: durationInSeconds,
-        onTimeline: onTimeline,
-        position: position,
-        projectId: projectId,
-    }
-    const response = await apiClient.post('/fragment', postData);
+export const createFragmentService = async (fragment) => {
+    const response = await apiClient.post('/fragment', fragment);
     return response.data;
 }
 

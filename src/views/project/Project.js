@@ -18,7 +18,8 @@ const Project = ({...props}) => {
     const timelineHeight = 120;
     const timelineToolsHeight = 55;
     const [readAllWidth, setReadAllWidth] = useState(350);
-    const [showReadAllPanel, setShowReadAllPanel] = useState(true);
+    const [showReadAllPanel, setShowReadAllPanel] = useState(false);
+    const [showCreateFragmentPanel, setShowCreateFragmentPanel] = useState(false);
 
     const {
         fetchFragments,
@@ -73,6 +74,8 @@ const Project = ({...props}) => {
                 height={toolBarHeight}
                 showReadAllPanel={showReadAllPanel}
                 setShowReadAllPanel={setShowReadAllPanel}
+                showCreateFragmentPanel={showCreateFragmentPanel}
+                setShowCreateFragmentPanel={setShowCreateFragmentPanel}
             />
             <Row
                 style={{
@@ -104,6 +107,8 @@ const Project = ({...props}) => {
                         fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${timelineHeight + timelineToolsHeight}px)`}
                         fragments={fragments}
                         setFragments={setFragments}
+                        showCreateFragmentPanel={showCreateFragmentPanel}
+                        setShowCreateFragmentPanel={setShowCreateFragmentPanel}
                         createFragment={createFragment}
                         updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
                         updateFragmentShortDescription={updateFragmentShortDescription}

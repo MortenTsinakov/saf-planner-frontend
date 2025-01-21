@@ -43,11 +43,11 @@ export const useFragments = () => {
     /**
      * Create new fragment
      */
-    const createFragment = useCallback(async (shortDescription, longDescription, durationInSeconds, onTimeline, position, projectId) => {
+    const createFragment = useCallback(async (fragment) => {
         try {
             setError(null);
-            const response = await createFragmentService(shortDescription, longDescription, durationInSeconds, onTimeline, position, projectId);
-            setFragments(prev => [...incrementFragmentPositions(prev, position)]);
+            const response = await createFragmentService(fragment);
+            setFragments(prev => [...incrementFragmentPositions(prev, response.position)]);
             setFragments(prev => [...prev, response].sort((a, b) => {return a.position - b.position}));
             return true;
         } catch (err) {

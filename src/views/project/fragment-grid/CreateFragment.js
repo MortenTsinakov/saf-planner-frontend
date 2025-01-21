@@ -1,36 +1,28 @@
-import { Column, FilledButton, IconButton, InputArea, InputField, Modal, OutlineButton, Row, Switch, Typography } from 'components';
-import { useAlerts } from 'hooks';
+import { Column,
+         Container,
+         SortableContextWrapper,
+         IconButton,
+         InputArea,
+         InputField,
+         Row,
+         Switch,
+         Typography } from 'components';
 import { useState } from 'react';
-import { MdArrowBack, MdArrowForward } from 'react-icons/md';
+import { MdArrowBack, MdArrowForward, MdClose } from 'react-icons/md';
 import { clampNumber } from 'utils';
+import NewCard from './NewCard';
+import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from 'constants/Constants';
 
-const CreateFragment = ({createFragment, previousFragment, setShowCreateFragmentModal, ...props}) => {
+const CreateFragment = ({activeId, newCards, setNewCards, createFragment, previousFragment, fragmentGridHeight, setShowCreateFragmentPanel, ...props}) => {
 
-    const position = previousFragment.position + 1;
     const projectId = props.projectId;
+    const panelWidth = 420;
 
     const [page, setPage] = useState(1);
     const [shortDescription, setShortDescription] = useState('');
     const [longDescription, setLongDescription] = useState('');
     const [durationInSeconds, setDurationInSeconds] = useState(5);
     const [onTimeline, setOnTimeline] = useState(false);
-
-    const { addAlert } = useAlerts();
-
-    const handleSaveClick = async () => {
-        const creationWasSuccessful = await createFragment(
-            shortDescription.trim(),
-            longDescription.trim(),
-            durationInSeconds <= 0 ? 5 : durationInSeconds,
-            onTimeline,
-            position,
-            projectId
-        );
-        if (creationWasSuccessful) {
-            addAlert("Fragment created", "success");
-            setShowCreateFragmentModal(false);
-        }
-    }
 
     const handleDurationChange = (e) => {
         if (isNaN(e.target.value)) {
@@ -44,17 +36,19 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
         return (
             <Column
                 data-testid='create-fragment-short-description'
+                style={{width: panelWidth}}
             >
                 <Column>
                     <Typography>Short description</Typography>
                     <Typography fontSize='extrasmall' color='label'>
-                        Enter a quick summary of your idea to make it easy to recognize.
+                        Enter a quick summary of your idea to make it easy to recognize later on.
                     </Typography>
                 </Column>
                 <InputArea
                     placeholder='Short description for the fragment...'
                     value={shortDescription}
                     onChange={(e) => setShortDescription(e.target.value)}
+                    style={{height: 200}}
                 />
             </Column>
         );
@@ -64,6 +58,7 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
         return (
             <Column
                 data-testid='create-fragment-long-description'
+                style={{width: panelWidth}}
             >
                 <Column>
                     <Typography>Long description</Typography>
@@ -75,6 +70,7 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
                     placeholder='Long description for the fragment...'
                     value={longDescription}
                     onChange={(e) => setLongDescription(e.target.value)}
+                    style={{height: 600}}
                 />
                 
             </Column>
@@ -85,6 +81,7 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
         return (
             <Column
                 data-testid='create-fragment-duration'
+                style={{width: panelWidth}}
             >
                 <Column>
                     <Typography>Duration</Typography>
@@ -111,6 +108,7 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
         return (
             <Column
                 data-testid='create-fragment-timeline-status'
+                style={{width: panelWidth}}
             >
                 <Column>
                     <Typography>On timeline</Typography>
@@ -135,54 +133,98 @@ const CreateFragment = ({createFragment, previousFragment, setShowCreateFragment
         );
     }
 
+    const finalizeFragmentCreationPage = () => {
+        return (
+            <Column
+                style={{width: panelWidth}}
+            >
+                <Typography
+                    color='label'
+                >
+                    To save it, simply drag the fragment card
+                    above the fragment grid and drop it in the
+                    position you want it to be saved.
+                </Typography>  
+                <Container
+                    style={{
+                        height: 220,
+                        borderRadius: 10,
+                        border: '1px dashed var(--primary-color)'
+                    }}
+                >
+                    {newCards.map(f => (
+                        <NewCard
+                            key={f.id}
+                            activeId={activeId}
+                            fragment={f}
+                        />
+                    ))}
+                </Container>
+            </Column>
+        );
+    }
+
+    const handleIncrementPage = () => {
+        if (page === 4) {
+            setNewCards([{
+                id: NEW_FRAGMENT_ID,
+                shortDescription: shortDescription,
+                longDescription: longDescription,
+                durationInSeconds: durationInSeconds,
+                onTimeline: onTimeline,
+                position: null,
+                projectId: projectId
+            }])
+            setPage(5);
+        }
+        else {
+            setPage(Math.min(4, page + 1))
+        }
+    }
+
     return (
-        <Modal
-            style={{
-                maxWidth: '75vw',
-                width: '500px',
-                minHeight: '650px',
-            }}
-            data-testid='create-fragment-modal'
+        <SortableContextWrapper
+            id={NEW_FRAGMENT_PANEL_ID}
+            items={newCards}
         >
             <Column
-                style={{gap: '3rem', flex:1}}
+                style={{
+                    width: 'fit-content',
+                    padding: '5rem 2rem',
+                    height: fragmentGridHeight,
+                    borderLeft: '1px solid var(--main-gray)',
+                    alignItems: 'center',
+                    gap: '3rem',
+                }}
             >
-                <Typography fontSize='medium'>Create new fragment</Typography>
+                <Row
+                    style={{width: '100%'}}
+                >
+                    <IconButton
+                        icon={<MdClose />}
+                        onClick={() => setShowCreateFragmentPanel(false)}
+                    />
+                </Row>
+                {
+                    page < 5 ?
+                    <Typography fontSize='medium'>Create new fragment</Typography>
+                    :
+                    <Typography fontSize='medium'>Your fragment is ready!</Typography>
+                }
                 <Column style={{justifyContent: 'space-between', flex: 1}}>
                     {page === 1 && shortDescriptionPage()}
                     {page === 2 && longDescriptionPage()}
                     {page === 3 && durationPage()}
                     {page === 4 && addToTimelinePage()}
+                    {page === 5 && finalizeFragmentCreationPage()}
                 </Column>
                 
-                <Row style={{justifyContent: 'space-between'}}>
+                <Row style={{justifyContent: 'space-between', width: '100%'}}>
                     {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={() => setPage(Math.max(1, page - 1))} data-testid='backward-button'/> : <div />}
-                    {page < 4 ? <IconButton icon={<MdArrowForward />} onClick={() => setPage(Math.min(4, page + 1))} data-testid='forward-button'/> : <div />}
-                </Row>
-
-                <Row style={{gap: '3rem', justifyContent: 'space-between'}}>
-                    <OutlineButton
-                        onClick={() => setShowCreateFragmentModal(false)}
-                        style={{width: '100px'}}
-                        data-testid='create-fragment-cancel-button'
-                    >
-                        Cancel
-                    </OutlineButton>
-                        {
-                        page === 4 ?
-                        <FilledButton
-                            onClick={handleSaveClick}
-                            style={{width: '100px'}}
-                            data-testid='create-fragment-save-button'
-                        >
-                            Save
-                        </FilledButton>
-                        :
-                        <div />
-                        }
+                    {page < 5 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
                 </Row>
             </Column>
-        </Modal>
+        </SortableContextWrapper>
     );
 }
  

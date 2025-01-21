@@ -1,3 +1,5 @@
+import { NEW_FRAGMENT_ID } from 'constants/Constants';
+
 export const restrictOnlyFragments = ({
     active,
     transform,
@@ -9,8 +11,8 @@ export const restrictOnlyFragments = ({
         return transform
     }
 
-    if (active && active.id === "new-card") {
-        return transform
+    if (active && active.id === NEW_FRAGMENT_ID) {
+        return restrictToBoundingRect(transform, draggingNodeRect, windowRect);
     }
 
     return restrictToBoundingRect(transform, draggingNodeRect, containerNodeRect);
