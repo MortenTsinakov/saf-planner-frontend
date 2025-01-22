@@ -1,9 +1,11 @@
 const { render, screen, fireEvent, waitFor } = require('@testing-library/react');
-const { useAlerts } = require('hooks');
+const { useAlerts, useProject } = require('hooks');
+const { updateProjectDescriptionService } = require('services');
 const { default: EditFragment } = require('views/project/fragment-grid/EditFragment');
 
 jest.mock('hooks', () => ({
     useAlerts: jest.fn(),
+    useProject: jest.fn(),
 }));
 
 const mockUseAlertValue = {
@@ -22,18 +24,21 @@ const mockUpdateFragmentShortDescription = jest.fn();
 const mockUpdateFragmentLongDescription = jest.fn();
 const mockUpdateFragmentDuration = jest.fn();
 
+const mockUseProjectValue = {
+    updateFragmentShortDescription: mockUpdateFragmentShortDescription,
+    updateFragmentLongDescription: mockUpdateFragmentLongDescription,
+    updateFragmentDuration: mockUpdateFragmentDuration,
+}
 
 describe('EditFragment', () => {
 
     beforeEach(() => {
         useAlerts.mockReturnValue(mockUseAlertValue);
+        useProject.mockReturnValue(mockUseProjectValue);
         render(
             <EditFragment
                 fragment={fragment}
                 setShowEditFragmentModal={mockSetShowEditFragmentModal}
-                updateFragmentShortDescription={mockUpdateFragmentShortDescription}
-                updateFragmentLongDescription={mockUpdateFragmentLongDescription}
-                updateFragmentDuration={mockUpdateFragmentDuration}
             />
         );
     });

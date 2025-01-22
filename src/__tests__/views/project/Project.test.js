@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { useFragments, useAlerts } from 'hooks';
+import { useProject, useAlerts } from 'hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Project from 'views/project/Project';
 
@@ -10,7 +10,7 @@ jest.mock('views/project/toolbar/Toolbar', () => () => <div>MockToolbar</div>);
 
 jest.mock('hooks', () => ({
     useAlerts: jest.fn(),
-    useFragments: jest.fn(),
+    useProject: jest.fn(),
 }));
 
 jest.mock('react-router-dom', () => ({
@@ -19,7 +19,7 @@ jest.mock('react-router-dom', () => ({
     useLocation: jest.fn(),
 }));
 
-const mockedUseFragmentsValue = {
+const mockedUseProjectValue = {
     fetchFragments: jest.fn(),
     createFragment: jest.fn(),
     updateFragmentOnTimelineStatus: jest.fn(),
@@ -45,7 +45,7 @@ const mockUseLocationValue = {
 
 describe('Project', () => {
     beforeEach(() => {
-        useFragments.mockReturnValue(mockedUseFragmentsValue);
+        useProject.mockReturnValue(mockedUseProjectValue);
         useAlerts.mockReturnValue(mockedUseAlertsValue);
         useLocation.mockReturnValue(mockUseLocationValue);
         useNavigate.mockReturnValue(mockedUseNavigateValue);

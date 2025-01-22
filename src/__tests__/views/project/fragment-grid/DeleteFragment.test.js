@@ -1,11 +1,12 @@
 const { render, screen, fireEvent, waitFor } = require('@testing-library/react');
-const { useAlerts } = require('hooks');
+const { useAlerts, useProject } = require('hooks');
 const { default: DeleteFragment } = require('views/project/fragment-grid/DeleteFragment');
 
 jest.mock('hooks', () => ({
     useAlerts: jest.fn(),
+    useProject: jest.fn(),
 }));
-const defaultUseAlertsValue = {
+const mockUseAlertsValue = {
     addAlert: jest.fn(),
 }
 
@@ -13,16 +14,19 @@ const mockFragment = {id: 1};
 const mockSetShowDeleteFragmentModal = jest.fn();
 const mockDeleteFragment = jest.fn();
 
+const mockUseProjectValue = {
+    deleteFragment: mockDeleteFragment,
+}
 
 describe('DeleteFragment', () => {
 
     beforeEach(() => {
-        useAlerts.mockReturnValue(defaultUseAlertsValue);
+        useAlerts.mockReturnValue(mockUseAlertsValue);
+        useProject.mockReturnValue(mockUseProjectValue);
         render(
             <DeleteFragment
                 fragment={mockFragment}
                 setShowDeleteFragmentModal={mockSetShowDeleteFragmentModal}
-                deleteFragment={mockDeleteFragment}
             />
         );
     });

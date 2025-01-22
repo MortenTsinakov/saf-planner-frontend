@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { useProject } from 'hooks';
 import { default as FragmentCard } from 'views/project/fragment-grid/FragmentCard';
 
 const defaultFragment = {
@@ -7,12 +8,25 @@ const defaultFragment = {
     onTimeline: true,
 }
 
+const mockUpdateTimelineStatus = jest.fn();
+const mockUseProjectValue = {
+    updateFragmentOnTimelineStatus: mockUpdateTimelineStatus,
+}
+
+jest.mock('hooks', () => ({
+    useProject: jest.fn(),
+}));
 jest.mock('views/project/fragment-grid/DeleteFragment', () => () => <div>MockDeleteFragment</div>);
 jest.mock('views/project/fragment-grid/EditFragment', () => () => <div>MockEditFragment</div>);
 jest.mock('views/project/fragment-grid/FragmentDetails', () => () => <div>MockFragmentDetails</div>);
 
 
 describe('fragment-card', () => {
+
+    beforeEach(() => {
+        useProject.mockReturnValue(mockUseProjectValue);
+    })
+
     test('renders fragment card', () => {
         render(<FragmentCard fragment={defaultFragment} />);
         expect(screen.getByTestId('fragment-card')).toBeInTheDocument();
@@ -104,7 +118,6 @@ describe('fragment-card', () => {
     });
 
     test('calls to remove from timeline when icon is clicked', () => {
-        const mockUpdateTimelineStatus = jest.fn();
         render(<FragmentCard fragment={defaultFragment} updateFragmentOnTimelineStatus={mockUpdateTimelineStatus}/>);
 
         const onTimelineActionButton = screen.getByTestId('on-timeline-button');
@@ -114,7 +127,6 @@ describe('fragment-card', () => {
     });
 
     test('calls to add to timeline when icon is clicked', () => {
-        const mockUpdateTimelineStatus = jest.fn();
         const notOnTimelineFragment = {
             id: 1,
             shortDescription: 'Short description',

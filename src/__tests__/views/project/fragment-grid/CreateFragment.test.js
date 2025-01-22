@@ -11,12 +11,9 @@ const defaultUseAlertsValue = {
 jest.mock('views/project/fragment-grid/NewCard', () => () => <div>MockNewCard</div>);
 
 const props = {projectId: 1}
-const mockNewCards = [{shortDescription: 'Short'}];
+const mockNewCards = [{id: 1, shortDescription: 'Short'}];
 const mockSetNewCards = jest.fn()
-const mockPreviousFragment = {
-    id: 1,
-    position: 10,
-};
+
 const mockSetShowCreateFragmentPanel = jest.fn();
 
 

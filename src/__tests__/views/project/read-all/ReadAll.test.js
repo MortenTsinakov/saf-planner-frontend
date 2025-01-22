@@ -1,10 +1,17 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { useProject } from 'hooks';
 import ReadAll from 'views/project/read-all/ReadAll';
 
-const mockFragments = [
-    {id: 1, longDescription: '1st fragment long description'},
-    {id: 2, longDescription: '2nd fragment long description'}
-];
+jest.mock('hooks', () => ({
+    useAlerts: jest.fn(),
+    useProject: jest.fn(),
+}));
+const mockUseProjectsValue = {
+    fragments: [
+        {id: 1, longDescription: '1st fragment long description'},
+        {id: 2, longDescription: '2nd fragment long description'}
+    ]
+}
 const mockReadAllHeight = 500;
 const mockReadAllWidth = 350;
 const mockSetReadAllWidth = jest.fn();
@@ -13,9 +20,9 @@ const mockSetReadAllWidth = jest.fn();
 describe('ReadAll', () => {
 
     beforeEach(() => {
+        useProject.mockReturnValue(mockUseProjectsValue);
         render(
             <ReadAll
-                fragments={mockFragments}
                 readAllHeight={mockReadAllHeight}
                 readAllWidth={mockReadAllWidth}
                 setReadAllWidth={mockSetReadAllWidth}
