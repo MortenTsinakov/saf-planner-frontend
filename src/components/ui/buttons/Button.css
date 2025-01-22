@@ -6,6 +6,10 @@ button:active {
     filter: brightness(90%);
 }
 
+button:focus {
+    filter: brightness(110%);
+}
+
 .button-filled {
     padding: 1rem 2rem;
     border-radius: 5px;
@@ -40,6 +44,10 @@ button:active {
     color: var(--primary-color);
 }
 
+.button-text:focus {
+    color: var(--primary-color);
+}
+
 .button-text.color-secondary:hover {
     color: var(--secondary-color);
 }
@@ -68,16 +76,12 @@ button:active {
     color: var(--color-success);
 }
 
-
 .button-icon:hover {
     color: var(--primary-color);
 }
 
-.button-outline {
-    padding: 1rem 2rem;
-    border-radius: 5px;
+.button-icon:focus {
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
 }
 
 .button-outline {

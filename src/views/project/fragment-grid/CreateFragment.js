@@ -1,5 +1,5 @@
 import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, Switch, Typography } from 'components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdArrowBack, MdArrowForward, MdClose } from 'react-icons/md';
 import { clampNumber } from 'utils';
 import NewCard from './NewCard';
@@ -23,27 +23,6 @@ const CreateFragment = (
     const [longDescription, setLongDescription] = useState('');
     const [durationInSeconds, setDurationInSeconds] = useState(5);
     const [onTimeline, setOnTimeline] = useState(false);
-
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            switch (e.key) {
-                case "ArrowLeft":
-                    handleDecrementPage();
-                    break;
-                case "ArrowRight":
-                    handleIncrementPage();
-                    break;
-                default:
-                    break;
-            }
-        }
-        
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        }
-    });
 
     const handleDurationChange = (e) => {
         if (isNaN(e.target.value)) {
