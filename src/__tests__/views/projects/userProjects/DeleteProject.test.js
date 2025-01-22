@@ -1,6 +1,6 @@
-const { render, screen, fireEvent } = require('@testing-library/react');
-const { useAlerts } = require('hooks');
-const { default: DeleteProject } = require('views/projects/userProjects/DeleteProject');
+import { render, screen, fireEvent } from '@testing-library/react';
+import { useAlerts } from 'hooks';
+import { default as DeleteProject } from 'views/projects/userProjects/DeleteProject';
 
 jest.mock('hooks', () => ({
     useAlerts: jest.fn(),

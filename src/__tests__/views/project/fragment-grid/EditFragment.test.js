@@ -1,7 +1,6 @@
-const { render, screen, fireEvent, waitFor } = require('@testing-library/react');
-const { useAlerts, useProject } = require('hooks');
-const { updateProjectDescriptionService } = require('services');
-const { default: EditFragment } = require('views/project/fragment-grid/EditFragment');
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useAlerts, useProject } from 'hooks';
+import { default as EditFragment } from 'views/project/fragment-grid/EditFragment';
 
 jest.mock('hooks', () => ({
     useAlerts: jest.fn(),

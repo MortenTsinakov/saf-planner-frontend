@@ -1,13 +1,12 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AlertProvider } from 'contexts';
-import { AxiosErrorHandler } from 'services';
-import { useEffect, useState } from 'react';
-import { AnonymousRoutes, ProtectedRoutes } from 'routes';
-import { SignIn, Dashboard, Page404, SignUp, Projects } from 'views';
 import { Navbar, AlertTray, Page } from 'components';
-import Project from 'views/project/Project';
-import { ProjectProvider } from 'contexts/ProjectContext';
+import { AuthProvider, AlertProvider, ProjectProvider } from 'contexts';
+import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AnonymousRoutes, ProtectedRoutes } from 'routes';
+import { AxiosErrorHandler } from 'services';
+import { SignIn, Dashboard, Page404, SignUp, Project, Projects } from 'views';
+
 
 function App() {
 

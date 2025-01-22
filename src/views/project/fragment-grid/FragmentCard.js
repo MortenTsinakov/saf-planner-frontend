@@ -1,13 +1,6 @@
 import { Card, Column, IconButton, Row, SortableItem, Typography } from 'components';
 import { useState } from 'react';
-import { 
-    MdAccessTime,
-    MdMoreHoriz,
-    MdDelete,
-    MdInfo,
-    MdEditSquare,
-    MdModeComment
-} from 'react-icons/md';
+import { MdAccessTime, MdMoreHoriz, MdDelete, MdInfo, MdEditSquare, MdModeComment } from 'react-icons/md';
 import FragmentDetails from './FragmentDetails';
 import DeleteFragment from './DeleteFragment';
 import EditFragment from './EditFragment';

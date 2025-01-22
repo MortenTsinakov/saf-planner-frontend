@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, queryAllByTestId, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { useAlerts } from 'hooks';
 import { default as CreateFragment } from 'views/project/fragment-grid/CreateFragment';
 

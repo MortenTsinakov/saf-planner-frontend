@@ -1,6 +1,6 @@
-const { render, screen, fireEvent, waitFor } = require('@testing-library/react');
-const { useAlerts, useProject } = require('hooks');
-const { default: DeleteFragment } = require('views/project/fragment-grid/DeleteFragment');
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useAlerts, useProject } from 'hooks';
+import { default as DeleteFragment } from 'views/project/fragment-grid/DeleteFragment';
 
 jest.mock('hooks', () => ({
     useAlerts: jest.fn(),

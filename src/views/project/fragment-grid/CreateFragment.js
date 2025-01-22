@@ -1,12 +1,4 @@
-import { Column,
-         Container,
-         SortableContextWrapper,
-         IconButton,
-         InputArea,
-         InputField,
-         Row,
-         Switch,
-         Typography } from 'components';
+import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, Switch, Typography } from 'components';
 import { useEffect, useState } from 'react';
 import { MdArrowBack, MdArrowForward, MdClose } from 'react-icons/md';
 import { clampNumber } from 'utils';

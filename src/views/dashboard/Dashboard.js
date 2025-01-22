@@ -1,6 +1,4 @@
-import { Column,
-         FilledButton,
-         Typography } from "components";
+import { Column, FilledButton, Typography } from "components";
 import { useAuth } from "hooks";
 import { useState } from "react";
 import { apiClient } from "services";
