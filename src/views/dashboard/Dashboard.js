@@ -1,4 +1,4 @@
-import { Column, FilledButton, Typography } from "components";
+import { Column, FilledButton, Loading, Typography } from "components";
 import { useAuth } from "hooks";
 import { useState } from "react";
 import { apiClient } from "services";
@@ -25,27 +25,37 @@ const Dashboard = () => {
 
     return ( 
         <Column
-            style={{width:'50%'}}
+            style={{width:'50%', gap: '2rem'}}
         >
+            <Typography fontSize='large'>
+                Temporary page for testing different stuff... for now
+            </Typography>
             {
                 user &&
                 <Typography fontSize='medium'>
                     Hello, {user.firstName}
                 </Typography>    
             }
-            <FilledButton
-                onClick={() => callEndpoint('open')}
-            >
-                Call open endpoint
-            </FilledButton>
-            <FilledButton
-                onClick={() => callEndpoint('closed')}
-            >
-                Call closed endpoint
-            </FilledButton>
-            <Typography>
-                {message}
-            </Typography>
+            <Column>
+                <Typography fontSize='medium'>Calling open and closed endpoints</Typography>
+                <FilledButton
+                    onClick={() => callEndpoint('open')}
+                >
+                    Call open endpoint
+                </FilledButton>
+                <FilledButton
+                    onClick={() => callEndpoint('closed')}
+                >
+                    Call closed endpoint
+                </FilledButton>
+                <Typography>
+                    {message}
+                </Typography>
+            </Column>
+            <Column>
+                <Typography fontSize='medium'>Loading animation</Typography>
+                <Loading />
+            </Column>
         </Column>
     );
 }

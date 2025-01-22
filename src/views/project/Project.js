@@ -2,7 +2,7 @@ import { useAlerts, useProject } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FragmentGrid from './fragment-grid/FragmentGrid';
-import { Column, Row } from 'components';
+import { Column, Loading, Row } from 'components';
 import Toolbar from './toolbar/Toolbar';
 import ReadAll from './read-all/ReadAll';
 import Timeline from './timeline/Timeline';
@@ -43,9 +43,7 @@ const Project = ({...props}) => {
 
     if (loading) {
         return (
-            <div>
-                Loading...
-            </div>
+            <Loading />
         );
     }
 

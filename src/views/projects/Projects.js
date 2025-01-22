@@ -1,4 +1,4 @@
-import { Column, Row, TextButton, Typography } from 'components';
+import { Column, Loading, Row, TextButton, Typography } from 'components';
 import { useEffect, useState } from 'react';
 import UserProjects from './userProjects/UserProjects';
 import SharedProjects from './sharedProjects/SharedProjects';
@@ -27,6 +27,7 @@ const Projects = (props) => {
         updateProjectDescription,
         updateProjectEstimatedLength,
         deleteProject,
+        loading,
         error,
         setError } = useProjects();
     const { addAlert } = useAlerts();
@@ -41,6 +42,12 @@ const Projects = (props) => {
             setError(null);
         }
     }, [setError, error, addAlert]);
+
+    if (loading) {
+        return (
+            <Loading />
+        );
+    }
 
     return (
         <Column
