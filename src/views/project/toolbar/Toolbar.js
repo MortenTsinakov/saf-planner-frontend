@@ -1,7 +1,7 @@
 import { IconButton, Row } from 'components';
-import { MdOutlineArticle } from "react-icons/md";
+import { MdAddBox, MdArticle } from "react-icons/md";
 
-const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, ...props}) => {
+const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, showCreateFragmentPanel, setShowCreateFragmentPanel, ...props}) => {
     return (
         <Row
             style={{
@@ -11,7 +11,12 @@ const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, ...props}) => {
             }}
         >
             <IconButton
-                icon={<MdOutlineArticle />}
+                icon={<MdAddBox />}
+                title='Add new fragment'
+                onClick={() => setShowCreateFragmentPanel(!showCreateFragmentPanel)}
+            />
+            <IconButton
+                icon={<MdArticle />}
                 title='Read detailed descriptions'
                 onClick={() => setShowReadAllPanel(!showReadAllPanel)}
             />

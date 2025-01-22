@@ -7,7 +7,6 @@ const defaultFragment = {
     onTimeline: true,
 }
 
-jest.mock('views/project/fragment-grid/CreateFragment', () => () => <div>MockCreateFragment</div>);
 jest.mock('views/project/fragment-grid/DeleteFragment', () => () => <div>MockDeleteFragment</div>);
 jest.mock('views/project/fragment-grid/EditFragment', () => () => <div>MockEditFragment</div>);
 jest.mock('views/project/fragment-grid/FragmentDetails', () => () => <div>MockFragmentDetails</div>);
@@ -21,12 +20,10 @@ describe('fragment-card', () => {
 
     test('renders no action icons by default', () => {
         render(<FragmentCard fragment={defaultFragment} />);
-        const createButton = screen.getByTestId('create-fragment-action-button');
         const editButton = screen.getByTestId('edit-fragment-action-button');
         const commentButton = screen.getByTestId('add-comment-action-button');
         const detailsButton = screen.getByTestId('details-action-button');
         const deleteButton = screen.getByTestId('delete-fragment-action-button');
-        expect(createButton.style.visibility).toEqual('hidden');
         expect(editButton.style.visibility).toEqual('hidden');
         expect(commentButton.style.visibility).toEqual('hidden');
         expect(detailsButton.style.visibility).toEqual('hidden');
@@ -36,7 +33,6 @@ describe('fragment-card', () => {
     test('renders action icons when expand button is clicked', () => {
         render(<FragmentCard fragment={defaultFragment} />);
 
-        const createButton = screen.getByTestId('create-fragment-action-button');
         const editButton = screen.getByTestId('edit-fragment-action-button');
         const commentButton = screen.getByTestId('add-comment-action-button');
         const detailsButton = screen.getByTestId('details-action-button');
@@ -45,7 +41,6 @@ describe('fragment-card', () => {
         const showIconsButton = screen.getByTestId('show-action-icons-button');
         fireEvent.click(showIconsButton);
 
-        expect(createButton.style.visibility).toEqual('visible');
         expect(editButton.style.visibility).toEqual('visible');
         expect(commentButton.style.visibility).toEqual('visible');
         expect(detailsButton.style.visibility).toEqual('visible');
@@ -55,7 +50,6 @@ describe('fragment-card', () => {
     test('renders no action icons on mouse leave', () => {
         render(<FragmentCard fragment={defaultFragment} />);
 
-        const createButton = screen.getByTestId('create-fragment-action-button');
         const editButton = screen.getByTestId('edit-fragment-action-button');
         const commentButton = screen.getByTestId('add-comment-action-button');
         const detailsButton = screen.getByTestId('details-action-button');
@@ -66,7 +60,6 @@ describe('fragment-card', () => {
         fireEvent.click(showIconsButton);
         fireEvent.mouseLeave(buttonRow);
 
-        expect(createButton.style.visibility).toEqual('hidden');
         expect(editButton.style.visibility).toEqual('hidden');
         expect(commentButton.style.visibility).toEqual('hidden');
         expect(detailsButton.style.visibility).toEqual('hidden');
@@ -81,15 +74,6 @@ describe('fragment-card', () => {
     test('renders short description if present', () => {
         render(<FragmentCard fragment={defaultFragment} />);
         expect(screen.queryAllByText(defaultFragment.shortDescription).length).toBeGreaterThan(0);
-    });
-
-    test('renders create-fragment when icon is clicked', () => {
-        render(<FragmentCard fragment={defaultFragment} />);
-
-        const createFragmentButton = screen.getByTestId('create-fragment-action-button');
-        fireEvent.click(createFragmentButton);
-
-        expect(screen.getByText('MockCreateFragment')).toBeInTheDocument();
     });
 
     test('renders fragment-details when icon is clicked', () => {

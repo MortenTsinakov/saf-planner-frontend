@@ -1,8 +1,7 @@
-import { Card, Column, IconButton, Row, Sortable, Typography } from 'components';
+import { Card, Column, IconButton, Row, SortableItem, Typography } from 'components';
 import { useState } from 'react';
 import { 
     MdAccessTime,
-    MdAddBox,
     MdMoreHoriz,
     MdDelete,
     MdInfo,
@@ -10,12 +9,12 @@ import {
     MdModeComment
 } from 'react-icons/md';
 import FragmentDetails from './FragmentDetails';
-import CreateFragment from './CreateFragment';
 import DeleteFragment from './DeleteFragment';
 import EditFragment from './EditFragment';
 
 const FragmentCard = (
     {
+        activeId,
         fragment,
         createFragment,
         updateFragmentOnTimelineStatus,
@@ -38,13 +37,13 @@ const FragmentCard = (
     };
 
     const [showFragmentDetails, setShowFragmentDetails] = useState(false);
-    const [showCreateFragmentModal, setShowCreateFragmentModal] = useState(false);
     const [showEditFragmentModal, setShowEditFragmentModal] = useState(false);
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
 
     return (
-        <Sortable
+        <SortableItem
             id={fragment.id}
+            activeId={activeId}
         >
             {({ listeners, attributes }) => (
                 <Card
@@ -81,23 +80,12 @@ const FragmentCard = (
                                 }}
                                 data-testid={'fragment-card-action-buttons'}
                             >
-                                <IconButton
-                                    onClick={() => setShowCreateFragmentModal(true)}
-                                    title='Add new fragment after this one'
-                                    style={{
-                                        ...iconStyle,
-                                        opacity: displayButtons ? 1 : 0,
-                                        visibility: displayButtons ? 'visible' : 'hidden',
-                                    }}
-                                    icon={<MdAddBox />}
-                                    data-testid={'create-fragment-action-button'}
-                                />
+    
                                 <IconButton 
                                     onClick={() => setShowEditFragmentModal(true)}
                                     title='Edit the fragment'
                                     style={{
                                         ...iconStyle,
-                                        transform: displayButtons ? 'translate(0)' : 'translate(-25px)',
                                         opacity: displayButtons ? 1 : 0,
                                         visibility: displayButtons ? 'visible' : 'hidden',
                                     }}
@@ -108,7 +96,7 @@ const FragmentCard = (
                                     title='Add comment'
                                     style={{
                                         ...iconStyle,
-                                        transform: displayButtons ? 'translate(0)' : 'translate(-50px)',
+                                        transform: displayButtons ? 'translate(0)' : 'translate(-25px)',
                                         opacity: displayButtons ? 1 : 0,
                                         visibility: displayButtons ? 'visible' : 'hidden',
                                     }}
@@ -120,7 +108,7 @@ const FragmentCard = (
                                     title='See details'
                                     style={{
                                         ...iconStyle,
-                                        transform: displayButtons ? 'translate(0)' : 'translate(-75px)',
+                                        transform: displayButtons ? 'translate(0)' : 'translate(-50px)',
                                         opacity: displayButtons ? 1 : 0,
                                         visibility: displayButtons ? 'visible' : 'hidden',
                                     }}
@@ -132,7 +120,7 @@ const FragmentCard = (
                                     title='Delete fragment'
                                     style={{
                                         ...iconStyle,
-                                        transform: displayButtons ? 'translate(0)' : 'translate(-100px)',
+                                        transform: displayButtons ? 'translate(0)' : 'translate(-75px)',
                                         opacity: displayButtons ? 1 : 0,
                                         visibility: displayButtons ? 'visible' : 'hidden',
                                     }}
@@ -183,13 +171,6 @@ const FragmentCard = (
                             fragment={fragment}
                             {...props}/>
                     }
-                    {showCreateFragmentModal &&
-                        <CreateFragment
-                            createFragment={createFragment}
-                            setShowCreateFragmentModal={setShowCreateFragmentModal}
-                            previousFragment={fragment}
-                            {...props}/>
-                    }
                     { showEditFragmentModal &&
                         <EditFragment
                             fragment={fragment}
@@ -212,7 +193,7 @@ const FragmentCard = (
             )}
 
 
-        </Sortable>
+        </SortableItem>
     );
 }
  

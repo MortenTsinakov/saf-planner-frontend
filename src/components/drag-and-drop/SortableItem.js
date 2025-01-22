@@ -1,15 +1,16 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const Sortable = ({id, children}) => {
+const SortableItem = ({id, children, activeId}) => {
 
-    const {attributes, listeners, setNodeRef, transform, transition} = useSortable({
+    const {attributes, listeners, setNodeRef, transform, transition, isDragging} = useSortable({
         id,
         animateLayoutChanges: () => false,
     });
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        visibility: activeId === id ? 'hidden' : 'visible',
     }
 
 
@@ -19,9 +20,9 @@ const Sortable = ({id, children}) => {
             ref={setNodeRef}
             style={style}
         >
-            {children({listeners, attributes})}
+            {children({listeners, attributes, isDragging})}
         </div>
     );
 }
  
-export default Sortable;
+export default SortableItem;
