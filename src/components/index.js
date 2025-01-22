@@ -29,6 +29,8 @@ export { default as Form } from 'components/ui/forms/Form';
 // input
 export { default as InputField } from 'components/ui/input/InputField';
 export { default as InputArea } from 'components/ui/input/InputArea';
+// loading
+export { default as Loading } from 'components/ui/loading/Loading';
 // menu
 export { default as DropdownMenu } from 'components/ui/menus/DropdownMenu';
 // modal
