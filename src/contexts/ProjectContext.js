@@ -1,4 +1,5 @@
 import { createContext, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createFragmentService,
          deleteFragmentService,
          fetchFragmentsService,
@@ -16,6 +17,8 @@ export const ProjectProvider = ({children}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const navigate = useNavigate();
+
     /**
      * Fetch all fragments for a project with given id
      */
@@ -26,11 +29,15 @@ export const ProjectProvider = ({children}) => {
             const response = await fetchFragmentsService(projectId);
             setFragments(response);
         } catch (err) {
-            setError(err.response?.data?.messsage || "Fetch fragments failed");
+            if (err.status === 404) {   
+                navigate('/404');
+            } else {
+                setError(err.response?.data?.messsage || "Fetch fragments failed");
+            }
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [navigate]);
 
     const incrementFragmentPositions = useCallback((prev, position) => {
         prev.forEach(f => {
