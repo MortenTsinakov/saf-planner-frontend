@@ -1,6 +1,10 @@
 import { Column, Row } from 'components';
+// import { useProject } from 'hooks';
 
-const Timeline = ({timelineHeight, timelineToolsHeight, fragments, ...props}) => {
+const Timeline = ({timelineHeight, timelineToolsHeight}) => {
+
+    // const {fragments} = useProject();
+
     return (
         <Column
             style={{

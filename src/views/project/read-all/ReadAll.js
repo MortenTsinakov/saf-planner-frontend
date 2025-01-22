@@ -1,7 +1,10 @@
 import { Column, Row, Typography } from 'components';
+import { useProject } from 'hooks';
 import { useState } from 'react';
 
-const ReadAll = ({fragments, readAllHeight, readAllWidth, setReadAllWidth, ...props}) => {
+const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth}) => {
+
+    const {fragments} = useProject();
 
     const [isResizing, setIsResizing] = useState(false);
     const [isHovered, setIsHovered] = useState(false);

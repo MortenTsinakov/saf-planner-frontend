@@ -1,4 +1,4 @@
-import { useAlerts, useFragments } from 'hooks';
+import { useAlerts, useProject } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FragmentGrid from './fragment-grid/FragmentGrid';
@@ -21,20 +21,7 @@ const Project = ({...props}) => {
     const [showReadAllPanel, setShowReadAllPanel] = useState(false);
     const [showCreateFragmentPanel, setShowCreateFragmentPanel] = useState(false);
 
-    const {
-        fetchFragments,
-        createFragment,
-        updateFragmentOnTimelineStatus,
-        updateFragmentShortDescription,
-        updateFragmentLongDescription,
-        updateFragmentDuration,
-        moveFragment,
-        deleteFragment,
-        fragments,
-        setFragments,
-        loading,
-        error,
-        setError} = useFragments();
+    const {fetchFragments, loading, error, setError} = useProject();
     const {addAlert} = useAlerts();
 
     useEffect(() => {
@@ -84,7 +71,6 @@ const Project = ({...props}) => {
             >
                 {showReadAllPanel &&                
                     <ReadAll
-                        fragments={fragments}
                         readAllWidth={readAllWidth}
                         setReadAllWidth={setReadAllWidth}
                         readAllHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px)`}
@@ -100,23 +86,13 @@ const Project = ({...props}) => {
                     <Timeline
                         timelineHeight={timelineHeight}
                         timelineToolsHeight={timelineToolsHeight}
-                        fragments={fragments}
                         {...props}
                     />
                     <FragmentGrid
                         fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${timelineHeight + timelineToolsHeight}px)`}
-                        fragments={fragments}
-                        setFragments={setFragments}
                         showCreateFragmentPanel={showCreateFragmentPanel}
                         setShowCreateFragmentPanel={setShowCreateFragmentPanel}
-                        createFragment={createFragment}
-                        updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
-                        updateFragmentShortDescription={updateFragmentShortDescription}
-                        updateFragmentLongDescription={updateFragmentLongDescription}
-                        updateFragmentDuration={updateFragmentDuration}
-                        deleteFragment={deleteFragment}
                         projectId={projectId}
-                        moveFragment={moveFragment}
                         {...props}
                     />
                 </Column>

@@ -1,6 +1,6 @@
 import { Column, Divider, Modal, OutlineButton, Typography } from 'components';
 
-const FragmentDetails = ({fragment, setShowFragmentDetails, ...props}) => {
+const FragmentDetails = ({fragment, setShowFragmentDetails}) => {
 
     const infoFieldStyle = {
         gap: 0

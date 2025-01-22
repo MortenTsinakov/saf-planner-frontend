@@ -1,5 +1,5 @@
 import { Column, Divider, FilledButton, InputArea, InputField, Modal, OutlineButton, Row, TextButton, Typography } from 'components';
-import { useAlerts } from 'hooks';
+import { useAlerts, useProject } from 'hooks';
 import { useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { clampNumber } from 'utils';
@@ -8,10 +8,6 @@ const EditFragment = (
     {
         fragment,
         setShowEditFragmentModal,
-        updateFragmentShortDescription,
-        updateFragmentLongDescription,
-        updateFragmentDuration,
-        ...props
     }) => {
 
     const Fields = Object.freeze({
@@ -20,6 +16,10 @@ const EditFragment = (
         DURATION: 2,
         LABELS: 3,
     });
+
+    const {updateFragmentShortDescription,
+           updateFragmentLongDescription,
+           updateFragmentDuration} = useProject();
 
     const [activeField, setActiveField] = useState(null);
     const [fieldToUpdate, setFieldToUpdate] = useState(null);

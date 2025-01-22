@@ -1,14 +1,13 @@
 import { Column, FilledButton, Modal, OutlineButton, Row, Typography } from 'components';
-import { useAlerts } from 'hooks';
+import { useAlerts, useProject } from 'hooks';
 
 const DeleteFragment = (
     {
         fragment,
-        setShowDeleteFragmentModal,
-        deleteFragment,
-        ...props}) => 
+        setShowDeleteFragmentModal}) => 
     {
 
+    const {deleteFragment} = useProject();
     const { addAlert } = useAlerts();
 
     const handleDeleteClick = async () => {

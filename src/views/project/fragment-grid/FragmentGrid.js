@@ -7,7 +7,7 @@ import CreateFragment from './CreateFragment';
 import CreateFragmentDragOverlay from './drag_overlays/CreateFragmentDragOverlay';
 import FragmentDragOverlay from './drag_overlays/FragmentDragOverlay';
 import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from 'constants/Constants';
-import { useAlerts } from 'hooks';
+import { useAlerts, useProject } from 'hooks';
 import { MdAdd } from 'react-icons/md';
 
 /**
@@ -17,19 +17,12 @@ import { MdAdd } from 'react-icons/md';
 const FragmentGrid = (
     {
         fragmentGridHeight,
-        fragments,
-        setFragments,
         showCreateFragmentPanel,
         setShowCreateFragmentPanel,
-        createFragment,
-        updateFragmentOnTimelineStatus,
-        updateFragmentShortDescription,
-        updateFragmentLongDescription,
-        updateFragmentDuration,
-        moveFragment,
-        deleteFragment,
         ...props}) => 
     {
+
+    const {fragments, setFragments, createFragment, moveFragment} = useProject();
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -301,12 +294,6 @@ const FragmentGrid = (
                                         key={f.id}
                                         activeId={activeId}
                                         fragment={f}
-                                        createFragment={createFragment}
-                                        updateFragmentOnTimelineStatus={updateFragmentOnTimelineStatus}
-                                        updateFragmentShortDescription={updateFragmentShortDescription}
-                                        updateFragmentLongDescription={updateFragmentLongDescription}
-                                        updateFragmentDuration={updateFragmentDuration}
-                                        deleteFragment={deleteFragment}
                                         {...props}
                                     />
                                 ))}
@@ -322,7 +309,6 @@ const FragmentGrid = (
                                 activeId={activeId}
                                 newCards={newCards}
                                 setNewCards={setNewCards}
-                                createFragment={createFragment}
                                 fragmentGridHeight={fragmentGridHeight}
                                 setShowCreateFragmentPanel={setShowCreateFragmentPanel}
                             />

@@ -11,20 +11,16 @@ import {
 import FragmentDetails from './FragmentDetails';
 import DeleteFragment from './DeleteFragment';
 import EditFragment from './EditFragment';
+import { useProject } from 'hooks';
 
 const FragmentCard = (
     {
         activeId,
         fragment,
-        createFragment,
-        updateFragmentOnTimelineStatus,
-        updateFragmentShortDescription,
-        updateFragmentLongDescription,
-        updateFragmentDuration,
-        deleteFragment,
         ...props}) => 
     {
 
+    const {updateFragmentOnTimelineStatus} = useProject();
     const [displayButtons, setDisplayButtons] = useState(false);
     const iconStyle = {
         fontSize: '2.2rem',
@@ -174,9 +170,6 @@ const FragmentCard = (
                     { showEditFragmentModal &&
                         <EditFragment
                             fragment={fragment}
-                            updateFragmentShortDescription={updateFragmentShortDescription}
-                            updateFragmentLongDescription={updateFragmentLongDescription}
-                            updateFragmentDuration={updateFragmentDuration}
                             setShowEditFragmentModal={setShowEditFragmentModal}
                             {...props}
                         />
@@ -185,7 +178,6 @@ const FragmentCard = (
                         <DeleteFragment
                             fragment={fragment}
                             setShowDeleteFragmentModal={setShowDeleteFragmentModal}
-                            deleteFragment={deleteFragment}
                             {...props}
                         />
                     }
