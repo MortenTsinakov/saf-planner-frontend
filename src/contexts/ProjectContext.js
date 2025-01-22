@@ -1,7 +1,17 @@
-import { useCallback, useState } from 'react'
-import { createFragmentService, deleteFragmentService, fetchFragmentsService, moveFragmentService, updateFragmentDurationService, updateFragmentLongDescriptionService, updateFragmentOnTimelineStatusService, updateFragmentShortDescriptionService } from 'services';
+import { createContext, useCallback, useState } from 'react';
+import { createFragmentService,
+         deleteFragmentService,
+         fetchFragmentsService,
+         moveFragmentService,
+         updateFragmentDurationService,
+         updateFragmentLongDescriptionService,
+         updateFragmentOnTimelineStatusService,
+         updateFragmentShortDescriptionService } from 'services';
 
-export const useFragments = () => {
+const ProjectContext = createContext();
+
+export const ProjectProvider = ({children}) => {
+
     const [fragments, setFragments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -166,7 +176,7 @@ export const useFragments = () => {
         }
     }, [decrementFragmentPositions]);
 
-    return {
+    const value = {
         fragments,
         setFragments,
         fetchFragments,
@@ -180,5 +190,13 @@ export const useFragments = () => {
         loading,
         error,
         setError,
-    };
+    }
+
+    return (
+        <ProjectContext.Provider value={value}>
+            {children}
+        </ProjectContext.Provider>
+    )
 }
+
+export default ProjectContext;

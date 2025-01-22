@@ -13,7 +13,15 @@ import { clampNumber } from 'utils';
 import NewCard from './NewCard';
 import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from 'constants/Constants';
 
-const CreateFragment = ({activeId, newCards, setNewCards, fragmentGridHeight, setShowCreateFragmentPanel, ...props}) => {
+const CreateFragment = (
+    {
+        activeId,
+        newCards,
+        setNewCards,
+        fragmentGridHeight,
+        setShowCreateFragmentPanel,
+        ...props}) =>
+    {
 
     const projectId = props.projectId;
     const panelWidth = 420;
