@@ -13,7 +13,7 @@ import { clampNumber } from 'utils';
 import NewCard from './NewCard';
 import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from 'constants/Constants';
 
-const CreateFragment = ({activeId, newCards, setNewCards, createFragment, fragmentGridHeight, setShowCreateFragmentPanel, ...props}) => {
+const CreateFragment = ({activeId, newCards, setNewCards, fragmentGridHeight, setShowCreateFragmentPanel, ...props}) => {
 
     const projectId = props.projectId;
     const panelWidth = 420;
@@ -222,6 +222,7 @@ const CreateFragment = ({activeId, newCards, setNewCards, createFragment, fragme
                     alignItems: 'center',
                     gap: '3rem',
                 }}
+                data-testid='create-fragment-panel'
             >
                 <Row
                     style={{width: '100%'}}
@@ -229,6 +230,7 @@ const CreateFragment = ({activeId, newCards, setNewCards, createFragment, fragme
                     <IconButton
                         icon={<MdClose />}
                         onClick={() => setShowCreateFragmentPanel(false)}
+                        data-testid='create-fragment-close-button'
                     />
                 </Row>
                 {

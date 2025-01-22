@@ -261,6 +261,7 @@ const FragmentGrid = (
                                         borderRadius: '50px',
                                         border: `1px dashed ${firstFragmentHovering ? 'var(--primary-color)' : 'gray'}`,
                                     }}
+                                    data-testid='empty-fragment-grid'
                                 >
                                     <Typography fontSize='medium'>This project has no fragments yet...</Typography>
                                     {
