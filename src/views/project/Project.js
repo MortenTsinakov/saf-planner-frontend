@@ -15,7 +15,7 @@ const Project = ({...props}) => {
     const projectId = searchParams.get('id');
 
     const toolBarHeight = 55;
-    const timelineHeight = 120;
+    const timelineHeight = 160;
     const timelineToolsHeight = 55;
     const [readAllWidth, setReadAllWidth] = useState(350);
     const [showReadAllPanel, setShowReadAllPanel] = useState(false);
@@ -79,6 +79,8 @@ const Project = ({...props}) => {
                     style={{
                         gap: 0,
                         flex: 1,
+                        width: '100%',
+                        overflow: 'auto',
                     }}
                 >
                     <Timeline
