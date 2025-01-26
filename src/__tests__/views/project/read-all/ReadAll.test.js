@@ -7,6 +7,7 @@ jest.mock('hooks', () => ({
     useProject: jest.fn(),
 }));
 const mockUseProjectsValue = {
+    project: {id: 1, title: "Title"},
     fragments: [
         {id: 1, longDescription: '1st fragment long description'},
         {id: 2, longDescription: '2nd fragment long description'}

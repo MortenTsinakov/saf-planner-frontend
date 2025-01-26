@@ -20,7 +20,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const mockedUseProjectValue = {
-    fetchFragments: jest.fn(),
+    fetchProject: jest.fn(),
     createFragment: jest.fn(),
     updateFragmentOnTimelineStatus: jest.fn(),
     updateFragmentShortDescription: jest.fn(),
