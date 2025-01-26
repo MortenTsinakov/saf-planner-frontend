@@ -1,10 +1,19 @@
 import apiClient from 'services/api/ApiClient'
 
+
+/**
+ * GET request for fetching project with given id
+ */
+export const fetchProjectByIdService = async(projectId) => {
+    const response = await apiClient.get(`/project?projectId=${projectId}`);
+    return response.data;
+}
+
 /**
  * GET request for fetching all user projects.
  */
 export const fetchUserProjectsService = async () => {
-    const response = await apiClient.get('/project');
+    const response = await apiClient.get('/project/all');
     return response.data;
 }
 

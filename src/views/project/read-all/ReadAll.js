@@ -1,10 +1,10 @@
-import { Column, Row, Typography } from 'components';
+import { Column, Divider, Row, Typography } from 'components';
 import { useProject } from 'hooks';
 import { useState } from 'react';
 
 const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth}) => {
 
-    const {fragments} = useProject();
+    const {project, fragments} = useProject();
 
     const [isResizing, setIsResizing] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -50,6 +50,10 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth}) => {
                 {
                 fragments.length > 0 
                 ?
+                <Column style={{gap:'2rem'}}>
+                <Typography fontSize='medium'>{project.title}</Typography>
+                <Divider />
+                {
                 fragments.map(f => (
                     <Column
                         key={f.id}
@@ -59,7 +63,8 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth}) => {
                             {f.longDescription}
                         </Typography>
                     </Column>
-                ))
+                ))}
+                </Column>
                 :
                 <Typography>This project has no fragments yet...</Typography>
                 }

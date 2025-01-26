@@ -6,6 +6,7 @@ import { Column, Loading, Row } from 'components';
 import Toolbar from './toolbar/Toolbar';
 import ReadAll from './read-all/ReadAll';
 import Timeline from './timeline/Timeline';
+import { TIMELINE_HEIGHT } from './timeline/TimelineConstants';
 
 const Project = ({...props}) => {
 
@@ -15,13 +16,11 @@ const Project = ({...props}) => {
     const projectId = searchParams.get('id');
 
     const toolBarHeight = 55;
-    const timelineHeight = 160;
-    const timelineToolsHeight = 55;
     const [readAllWidth, setReadAllWidth] = useState(350);
     const [showReadAllPanel, setShowReadAllPanel] = useState(false);
     const [showCreateFragmentPanel, setShowCreateFragmentPanel] = useState(false);
 
-    const {fetchFragments, loading, error, setError} = useProject();
+    const {fetchProject, loading, error, setError} = useProject();
     const {addAlert} = useAlerts();
 
     useEffect(() => {
@@ -31,8 +30,8 @@ const Project = ({...props}) => {
     }, [projectId, navigate]);
 
     useEffect(() => {
-        fetchFragments(projectId);
-    }, [fetchFragments, projectId]);
+        fetchProject(projectId);
+    }, [fetchProject, projectId]);
 
     useEffect(() => {
         if (error) {
@@ -84,12 +83,11 @@ const Project = ({...props}) => {
                     }}
                 >
                     <Timeline
-                        timelineHeight={timelineHeight}
-                        timelineToolsHeight={timelineToolsHeight}
+                        timelineHeight={TIMELINE_HEIGHT}
                         {...props}
                     />
                     <FragmentGrid
-                        fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${timelineHeight + timelineToolsHeight}px)`}
+                        fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${TIMELINE_HEIGHT}px)`}
                         showCreateFragmentPanel={showCreateFragmentPanel}
                         setShowCreateFragmentPanel={setShowCreateFragmentPanel}
                         projectId={projectId}

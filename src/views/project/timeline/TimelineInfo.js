@@ -1,7 +1,13 @@
 import { Column, Row, Typography } from 'components';
+import { useProject } from 'hooks';
 import { formatSecondsToHMS } from 'utils';
 
 const TimelineInfo = ({currentDuration}) => {
+
+    const {project} = useProject();
+
+    if (!project) {return};
+
     return (
         <Row>
             <Column style={{gap: 0, alignItems: 'center'}}>
@@ -14,10 +20,10 @@ const TimelineInfo = ({currentDuration}) => {
             </Column>
             <Column style={{gap: 0, alignItems: 'center'}}>
                 <Typography color='label' fontSize='extrasmall'>
-                    Estimated duration
+                    Target duration
                 </Typography>
                 <Typography fontSize='extrasmall'>
-                    TODO: Add est. dur.
+                    {formatSecondsToHMS(project.estimatedLengthInSeconds)}
                 </Typography>
             </Column>
         </Row>

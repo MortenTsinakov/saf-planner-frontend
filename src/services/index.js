@@ -11,6 +11,7 @@ export {
 
 // Project services
 export {
+    fetchProjectByIdService,
     fetchUserProjectsService,
     createProjectService,
     updateProjectTitleService,

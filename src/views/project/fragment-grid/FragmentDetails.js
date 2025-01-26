@@ -10,7 +10,7 @@ const FragmentDetails = ({fragment, setShowFragmentDetails}) => {
         <Modal>
             <Column style={{gap: 0}}>
                 <Typography fontSize='medium'>Project details</Typography>
-                <Divider style={{height: '1.4px', marginTop: '2rem'}} />
+                <Divider style={{marginTop: '2rem'}} />
                 <Column
                     style={{
                         padding: '2rem 0',
@@ -49,7 +49,7 @@ const FragmentDetails = ({fragment, setShowFragmentDetails}) => {
                         <Typography>TODO: Display a list of comments associated with the fragment</Typography>
                     </Column>
                 </Column>
-                <Divider style={{height: '1.4px', marginBottom: '2rem'}} />
+                <Divider style={{marginBottom: '2rem'}} />
                 <OutlineButton
                     onClick={() => {setShowFragmentDetails(false)}}
                     style={{width: 'fit-content'}}
