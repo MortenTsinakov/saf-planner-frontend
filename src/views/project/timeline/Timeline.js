@@ -2,12 +2,12 @@ import { Column, Row } from 'components';
 import { useProject } from 'hooks';
 import TimelineItem from './TimelineItem';
 import { useEffect, useState } from 'react';
-import { DEFAULT_ZOOM, PIXELS_PER_SECOND, TIMELINE_BAR_HEIGHT, TIMELINE_ITEM_HEIGHT, TIMELINE_MARKING_HEIGHT, TIMELINE_TOOLBAR_HEIGHT } from './TimelineConstants';
+import { DEFAULT_ZOOM, PIXELS_PER_SECOND, TIMELINE_BAR_HEIGHT, TIMELINE_HEIGHT, TIMELINE_ITEM_HEIGHT, TIMELINE_MARKING_HEIGHT, TIMELINE_TOOLBAR_HEIGHT } from './TimelineConstants';
 import TimelineMarkings from './TimelineMarkings';
 import TimelineToolbar from './TimelineToolbar';
 import TimelineInfo from './TimelineInfo';
 
-const Timeline = ({timelineHeight, ...props}) => {
+const Timeline = ({...props}) => {
 
     const {project, fragments} = useProject();
     const [zoom, setZoom] = useState(DEFAULT_ZOOM);
@@ -34,7 +34,7 @@ const Timeline = ({timelineHeight, ...props}) => {
         <Column
             style={{
                 gap: 0,
-                height: timelineHeight,
+                height: TIMELINE_HEIGHT,
             }}
         >
 
@@ -48,6 +48,7 @@ const Timeline = ({timelineHeight, ...props}) => {
                     justifyContent: 'start',
                     overflowX: 'auto',
                 }}
+                data-testid='timeline-component'
             >
                 <Row
                     style={{
@@ -91,7 +92,9 @@ const Timeline = ({timelineHeight, ...props}) => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     borderTop: '1px solid var(--main-gray)'
-            }}>
+                }}
+                data-testid='timeline-toolbar-component'
+            >
                 <TimelineToolbar
                     zoom={zoom}
                     setZoom={setZoom}

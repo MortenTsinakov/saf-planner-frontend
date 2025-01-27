@@ -11,6 +11,7 @@ const TimelineItem = ({fragment, zoom}) => {
                 minWidth: `${fragment.durationInSeconds * zoom * PIXELS_PER_SECOND}px`,
                 maxWidth: `${fragment.durationInSeconds * zoom * PIXELS_PER_SECOND}px`,
             }}
+            data-testid='timeline-item'
         />
     );
 }

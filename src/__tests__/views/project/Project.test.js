@@ -55,9 +55,6 @@ describe('Project', () => {
         render(<Project/>);
         expect(screen.getByText('MockFragmentGrid')).toBeInTheDocument();
     });
-
-    // TODO: Renders ReadAll if toggled
-    // TODO: Doesn't render ReadAll if NOT toggled
     
     test('renders timeline', () => {
         render(<Project />);

@@ -83,7 +83,6 @@ const Project = ({...props}) => {
                     }}
                 >
                     <Timeline
-                        timelineHeight={TIMELINE_HEIGHT}
                         {...props}
                     />
                     <FragmentGrid
