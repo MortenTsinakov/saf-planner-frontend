@@ -6,7 +6,7 @@ import { restrictOnlyFragments } from 'utils';
 import CreateFragment from './CreateFragment';
 import CreateFragmentDragOverlay from './drag_overlays/CreateFragmentDragOverlay';
 import FragmentDragOverlay from './drag_overlays/FragmentDragOverlay';
-import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from 'constants/Constants';
+import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
 import { useAlerts, useProject } from 'hooks';
 import { MdAdd } from 'react-icons/md';
 
@@ -256,7 +256,12 @@ const FragmentGrid = (
                                     }}
                                     data-testid='empty-fragment-grid'
                                 >
-                                    <Typography fontSize='medium'>This project has no fragments yet...</Typography>
+                                    <Typography
+                                        fontSize='medium'
+                                        style={{textAlign: 'center'}}
+                                    >
+                                        This project has no fragments yet...
+                                    </Typography>
                                     {
                                         !showCreateFragmentPanel &&
                                         <TextButton

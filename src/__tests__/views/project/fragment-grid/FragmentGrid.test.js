@@ -23,14 +23,14 @@ describe('fragment-grid', () => {
             id: 1
         }];
         useProject.mockReturnValue({fragments: mockFragments});
-        render(<FragmentGrid fragments={mockFragments} />);
+        render(<FragmentGrid />);
         expect(screen.queryAllByText('MockFragmentCard').length).toBeGreaterThan(0);
     });
 
     test('renders droppable even if fragment grid is empty', () => {
         const mockFragments = [];
         useProject.mockReturnValue({fragments: mockFragments});
-        render(<FragmentGrid fragments={mockFragments} />);
+        render(<FragmentGrid />);
         expect(screen.queryAllByText('MockFragmentCard').length).toBe(0);
         expect(screen.getByTestId('empty-fragment-grid')).toBeInTheDocument();
     });

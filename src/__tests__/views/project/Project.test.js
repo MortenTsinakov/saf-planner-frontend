@@ -20,7 +20,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const mockedUseProjectValue = {
-    fetchFragments: jest.fn(),
+    fetchProject: jest.fn(),
     createFragment: jest.fn(),
     updateFragmentOnTimelineStatus: jest.fn(),
     updateFragmentShortDescription: jest.fn(),
@@ -55,9 +55,6 @@ describe('Project', () => {
         render(<Project/>);
         expect(screen.getByText('MockFragmentGrid')).toBeInTheDocument();
     });
-
-    // TODO: Renders ReadAll if toggled
-    // TODO: Doesn't render ReadAll if NOT toggled
     
     test('renders timeline', () => {
         render(<Project />);

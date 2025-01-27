@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createFragmentService,
          deleteFragmentService,
          fetchFragmentsService,
+         fetchProjectByIdService,
          moveFragmentService,
          updateFragmentDurationService,
          updateFragmentLongDescriptionService,
@@ -13,26 +14,37 @@ const ProjectContext = createContext();
 
 export const ProjectProvider = ({children}) => {
 
+    const [project, setProject] = useState(null);
     const [fragments, setFragments] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
     /**
-     * Fetch all fragments for a project with given id
+     * Fetch project from the server.
+     * 
+     * Fetches:
+     *  - project information
+     *  - fragments for the project
      */
-    const fetchFragments = useCallback(async (projectId) => {
+    const fetchProject = useCallback(async (projectId) => {
         try {
             setLoading(true);
             setError(null);
-            const response = await fetchFragmentsService(projectId);
-            setFragments(response);
+            
+            const [projectResponse, fragmentsResponse] = await Promise.all([
+                fetchProjectByIdService(projectId),
+                fetchFragmentsService(projectId),
+            ]);
+
+            setProject(projectResponse);
+            setFragments(fragmentsResponse);
         } catch (err) {
-            if (err.status === 404) {   
+            if (err.status === 404) {
                 navigate('/404');
             } else {
-                setError(err.response?.data?.messsage || "Fetch fragments failed");
+                setError(err.response?.data?.message || "Fetching project failed");
             }
         } finally {
             setLoading(false);
@@ -184,9 +196,10 @@ export const ProjectProvider = ({children}) => {
     }, [decrementFragmentPositions]);
 
     const value = {
+        project,
+        fetchProject,
         fragments,
         setFragments,
-        fetchFragments,
         createFragment,
         updateFragmentOnTimelineStatus,
         updateFragmentShortDescription,

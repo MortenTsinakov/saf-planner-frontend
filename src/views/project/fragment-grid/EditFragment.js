@@ -306,7 +306,7 @@ const EditFragment = (
             }
             <Column>
                 <Typography fontSize='medium'>Edit fragment</Typography>
-                <Divider style={{backgroundColor: 'var(--primary-color)', height: '1.4px', marginBottom: '3rem'}}/>
+                <Divider style={{backgroundColor: 'var(--primary-color)', marginBottom: '3rem'}}/>
             </Column>
             <Column
                 style={{overflow: 'scroll', paddingBottom: '2rem'}}

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MdArrowBack, MdArrowForward, MdClose } from 'react-icons/md';
 import { clampNumber } from 'utils';
 import NewCard from './NewCard';
-import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from 'constants/Constants';
+import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
 
 const CreateFragment = (
     {
@@ -194,12 +194,14 @@ const CreateFragment = (
             <Column
                 ref={setNodeRef}
                 style={{
+                    minWidth: 'fit-content',
                     width: 'fit-content',
                     padding: '5rem 2rem',
                     height: fragmentGridHeight,
                     borderLeft: '1px solid var(--main-gray)',
                     alignItems: 'center',
                     gap: '3rem',
+                    overflow: 'auto',
                 }}
                 data-testid='create-fragment-panel'
             >

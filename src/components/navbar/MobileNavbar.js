@@ -77,7 +77,6 @@ const MobileNavbar = () => {
                         <Divider
                             style={{
                                 backgroundColor:'var(--primary-color)',
-                                height:'1.5px',
                             }}
                         />
                         <TextButton
@@ -105,7 +104,6 @@ const MobileNavbar = () => {
                         <Divider
                             style={{
                                 backgroundColor:'var(--primary-color)',
-                                height:'1.5px',
                             }}
                         />
                         <TextButton

@@ -1,5 +1,5 @@
 import { Card, Column, Row, SortableItem, Typography } from 'components';
-import { NEW_FRAGMENT_ID } from 'constants/Constants';
+import { NEW_FRAGMENT_ID } from './FragmentGridConstants';
 
 const NewCard = ({fragment, activeId}) => {
     return (
