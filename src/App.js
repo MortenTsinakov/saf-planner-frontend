@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnonymousRoutes, ProtectedRoutes } from 'routes';
 import { AxiosErrorHandler } from 'services';
-import { SignIn, Dashboard, Page404, SignUp, Project, Projects } from 'views';
+import { SignIn, Page404, SignUp, Project, Projects } from 'views';
 
 
 function App() {
@@ -42,7 +42,6 @@ function App() {
                 </Route>
                 {/* Protected routes */}
                 <Route element={<ProtectedRoutes />}>
-                  <Route path='/dashboard' element={<Dashboard {...props} />} />
                   <Route path='/projects' element={<Projects {...props} />} />
                   <Route path='/project' element={
                     <ProjectProvider>
