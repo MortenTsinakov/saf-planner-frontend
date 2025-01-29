@@ -58,11 +58,6 @@ const DesktopNavbar = () => {
                     </TextButton>
                 }
                 {user &&
-                    <TextButton onClick={() => handleNavigate('/dashboard')}>
-                        Dashboard
-                    </TextButton>
-                }
-                {user &&
                     <TextButton onClick={() => handleNavigate('/projects')}>
                         Projects
                     </TextButton>

@@ -65,11 +65,6 @@ const MobileNavbar = () => {
                         }}
                     >
                         <TextButton
-                            onClick={() => handleNavigate('/dashboard')}
-                        >
-                            Dashboard
-                        </TextButton>
-                        <TextButton
                             onClick={() => handleNavigate('/projects')}
                         >
                             Projects
