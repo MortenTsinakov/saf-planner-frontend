@@ -39,3 +39,33 @@ button {
   border: none;
   cursor: pointer;
 }
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--background-color-lowest)
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--main-gray);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: var(--primary-color);
+}
+
+*::-webkit-scrollbar-track-piece {
+  background: var(--background-color-lowest)
+}
+
+*::-webkit-scrollbar-corner {
+  background-color: var(--background-color-high);
+}
+
+*::-webkit-resizer {
+  background-color: var(--primary-color);
+}

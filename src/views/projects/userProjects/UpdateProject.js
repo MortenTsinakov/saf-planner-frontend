@@ -328,7 +328,7 @@ const UpdateProject = ({
                 </Modal>
             }
             <Column
-                style={{overflow: 'scroll'}}
+                style={{overflow: 'auto'}}
             >
                 <Typography fontSize='medium'>Project settings</Typography>
                 <Divider style={{backgroundColor: 'var(--primary-color)', marginBottom: '3rem'}}/>

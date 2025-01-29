@@ -15,7 +15,7 @@ const FragmentDetails = ({fragment, setShowFragmentDetails}) => {
                     style={{
                         padding: '2rem 0',
                         maxHeight: '50vh',
-                        overflow: 'scroll'
+                        overflow: 'auto'
                     }}
                 >
                     {/* Short description */}

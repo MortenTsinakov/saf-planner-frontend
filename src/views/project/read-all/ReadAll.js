@@ -43,7 +43,7 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth}) => {
                 style={{
                     padding: '4rem 2rem 4rem 2rem',
                     flex: 1,
-                    overflowY: 'scroll',
+                    overflowY: 'auto',
                 }}
             >
                 <Typography></Typography>

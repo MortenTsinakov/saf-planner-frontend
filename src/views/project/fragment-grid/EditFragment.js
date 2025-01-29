@@ -309,7 +309,7 @@ const EditFragment = (
                 <Divider style={{backgroundColor: 'var(--primary-color)', marginBottom: '3rem'}}/>
             </Column>
             <Column
-                style={{overflow: 'scroll', paddingBottom: '2rem'}}
+                style={{overflow: 'auto', paddingBottom: '2rem'}}
             >
                 {getRowInEditFragment('Short description', oldShortDescription, Fields.SHORT_DESCRIPTION)}
                 {getRowInEditFragment('Long description', oldLongDescription, Fields.LONG_DESCRIPTION)}
