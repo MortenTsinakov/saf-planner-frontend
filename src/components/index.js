@@ -12,6 +12,8 @@ export { default as TextButton } from 'components/ui/buttons/TextButton';
 export {default as Card } from 'components/ui/cards/Card';
 // clickable
 export {default as Clickable } from 'components/ui/clickables/Clickable';
+// color-picker
+export {default as ColorPicker } from 'components/color-picker/ColorPicker';
 // container
 export { default as Column } from 'components/ui/containers/Column';
 export { default as Container} from 'components/ui/containers/Container';

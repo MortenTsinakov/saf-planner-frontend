@@ -27,6 +27,7 @@ const Projects = (props) => {
         updateProjectDescription,
         updateProjectEstimatedLength,
         deleteProject,
+        updateLabel,
         loading,
         error,
         setError } = useProjects();
@@ -111,6 +112,7 @@ const Projects = (props) => {
                     updateProjectTitle={updateProjectTitle}
                     updateProjectDescription={updateProjectDescription}
                     updateProjectEstimatedLength={updateProjectEstimatedLength}
+                    updateLabel={updateLabel}
                     deleteProject={deleteProject}
                     {...props}
                 />}

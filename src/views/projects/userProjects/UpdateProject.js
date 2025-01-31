@@ -1,7 +1,8 @@
-import { Column, Divider, FilledButton, InputArea, InputField, Modal, OutlineButton, Row, TextButton, Typography } from 'components';
+import { Clickable, ColorPicker, Column, Divider, FilledButton, InputArea, InputField, Modal, OutlineButton, Row, TextButton, Typography } from 'components';
+import Label from 'components/ui/labels/Label';
 import { useAlerts } from 'hooks';
 import { useState } from 'react';
-import { MdEdit } from 'react-icons/md';
+import { MdAdd, MdEdit } from 'react-icons/md';
 import { clampNumber, formatSecondsToHMS, timeInMinsSecsToTimeInSeconds } from 'utils';
 
 /**
@@ -16,6 +17,7 @@ const UpdateProject = ({
     updateProjectTitle,
     updateProjectDescription,
     updateProjectEstimatedLength,
+    updateLabel,
 }) => {
 
     const Fields = Object.freeze({
@@ -37,6 +39,10 @@ const UpdateProject = ({
     const [newDescription, setNewDescription] = useState(projectToUpdate.description);
     const [estLenMin, setEstLenMin] = useState(Math.floor(projectToUpdate.estimatedLengthInSeconds / 60));
     const [estLenSec, setEstLenSec] = useState(projectToUpdate.estimatedLengthInSeconds - (60 * Math.floor(projectToUpdate.estimatedLengthInSeconds / 60)));
+
+    const [labelToEdit, setLabelToEdit] = useState(null);
+    const [newLabelColor, setNewLabelColor] = useState(null);
+    const [newLabelDescription, setNewLabelDescription] = useState(null);
 
     const { addAlert } = useAlerts();
 
@@ -79,6 +85,49 @@ const UpdateProject = ({
         } else {
 
         }
+    }
+
+    const handleOpenLabelEditWindow = (label) => {
+        setFieldToUpdate(Fields.LABELS);
+        setLabelToEdit(label);
+        setNewLabelColor(label.color);
+        setNewLabelDescription(label.description);
+    }
+
+    const handleLabelDescriptionChange = (e) => {
+        const text = e.target.value;
+        if (text.length > 50) {
+            return
+        }
+        setNewLabelDescription(text);
+    }
+
+    const handleUpdateLabel = async () => {
+        if (!labelToEdit || (labelToEdit.description === newLabelDescription && labelToEdit.color === newLabelColor)) {
+            setFieldToUpdate(null);
+            setLabelToEdit(null);
+            setNewLabelColor(null);
+            setNewLabelDescription(null);
+            return;
+        }
+        const labelEditWasSuccessful = await updateLabel(projectToUpdate.id, labelToEdit.id, newLabelDescription, newLabelColor);
+        if (labelEditWasSuccessful) {
+            addAlert("Label updated", "success");
+            setProjectToUpdate({
+                ...projectToUpdate,
+                labels: projectToUpdate.labels.map(label =>
+                    label.id !== labelToEdit.id
+                    ?
+                    label
+                    :
+                    {...label, color: newLabelColor, description: newLabelDescription}
+                )
+            });
+            setFieldToUpdate(null);
+            setLabelToEdit(null);
+            setNewLabelColor(null);
+            setNewLabelDescription(null);
+        };
     }
 
     /**
@@ -192,16 +241,46 @@ const UpdateProject = ({
     }
 
     /**
-     * TODO: implement updating labels
-     * Temporary placeholder for updating labels.
+     * Modal for updating a label.
      */
     const labelsUpdateWindow = () => {
         return (
             <Column
                 data-testid='label-update-modal'
+                style={{gap: '2rem'}}
             >
-                <Typography>Update labels</Typography>
-                {getModalButtons(() => {})}
+                <Typography fontSize='medium'>Edit label</Typography>
+                <Divider style={{marginBottom: '1rem'}}/>
+                <Label
+                    color={newLabelColor}
+                >
+                    {newLabelDescription}
+                </Label>
+                <Column style={{gap: '0.5rem'}}>
+                    <Row style={{justifyContent: 'space-between'}}>
+                        <Typography color='label'>
+                            Description
+                        </Typography>
+                        {
+                            newLabelDescription.length === 50 &&
+                            <Typography fontSize='extrasmall' style={{color: 'var(--color-error)'}}>
+                                Maximum description length
+                            </Typography>
+                        }
+                    </Row>
+                    <InputField
+                        value={newLabelDescription}
+                        onChange={(e) => handleLabelDescriptionChange(e)}
+                    />
+                </Column>
+                <Column style={{gap: '0.5rem', paddingBottom: '25px'}}>
+                    <Typography color='label'>Color</Typography>
+                    <ColorPicker
+                        value={newLabelColor}
+                        setColorFn={setNewLabelColor}
+                    />
+                </Column>
+                {getModalButtons(handleUpdateLabel)}
             </Column>
         )
     }
@@ -302,6 +381,41 @@ const UpdateProject = ({
         );
     }
 
+    const getLabelsRow = () => {
+        return (
+        <Column
+            aria-label={'project labels'}
+            style={{gap: '1rem'}}
+        >
+            <Typography fontSize='small' color='label'>
+                Labels
+            </Typography>
+            <Row style={{flexWrap: 'wrap'}}>
+                {projectToUpdate.labels.map(label => (
+                    <Clickable
+                        key={label.id}
+                        onClick={() => handleOpenLabelEditWindow(label)}
+                    >
+                        <Label
+                            color={label.color}
+                        >
+                            {label.description}
+                        </Label>
+                    </Clickable>
+                ))}
+            </Row>
+            <TextButton>
+                <Row style={{gap: 0}}>
+                    <MdAdd />
+                    <Typography fontSize='extrasmall'>
+                        Create label
+                    </Typography>
+                </Row>
+            </TextButton>
+        </Column>
+        );
+    }
+
     return (
         <Modal
             style={{
@@ -335,7 +449,7 @@ const UpdateProject = ({
                 {getRowInProjectSettings('Title', oldTitle, Fields.TITLE)}
                 {getRowInProjectSettings('Description', oldDescription, Fields.DESCRIPTION)}
                 {getRowInProjectSettings('Estimated length', formatSecondsToHMS(oldEstLen), Fields.ESTIMATED_LENGTH)}
-                {getRowInProjectSettings('Labels', 'TODO: Display labels created for the project and let user to add/update/delete them', Fields.LABELS)}
+                {getLabelsRow()}
                 {getRowInProjectSettings('Shared with', 'TODO: Display users the project is shared with and let user add/delete them', Fields.SHARED)}
             </Column>
             <OutlineButton

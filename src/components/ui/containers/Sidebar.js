@@ -1,8 +1,12 @@
-const Sidebar = ({isOpen, children, style, ...props}) => {
+const Sidebar = ({isOpen, children, style, isMobile, ...props}) => {
     return (
         <div
-            className={`sidebar ${isOpen ? 'is-open' : 'is-closed'}`}
-            style={style}
+            className='sidebar'
+            style={{
+                ...style,
+                width: isMobile ? '100%' : '350px',
+                transform: isOpen ? 'translate(0)' : `translate(${isMobile ? '-100%' : '-350px'})` 
+            }}
             {...props}
         >
             { children }

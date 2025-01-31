@@ -17,6 +17,7 @@ const UserProjects = ({
     updateProjectTitle,
     updateProjectDescription,
     updateProjectEstimatedLength,
+    updateLabel,
     deleteProject,
     ...props}
 ) => {
@@ -65,6 +66,7 @@ const UserProjects = ({
                     updateProjectTitle={updateProjectTitle}
                     updateProjectDescription={updateProjectDescription}
                     updateProjectEstimatedLength={updateProjectEstimatedLength}
+                    updateLabel={updateLabel}
                 />
             }
             {

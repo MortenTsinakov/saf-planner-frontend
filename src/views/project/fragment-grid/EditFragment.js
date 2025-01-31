@@ -1,7 +1,8 @@
-import { Column, Divider, FilledButton, InputArea, InputField, Modal, OutlineButton, Row, TextButton, Typography } from 'components';
+import { Column, Divider, FilledButton, IconButton, InputArea, InputField, Modal, OutlineButton, Row, TextButton, Typography } from 'components';
+import Label from 'components/ui/labels/Label';
 import { useAlerts, useProject } from 'hooks';
 import { useState } from 'react';
-import { MdEdit } from 'react-icons/md';
+import { MdAdd, MdClose, MdEdit } from 'react-icons/md';
 import { clampNumber } from 'utils';
 
 const EditFragment = (
@@ -19,7 +20,8 @@ const EditFragment = (
 
     const {updateFragmentShortDescription,
            updateFragmentLongDescription,
-           updateFragmentDuration} = useProject();
+           updateFragmentDuration,
+           project} = useProject();
 
     const [activeField, setActiveField] = useState(null);
     const [fieldToUpdate, setFieldToUpdate] = useState(null);
@@ -119,6 +121,10 @@ const EditFragment = (
         setLongDescription(newValue);
     }
 
+    const removeLabel = (label) => {
+        console.log("Remove label:", label);
+    }
+
     /**
      * Change the field value for duration.
      */
@@ -179,6 +185,56 @@ const EditFragment = (
                         </TextButton>
                     }
                 </Row>
+            </Column>
+        );
+    }
+
+    const getLabelsRow = () => {
+        return(
+            <Column
+                aria-label={`fragment labels`}
+                style={{gap: '1rem'}}
+            >
+                <Typography fontSize='small' color='label'>Labels</Typography>
+                <Row>
+                    {
+                        fragment.labels
+                        ? 
+                        fragment.labels.map(label => (
+                            <Label
+                                key={label.id}
+                                color={label.color}
+                                style={{paddingRight: '5px'}}
+                            >
+                                <Row>
+                                    {label.description}
+                                    <IconButton
+                                        title='Remove label from fragment'
+                                        style={{
+                                            color: 'white',
+
+                                        }}
+                                        icon={<MdClose style={{fontSize: 'small'}}/>}
+                                        onClick={() => removeLabel(label)}
+                                    />
+                                </Row>
+                            </Label>
+                        ))
+                        : 
+                        '-'
+                    }
+                </Row>
+                <TextButton
+                    style={{
+                        width: 'fit-content',
+                    }}
+                    onClick={() => setFieldToUpdate(Fields.LABELS)}
+                >
+                    <Row style={{alignItems: 'center', gap:0}}>
+                        <MdAdd />
+                        <Typography fontSize='extrasmall'>Add label</Typography>
+                    </Row>
+                </TextButton>
             </Column>
         );
     }
@@ -254,7 +310,7 @@ const EditFragment = (
     const labelsEditWindow = () => {
         return (
             <Column>
-                TODO: Update labels
+                Here should be a list of project labels.
                 {getModalButtons(() => {})}
             </Column>
         );
@@ -287,34 +343,37 @@ const EditFragment = (
                 width: '750px',
                 maxWidth: '90vw',
 
-                minHeight: '50vh',
+                minHeight: '90vh',
+                height: '90vh',
                 maxHeight: '90vh',
 
                 gap: '2rem',
                 justifyContent: 'space-between'
             }}
         >
-            {
-                fieldToUpdate !== null
-                && 
-                <Modal
-                    data-testid='update-modal'
-                    style={{minWidth: '250px', width: '500px'}}
-                >
-                    {getCorrectEditingWindow()}
-                </Modal>
-            }
             <Column>
-                <Typography fontSize='medium'>Edit fragment</Typography>
-                <Divider style={{backgroundColor: 'var(--primary-color)', marginBottom: '3rem'}}/>
-            </Column>
-            <Column
-                style={{overflow: 'auto', paddingBottom: '2rem'}}
-            >
-                {getRowInEditFragment('Short description', oldShortDescription, Fields.SHORT_DESCRIPTION)}
-                {getRowInEditFragment('Long description', oldLongDescription, Fields.LONG_DESCRIPTION)}
-                {getRowInEditFragment('Duration', `${oldDurationInSeconds} seconds`, Fields.DURATION)}
-                {getRowInEditFragment('Labels', 'TODO: Display labels created for the project and let user to add/update/delete them', Fields.LABELS)}
+                {
+                    fieldToUpdate !== null
+                    && 
+                    <Modal
+                        data-testid='update-modal'
+                        style={{minWidth: '250px', width: '500px'}}
+                    >
+                        {getCorrectEditingWindow()}
+                    </Modal>
+                }
+                <Column>
+                    <Typography fontSize='medium'>Edit fragment</Typography>
+                    <Divider style={{backgroundColor: 'var(--primary-color)', marginBottom: '3rem'}}/>
+                </Column>
+                <Column
+                    style={{overflow: 'auto', paddingBottom: '2rem'}}
+                >
+                    {getRowInEditFragment('Short description', oldShortDescription, Fields.SHORT_DESCRIPTION)}
+                    {getRowInEditFragment('Long description', oldLongDescription, Fields.LONG_DESCRIPTION)}
+                    {getRowInEditFragment('Duration', `${oldDurationInSeconds} seconds`, Fields.DURATION)}
+                    {getLabelsRow()}
+                </Column>
             </Column>
             <OutlineButton
                 data-testid='close-button'

@@ -11,7 +11,7 @@ const InputArea = ({style,
                     ...props}) => {
     return (
         <div className='input-area-container'{...props}>
-            <label className="input-area-label">{label}</label>
+            {label && <label className="input-area-label">{label}</label> }
             <textarea
                 className={`input-area-input color-${color ? color : 'primary'}`}
                 style={style}
