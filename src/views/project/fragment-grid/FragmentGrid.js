@@ -41,6 +41,11 @@ const FragmentGrid = (
         if (active.id !== over.id) {
             const movedFragment = fragments.find(f => f.id === active.id);
             const overFragment = fragments.find(f => f.id === over.id);
+
+            if (!movedFragment || !overFragment) {
+                return;
+            }
+
             const newPosition = overFragment.position;
 
             moveFragment(movedFragment, newPosition);
@@ -61,7 +66,7 @@ const FragmentGrid = (
                 longDescription: newCard.longDescription.trim(),
                 durationInSeconds: newCard.durationInSeconds <= 0 ? 5 : newCard.durationInSeconds,
                 onTimeline: newCard.onTimeline,
-                position: 1,
+                position: fragments.length + 1,
                 projectId: props.projectId,
             }
             const fragmentCreatedSuccessfully = await createFragment(data);

@@ -1,6 +1,6 @@
-import { Clickable, Column, Divider, IconButton, Row, TextButton, Typography } from 'components';
+import { Column, Divider, IconButton, Row, TextButton, Typography } from 'components';
 import Label from 'components/ui/labels/Label';
-import { MdAdd, MdClose, MdEdit } from 'react-icons/md';
+import { MdClose, MdEdit } from 'react-icons/md';
 import { formatSecondsToHMS, truncateString } from 'utils';
 
 const ProjectSettingsInfoPanel = ({
@@ -25,60 +25,51 @@ const ProjectSettingsInfoPanel = ({
 
     const getTextField = (category, content, fieldToUpdate) => {
         return (
-            <Clickable
-                onClick={() => handleEditField(fieldToUpdate)}
+            <Row  
                 style={{
-                    width: '100%',
-                    backgroundColor: 'var(--background-color-medium)',
-                    borderRadius: '10px',
-
+                    backgroundColor: 'var(--background-color-medium)', 
+                    width: '100%', 
+                    padding: '2rem', 
+                    borderRadius: '10px', 
+                    justifyContent: 'space-between'
                 }}
             >
-                <Column
-                    style={{
-                        alignItems: 'center',
-                        padding: '25px 0',
-                        width: '80%'
-                    }}
-                >
-                    <Typography color='label'>
-                        {category}
-                    </Typography>
-                    <Typography>
-                        {content}
-                    </Typography>
+                <Column>
+                    <Typography color='label'>{category}</Typography>
+                    <Typography>{content}</Typography>
                 </Column>
-            </Clickable>
-        );
+                <TextButton
+                    onClick={() => handleEditField(fieldToUpdate)}
+                >
+                    Edit
+                </TextButton>
+            </Row>
+        )
     }
 
     const getLabelsField = () => {
         return (
             <Column
                 style={{
-                    width: '100%',
-                    alignItems: 'center', 
-                    padding: '25px 0',
+                    backgroundColor: 'var(--background-color-medium)', 
+                    width: '100%', 
+                    padding: '2rem', 
+                    borderRadius: '10px', 
+                    gap: '2rem'
                 }}
             >
                 <Typography color='label'>Labels</Typography>
-                {project.labels.map(label => (
-                        <Label key={label.id} color={label.color} style={{width: '100%', display: 'flex', justifyContent: 'space-between', paddingRight: '5px'}}>
+                <Row style={{flexWrap: 'wrap', width: '100%'}}>
+                    {project.labels.map(label => (
+                       <Label key={label.id} color={label.color} style={{display: 'flex', gap: '2rem', justifyContent: 'space-between', paddingRight: '5px'}}>
                             {truncateString(label.description, 15)}
                             <Row style={{gap: 0}}>
-                                <IconButton style={{fontSize: '2rem', color: 'black'}} icon={<MdEdit />} title='Edit label' onClick={() => handleEditLabelClick(label)}/>
-                                <IconButton style={{fontSize: '2rem', color: 'black'}} icon={<MdClose />} title='Delete label' onClick={() => setLabelToDelete(label)}/>
+                                <IconButton style={{fontSize: '2rem', color: 'black', padding: 0}} icon={<MdEdit />} title='Edit label' onClick={() => handleEditLabelClick(label)}/>
+                                <IconButton style={{fontSize: '2rem', color: 'black', padding: 0}} icon={<MdClose />} title='Delete label' onClick={() => setLabelToDelete(label)}/>
                             </Row>
                         </Label>
-                ))}
-                <TextButton onClick={() => handleEditField(fields.CREATE_LABEL)}>
-                    <Row>
-                        <MdAdd/>
-                        <Typography>    
-                            Create new label
-                        </Typography>
-                    </Row>
-                </TextButton>
+                    ))}
+                </Row>
             </Column>
         );
     }
@@ -89,18 +80,20 @@ const ProjectSettingsInfoPanel = ({
                 width: props.isMobile ? '100%' : '750px', 
                 alignItems: 'center', 
                 gap: 0,
-                backgroundColor: 'var(--background-color-medium)',
+                // backgroundColor: 'var(--background-color-medium)',
                 borderRadius: '10px',
                 paddingBottom: '50px',
             }}
         >
             <Typography fontSize='medium' style={{padding: '25px 0'}}>Project information</Typography>
-            <Divider style={{width: '80%', backgroundColor: 'var(--primary-color)'}}/>
-            {getTextField("Title", project.title, fields.TITLE)}
-            {getTextField("Description", project.description, fields.DESCRIPTION)}
-            {getTextField("Estimated length", formatSecondsToHMS(project.estimatedLengthInSeconds), fields.ESTIMATED_LENGTH)}
-            {getLabelsField()}
-            {getTextField("Shared with", "TODO: Display users with whom the project has been shared with")}
+            <Divider style={{backgroundColor: 'var(--primary-color)'}}/>
+            <Column style={{alignItems: 'start', marginTop: '50px', width: '100%'}}>
+                {getTextField("Title", project.title, fields.TITLE)}
+                {getTextField("Description", project.description, fields.DESCRIPTION)}
+                {getTextField("Estimated length", formatSecondsToHMS(project.estimatedLengthInSeconds), fields.ESTIMATED_LENGTH)}
+                {getLabelsField()}
+                {getTextField("Shared with", "TODO: Display users with whom the project has been shared with")}
+            </Column>
         </Column>
     );
 }

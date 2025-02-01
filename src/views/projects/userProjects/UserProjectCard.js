@@ -39,7 +39,7 @@ const UserProjectCard = (props) => {
             {}
             <Card style={{gap: '1rem', maxWidth: '90vw', width: '750px'}}>
                     <Clickable onClick={() => navigateToProjectPage(project.id)}>
-                        <Column>
+                        <Column style={{width: '100%'}}>
                             <Typography fontSize='medium' style={titleStyle}>{project.title}</Typography>
                             <Typography fontSize='small' style={descriptionStyle}>{project.description || '-'}</Typography>
                             <Column style={{gap:0}}>
