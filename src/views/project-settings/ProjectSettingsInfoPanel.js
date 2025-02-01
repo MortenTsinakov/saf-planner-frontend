@@ -80,7 +80,6 @@ const ProjectSettingsInfoPanel = ({
                 width: props.isMobile ? '100%' : '750px', 
                 alignItems: 'center', 
                 gap: 0,
-                // backgroundColor: 'var(--background-color-medium)',
                 borderRadius: '10px',
                 paddingBottom: '50px',
             }}
