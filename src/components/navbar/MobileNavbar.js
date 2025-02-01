@@ -58,6 +58,7 @@ const MobileNavbar = () => {
             <Sidebar
                 isOpen={sidebarIsOpen}
                 isMobile='true'
+                style={{zIndex: 10}}
             >
                 {user ?
                     <Column

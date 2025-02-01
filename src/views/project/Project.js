@@ -13,7 +13,7 @@ const Project = ({...props}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
-    const projectId = searchParams.get('id');
+    const projectId = searchParams.get('projectId');
 
     const toolBarHeight = 55;
     const [readAllWidth, setReadAllWidth] = useState(350);

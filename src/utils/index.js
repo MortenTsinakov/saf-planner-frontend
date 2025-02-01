@@ -1,5 +1,6 @@
 export {
     clampNumber,
+    truncateString,
 } from './misc/MiscUtils'
 
 export {

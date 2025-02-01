@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnonymousRoutes, ProtectedRoutes } from 'routes';
 import { AxiosErrorHandler } from 'services';
-import { SignIn, Page404, SignUp, Project, Projects } from 'views';
+import { SignIn, Page404, SignUp, Project, Projects, ProjectSettings } from 'views';
 
 
 function App() {
@@ -48,6 +48,7 @@ function App() {
                       <Project {...props} />
                     </ProjectProvider>
                   } />
+                  <Route path='/project-settings' element={<ProjectSettings {...props} />} />
                 </Route>
                 {/* Redirect to 404 if page is not found */}
                 <Route path="*" element={<Navigate to="/404" replace />} />

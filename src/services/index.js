@@ -31,3 +31,10 @@ export {
     moveFragmentService,
     deleteFragmentService,
 } from 'services/fragment/FragmentService';
+
+// Label service
+export {
+    createLabelService,
+    updateLabelService,
+    deleteLabelService,
+} from 'services/label/LabelService';
