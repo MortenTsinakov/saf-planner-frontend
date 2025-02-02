@@ -91,7 +91,7 @@ const ProjectSettings = ({...props}) => {
                 isOpen={editPanelIsOpen}
                 isMobile={props.isMobile}
                 fromRight={true}
-                style={{justifyContent: 'start', backgroundColor: 'var(--background-color-low)'}}
+                style={{justifyContent: 'start'}}
             >
                 <Column style={{width: '80%', alignItems: 'start', padding: '2rem'}}>
                     <IconButton icon={<MdClose />} onClick={() => setEditPanelIsOpen(false)}/>

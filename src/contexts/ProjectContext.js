@@ -21,6 +21,18 @@ export const ProjectProvider = ({children}) => {
 
     const navigate = useNavigate();
 
+    const SidePanelStates = Object.freeze({
+        CREATE_FRAGMENT: 0,
+        EDIT_FRAGMENT: 1,
+        EDIT_SHORT_DESCRIPTION: 2,
+        EDIT_LONG_DESCRIPTION: 3,
+        EDIT_DURATION: 4,
+        ADD_LABEL: 5,
+        REMOVE_LABEL: 6,
+    });
+    const [sidePanelState, setSidePanelState] = useState(null);
+    const [sidePanelIsOpen, setSidePanelIsOpen] = useState(false);
+
     /**
      * Fetch project from the server.
      * 
@@ -200,6 +212,11 @@ export const ProjectProvider = ({children}) => {
         fetchProject,
         fragments,
         setFragments,
+        SidePanelStates,
+        sidePanelState,
+        setSidePanelState,
+        sidePanelIsOpen,
+        setSidePanelIsOpen,
         createFragment,
         updateFragmentOnTimelineStatus,
         updateFragmentShortDescription,

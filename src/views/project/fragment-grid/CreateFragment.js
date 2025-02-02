@@ -194,13 +194,10 @@ const CreateFragment = (
             <Column
                 ref={setNodeRef}
                 style={{
-                    minWidth: 'fit-content',
-                    width: 'fit-content',
                     padding: '5rem 2rem',
-                    height: fragmentGridHeight,
-                    borderLeft: '1px solid var(--main-gray)',
-                    alignItems: 'center',
-                    gap: '3rem',
+                    alignItems: 'start',
+                    height: '100%',
+                    width: '100%',
                     overflow: 'auto',
                 }}
                 data-testid='create-fragment-panel'

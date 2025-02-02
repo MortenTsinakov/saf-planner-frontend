@@ -20,8 +20,8 @@ const EditFragment = (
 
     const {updateFragmentShortDescription,
            updateFragmentLongDescription,
-           updateFragmentDuration,
-           project} = useProject();
+           updateFragmentDuration
+    } = useProject();
 
     const [activeField, setActiveField] = useState(null);
     const [fieldToUpdate, setFieldToUpdate] = useState(null);

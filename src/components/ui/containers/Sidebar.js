@@ -20,6 +20,7 @@ const Sidebar = ({isOpen, children, style, isMobile, fromRight, ...props}) => {
                 left: fromRight ? null : 0,
                 borderLeft: isMobile ? 'none' : (fromRight ? '1px solid var(--main-gray)' : 'none'),
                 borderRight: isMobile ? 'none' : (fromRight ? 'none' : '1px solid var(--main-gray)'),
+                transition: isOpen ? 'transform 0.5s ease, opacity 0.5s ease' : 'transform 0.3s ease, opacity 0.5s ease, visibility 0s linear 0.5s',
             }}
             {...props}
         >

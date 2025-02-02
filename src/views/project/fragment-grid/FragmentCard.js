@@ -13,7 +13,7 @@ const FragmentCard = (
         ...props}) => 
     {
 
-    const {updateFragmentOnTimelineStatus} = useProject();
+    const {updateFragmentOnTimelineStatus, SidePanelStates, setSidePanelState, setSidePanelIsOpen} = useProject();
     const [displayButtons, setDisplayButtons] = useState(false);
     const iconStyle = {
         fontSize: '2.2rem',
@@ -28,6 +28,11 @@ const FragmentCard = (
     const [showFragmentDetails, setShowFragmentDetails] = useState(false);
     const [showEditFragmentModal, setShowEditFragmentModal] = useState(false);
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
+
+    const handleEditFragmentClick = () => {
+        setSidePanelState(SidePanelStates.EDIT_FRAGMENT);
+        setSidePanelIsOpen(true);
+    }
 
     return (
         <SortableItem
@@ -71,7 +76,8 @@ const FragmentCard = (
                             >
     
                                 <IconButton 
-                                    onClick={() => setShowEditFragmentModal(true)}
+                                    // onClick={() => setShowEditFragmentModal(true)}
+                                    onClick={handleEditFragmentClick}
                                     title='Edit the fragment'
                                     style={{
                                         ...iconStyle,

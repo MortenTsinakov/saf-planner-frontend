@@ -20,11 +20,10 @@
     position: fixed;
     top: var(--navbar-height);
     height: calc(100vh - var(--navbar-height));
-    background-color: var(--background-color-lowest);
+    background-color: var(--background-color-low);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 5;
-    transition: transform 0.5s ease;
 }

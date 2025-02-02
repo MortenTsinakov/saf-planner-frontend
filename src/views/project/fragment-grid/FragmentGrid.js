@@ -1,4 +1,4 @@
-import { Container, SortableContextWrapper, Row, Typography, Column, TextButton } from 'components';
+import { Container, SortableContextWrapper, Row, Typography, Column, TextButton, Sidebar } from 'components';
 import FragmentCard from './FragmentCard';
 import { DndContext, DragOverlay, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useState } from 'react';
@@ -9,20 +9,25 @@ import FragmentDragOverlay from './drag_overlays/FragmentDragOverlay';
 import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
 import { useAlerts, useProject } from 'hooks';
 import { MdAdd } from 'react-icons/md';
+import EditFragment2 from './EditFragment2';
 
 /**
  * Grid that displays project fragments.
  * It's also possible to add new fragments on the grid.
  */
-const FragmentGrid = (
-    {
-        fragmentGridHeight,
-        showCreateFragmentPanel,
-        setShowCreateFragmentPanel,
-        ...props}) => 
-    {
+const FragmentGrid = ({fragmentGridHeight, ...props}) => {
 
-    const {fragments, setFragments, createFragment, moveFragment} = useProject();
+    const {
+        fragments, 
+        setFragments, 
+        createFragment, 
+        moveFragment,
+        SidePanelStates,
+        sidePanelState,
+        setSidePanelState,
+        sidePanelIsOpen,
+        setSidePanelIsOpen,
+    } = useProject();
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -33,6 +38,11 @@ const FragmentGrid = (
     const [activeId, setActiveId] = useState(null);
     const [firstFragmentHovering, setFirstFragmentHovering] = useState(false);
     const {addAlert} = useAlerts();
+
+    const handleCreateFragmentClick = () => {
+        setSidePanelState(SidePanelStates.CREATE_FRAGMENT);
+        setSidePanelIsOpen(true);
+    }
 
     /**
      * Handle moving a fragment inside the fragment grid.
@@ -58,7 +68,6 @@ const FragmentGrid = (
      * to the database. Otherwise it will be returned to it's initial position.
      */
     const handleFragmentCreationDrop = async (active, over) => {
-
         if (active.data.current.sortable.containerId === NEW_FRAGMENT_PANEL_ID && over.id === FRAGMENT_GRID_ID) {
             const newCard = newCards.find(f => f.id === NEW_FRAGMENT_ID);
             const data = {
@@ -72,7 +81,8 @@ const FragmentGrid = (
             const fragmentCreatedSuccessfully = await createFragment(data);
             if (fragmentCreatedSuccessfully) {
                 addAlert("Fragment created", "success");
-                setShowCreateFragmentPanel(false);
+                setSidePanelIsOpen(false);
+                setSidePanelState(null);
             }
             return;
         }
@@ -97,7 +107,8 @@ const FragmentGrid = (
             const fragmentCreatedSuccessfully = await createFragment(data);
             if (fragmentCreatedSuccessfully) {
                 addAlert("Fragment created", "success");
-                setShowCreateFragmentPanel(false);
+                setSidePanelIsOpen(false);
+                setSidePanelState(null);
             }
             return;
         }
@@ -117,7 +128,13 @@ const FragmentGrid = (
     const handleDragEnd = async ({active, over}) => {
         setActiveId(null);
 
-        if (!active || !over) {return;}
+        if (!active || !over) {
+            setFragments(prev => prev.filter(f => f.id !== activeId));
+            const initialState = [...fragments.filter(f => f.id === activeId), ...newCards.filter(f => f.id === activeId)];
+            setNewCards(initialState);
+            setSidePanelIsOpen(true);
+            return;
+        }
 
         const activeContainer = active.data.current?.sortable.containerId;
         const overContainer = active.data.current?.sortable.containerId;
@@ -173,6 +190,7 @@ const FragmentGrid = (
     const handleDragCancel = (e) => {
         const {active} = e;
         setActiveId(null);
+        setSidePanelIsOpen(true);
 
         if (active.id === NEW_FRAGMENT_ID) {
             setNewCards(fragments.filter(f => f.id === NEW_FRAGMENT_ID));
@@ -186,6 +204,7 @@ const FragmentGrid = (
      * for drag overlays.
      */
     const handleDragStart = (e) => {
+        setSidePanelIsOpen(false);
         setActiveId(e.active.id);
     }
 
@@ -268,16 +287,16 @@ const FragmentGrid = (
                                         This project has no fragments yet...
                                     </Typography>
                                     {
-                                        !showCreateFragmentPanel &&
+                                        !sidePanelIsOpen &&
                                         <TextButton
-                                            onClick={() => setShowCreateFragmentPanel(true)}
+                                            onClick={handleCreateFragmentClick}
                                             style={{display: 'flex', alignContent:'center', gap: '5px'}}
                                         >
                                             {<MdAdd/>} Create new fragment
                                         </TextButton>
                                     }
                                     {
-                                        showCreateFragmentPanel &&
+                                        sidePanelIsOpen &&
                                         <Typography color='label'>
                                             Once you have filled in the
                                             details, drop the fragment card
@@ -312,18 +331,28 @@ const FragmentGrid = (
                     </Container>
                 }
                     </SortableContextWrapper>
-                        {
-                            showCreateFragmentPanel
-                            &&
-                            <CreateFragment
-                                activeId={activeId}
-                                newCards={newCards}
-                                setNewCards={setNewCards}
-                                fragmentGridHeight={fragmentGridHeight}
-                                setShowCreateFragmentPanel={setShowCreateFragmentPanel}
-                            />
-                        }
+                        
             </Row>
+            <Sidebar
+                isOpen={sidePanelIsOpen}
+                fromRight={true}
+                isMobile={props.isMobile}
+            >
+                {
+                    sidePanelState === SidePanelStates.CREATE_FRAGMENT &&
+                    <CreateFragment
+                        activeId={activeId}
+                        newCards={newCards}
+                        setNewCards={setNewCards}
+                        fragmentGridHeight={fragmentGridHeight}
+                        setShowCreateFragmentPanel={setSidePanelIsOpen}
+                    />
+                }
+                {
+                    sidePanelState === SidePanelStates.EDIT_FRAGMENT &&
+                    <EditFragment2 />
+                }
+            </Sidebar>
             <DragOverlay>
                 {getDragOverlay()}
             </DragOverlay>
