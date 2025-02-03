@@ -1,15 +1,14 @@
-import { Container, SortableContextWrapper, Row, Typography, Column, TextButton, Sidebar } from 'components';
+import { Container, SortableContextWrapper, Row, Typography, Column, TextButton } from 'components';
 import FragmentCard from './FragmentCard';
 import { DndContext, DragOverlay, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useState } from 'react';
 import { restrictOnlyFragments } from 'utils';
-import CreateFragment from './CreateFragment';
 import CreateFragmentDragOverlay from './drag_overlays/CreateFragmentDragOverlay';
 import FragmentDragOverlay from './drag_overlays/FragmentDragOverlay';
 import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
 import { useAlerts, useProject } from 'hooks';
 import { MdAdd } from 'react-icons/md';
-import EditFragment2 from './EditFragment2';
+import FragmentGridSidebar from './FragmentGridSidebar';
 
 /**
  * Grid that displays project fragments.
@@ -23,10 +22,13 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
         createFragment, 
         moveFragment,
         SidePanelStates,
-        sidePanelState,
         setSidePanelState,
         sidePanelIsOpen,
         setSidePanelIsOpen,
+        activeId,
+        setActiveId,
+        newCards,
+        setNewCards,
     } = useProject();
 
     const sensors = useSensors(
@@ -35,7 +37,6 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
         useSensor(TouchSensor),
     );
 
-    const [activeId, setActiveId] = useState(null);
     const [firstFragmentHovering, setFirstFragmentHovering] = useState(false);
     const {addAlert} = useAlerts();
 
@@ -229,12 +230,6 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
         return <FragmentDragOverlay fragment={fragment}/> 
     }
 
-    /**
-     * A list of newly created cards. There should always be a single card
-     * in the array, but the dnd-kit Sortable needs a list.
-     */
-    const [newCards, setNewCards] = useState([]);
-
     return (
         <DndContext
             modifiers={[restrictOnlyFragments]}
@@ -321,7 +316,6 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
                                 {fragments.map(f => (
                                     <FragmentCard
                                         key={f.id}
-                                        activeId={activeId}
                                         fragment={f}
                                         {...props}
                                     />
@@ -333,26 +327,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
                     </SortableContextWrapper>
                         
             </Row>
-            <Sidebar
-                isOpen={sidePanelIsOpen}
-                fromRight={true}
-                isMobile={props.isMobile}
-            >
-                {
-                    sidePanelState === SidePanelStates.CREATE_FRAGMENT &&
-                    <CreateFragment
-                        activeId={activeId}
-                        newCards={newCards}
-                        setNewCards={setNewCards}
-                        fragmentGridHeight={fragmentGridHeight}
-                        setShowCreateFragmentPanel={setSidePanelIsOpen}
-                    />
-                }
-                {
-                    sidePanelState === SidePanelStates.EDIT_FRAGMENT &&
-                    <EditFragment2 />
-                }
-            </Sidebar>
+            <FragmentGridSidebar {...props}/>
             <DragOverlay>
                 {getDragOverlay()}
             </DragOverlay>

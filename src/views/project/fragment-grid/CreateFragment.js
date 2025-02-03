@@ -1,19 +1,14 @@
 import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, Switch, Typography } from 'components';
 import { useState } from 'react';
-import { MdArrowBack, MdArrowForward, MdClose } from 'react-icons/md';
+import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import { clampNumber } from 'utils';
 import NewCard from './NewCard';
 import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
+import { useProject } from 'hooks';
 
-const CreateFragment = (
-    {
-        activeId,
-        newCards,
-        setNewCards,
-        fragmentGridHeight,
-        setShowCreateFragmentPanel,
-        ...props}) =>
-    {
+const CreateFragment = ({...props}) => {
+
+    const {newCards, setNewCards} = useProject();
 
     const projectId = props.projectId;
     const panelWidth = 420;
@@ -36,7 +31,7 @@ const CreateFragment = (
         return (
             <Column
                 data-testid='create-fragment-short-description'
-                style={{width: panelWidth}}
+                style={{width: '100%'}}
             >
                 <Column>
                     <Typography>Short description</Typography>
@@ -58,7 +53,7 @@ const CreateFragment = (
         return (
             <Column
                 data-testid='create-fragment-long-description'
-                style={{width: panelWidth}}
+                style={{width: '100%'}}
             >
                 <Column>
                     <Typography>Long description</Typography>
@@ -81,7 +76,7 @@ const CreateFragment = (
         return (
             <Column
                 data-testid='create-fragment-duration'
-                style={{width: panelWidth}}
+                style={{width: '100%'}}
             >
                 <Column>
                     <Typography>Duration</Typography>
@@ -108,7 +103,7 @@ const CreateFragment = (
         return (
             <Column
                 data-testid='create-fragment-timeline-status'
-                style={{width: panelWidth}}
+                style={{width: '100%'}}
             >
                 <Column>
                     <Typography>On timeline</Typography>
@@ -155,7 +150,6 @@ const CreateFragment = (
                     {newCards.map(f => (
                         <NewCard
                             key={f.id}
-                            activeId={activeId}
                             fragment={f}
                         />
                     ))}
@@ -194,23 +188,14 @@ const CreateFragment = (
             <Column
                 ref={setNodeRef}
                 style={{
-                    padding: '5rem 2rem',
-                    alignItems: 'start',
+                    padding: '5rem 3rem',
                     height: '100%',
                     width: '100%',
                     overflow: 'auto',
+                    alignItems: 'center',
                 }}
                 data-testid='create-fragment-panel'
             >
-                <Row
-                    style={{width: '100%'}}
-                >
-                    <IconButton
-                        icon={<MdClose />}
-                        onClick={() => setShowCreateFragmentPanel(false)}
-                        data-testid='create-fragment-close-button'
-                    />
-                </Row>
                 {
                     page < 5 ?
                     <Typography fontSize='medium'>Create new fragment</Typography>

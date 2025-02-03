@@ -33,6 +33,7 @@
     outline: none;
     resize: none;
     border-radius: 5px;
+    height: inherit;
 }
 
 .input-area-input:focus {

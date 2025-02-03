@@ -1,10 +1,12 @@
 import { createContext, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createFragmentService,
+import { attachLabeltoFragmentService, createFragmentService,
+         createLabelService,
          deleteFragmentService,
          fetchFragmentsService,
          fetchProjectByIdService,
          moveFragmentService,
+         removeLabelFromFragmentService,
          updateFragmentDurationService,
          updateFragmentLongDescriptionService,
          updateFragmentOnTimelineStatusService,
@@ -27,11 +29,15 @@ export const ProjectProvider = ({children}) => {
         EDIT_SHORT_DESCRIPTION: 2,
         EDIT_LONG_DESCRIPTION: 3,
         EDIT_DURATION: 4,
-        ADD_LABEL: 5,
-        REMOVE_LABEL: 6,
+        CREATE_LABEL: 5,
     });
     const [sidePanelState, setSidePanelState] = useState(null);
     const [sidePanelIsOpen, setSidePanelIsOpen] = useState(false);
+    // Id of the fragment being dragged
+    const [activeId, setActiveId] = useState(null);
+    // A list of a SINGLE card - the card being created at the moment
+    const [newCards, setNewCards] = useState([]);
+    const [fragmentToEdit, setFragmentToEdit] = useState(null);
 
     /**
      * Fetch project from the server.
@@ -118,6 +124,7 @@ export const ProjectProvider = ({children}) => {
             setError(null);
             const response = await updateFragmentShortDescriptionService(fragment.id, shortDescription);
             setFragments(f => f.map((item) => (item.id === fragment.id ? response : item)));
+            setFragmentToEdit(response);
             return true;
         } catch (err) {
             setError(err.response?.data?.message || "Updating fragment failed");
@@ -133,6 +140,7 @@ export const ProjectProvider = ({children}) => {
             setError(null);
             const response = await updateFragmentLongDescriptionService(fragment.id, longDescription);
             setFragments(f => f.map((item) => (item.id === fragment.id ? response : item)));
+            setFragmentToEdit(response);
             return true;
         } catch (err) {
             setError(err.response?.data?.message || "Updating fragment failed");
@@ -148,6 +156,7 @@ export const ProjectProvider = ({children}) => {
             setError(null);
             const response = await updateFragmentDurationService(fragment.id, durationInSeconds);
             setFragments(f => f.map((item) => (item.id === fragment.id ? response : item)));
+            setFragmentToEdit(response);
             return true;
         } catch (err) {
             setError(err.response?.data?.message || "Updating fragment failed");
@@ -207,11 +216,83 @@ export const ProjectProvider = ({children}) => {
         }
     }, [decrementFragmentPositions]);
 
+    const createLabel = useCallback(async (proj, description, color) => {
+        try {
+            setError(null);
+            const response = await createLabelService(proj.id, description, color);
+            setProject(prev => ({
+                ...prev,
+                labels: [...prev.labels, response]
+            }));
+            return true;
+        } catch (err) {
+            setError(err);
+            return false;
+        }
+    }, []);
+
+    const attachLabelToFragment = useCallback(async (labelId, fragmentId) => {
+        try {
+            setError(null);
+            const response = await attachLabeltoFragmentService(labelId, fragmentId);
+            setFragments(prev => prev.map(fragment => {
+                if (fragment.id !== fragmentId) {
+                    return fragment
+                }
+                return {
+                    ...fragment,
+                    labels: [...fragment.labels, response]
+                }
+            }));
+            setFragmentToEdit(prev => ({
+                ...prev,
+                labels: [...prev.labels, response]
+            }))
+            return true;
+        } catch (err) {
+            setError(err);
+            return false;
+        }
+    }, []);
+
+    const removeLabelFromFragment = useCallback(async (labelId, fragmentId) => {
+        try {
+            setError(null);
+            const response = await removeLabelFromFragmentService(labelId, fragmentId);
+            setFragments(prev => prev.map(fragment => {
+                if (fragment.id !== response.fragmentId) {
+                    return fragment;
+                }
+                return {
+                    ...fragment,
+                    labels: fragment.labels.filter(label => label.id !== response.labelId)
+                }
+            }));
+            setFragmentToEdit(prev => ({
+                ...prev,
+                labels: prev.labels.filter(l => l.id !== labelId)
+            }));
+            return true;
+        } catch (err) {
+            setError(err);
+            return false;
+        }
+    }, []);
+
     const value = {
         project,
         fetchProject,
         fragments,
+        createLabel,
+        attachLabelToFragment,
+        removeLabelFromFragment,
         setFragments,
+        fragmentToEdit,
+        setFragmentToEdit,
+        activeId,
+        setActiveId,
+        newCards,
+        setNewCards,
         SidePanelStates,
         sidePanelState,
         setSidePanelState,

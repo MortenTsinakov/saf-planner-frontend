@@ -8,12 +8,18 @@ import { useProject } from 'hooks';
 
 const FragmentCard = (
     {
-        activeId,
         fragment,
         ...props}) => 
     {
 
-    const {updateFragmentOnTimelineStatus, SidePanelStates, setSidePanelState, setSidePanelIsOpen} = useProject();
+    const {
+        updateFragmentOnTimelineStatus,
+        SidePanelStates,
+        setSidePanelState,
+        setSidePanelIsOpen,
+        activeId,
+        setFragmentToEdit,
+    } = useProject();
     const [displayButtons, setDisplayButtons] = useState(false);
     const iconStyle = {
         fontSize: '2.2rem',
@@ -30,6 +36,7 @@ const FragmentCard = (
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
 
     const handleEditFragmentClick = () => {
+        setFragmentToEdit(fragment);
         setSidePanelState(SidePanelStates.EDIT_FRAGMENT);
         setSidePanelIsOpen(true);
     }

@@ -36,3 +36,27 @@ export const deleteLabelService = async (labelId) => {
     const response = await apiClient.delete('/label', {data: deleteData});
     return response.data;
 }
+
+/**
+ * Attach label to fragment
+ */
+export const attachLabeltoFragmentService = async (labelId, fragmentId) => {
+    const postData = {
+        labelId: labelId,
+        fragmentId: fragmentId,
+    }
+    const response = await apiClient.post('/label/fragment', postData);
+    return response.data;
+}
+
+/**
+ * Remove label from fragment
+ */
+export const removeLabelFromFragmentService = async (labelId, fragmentId) => {
+    const deleteData = {
+        labelId: labelId,
+        fragmentId: fragmentId,
+    }
+    const response = await apiClient.delete('/label/fragment', {data: deleteData});
+    return response.data;
+}
