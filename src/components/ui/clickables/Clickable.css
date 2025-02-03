@@ -1,5 +1,7 @@
 .clickable {
     cursor: pointer;
+    display: flex;
+    justify-content: center;
 }
 
 .clickable:hover {

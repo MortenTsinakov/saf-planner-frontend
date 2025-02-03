@@ -13,12 +13,11 @@ const Project = ({...props}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
-    const projectId = searchParams.get('id');
+    const projectId = searchParams.get('projectId');
 
     const toolBarHeight = 55;
     const [readAllWidth, setReadAllWidth] = useState(350);
     const [showReadAllPanel, setShowReadAllPanel] = useState(false);
-    const [showCreateFragmentPanel, setShowCreateFragmentPanel] = useState(false);
 
     const {fetchProject, loading, error, setError} = useProject();
     const {addAlert} = useAlerts();
@@ -58,8 +57,6 @@ const Project = ({...props}) => {
                 height={toolBarHeight}
                 showReadAllPanel={showReadAllPanel}
                 setShowReadAllPanel={setShowReadAllPanel}
-                showCreateFragmentPanel={showCreateFragmentPanel}
-                setShowCreateFragmentPanel={setShowCreateFragmentPanel}
             />
             <Row
                 style={{
@@ -87,8 +84,6 @@ const Project = ({...props}) => {
                     />
                     <FragmentGrid
                         fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${TIMELINE_HEIGHT}px)`}
-                        showCreateFragmentPanel={showCreateFragmentPanel}
-                        setShowCreateFragmentPanel={setShowCreateFragmentPanel}
                         projectId={projectId}
                         {...props}
                     />

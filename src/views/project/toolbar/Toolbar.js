@@ -1,7 +1,16 @@
 import { IconButton, Row } from 'components';
+import { useProject } from 'hooks';
 import { MdAddBox, MdArticle } from "react-icons/md";
 
-const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, showCreateFragmentPanel, setShowCreateFragmentPanel, ...props}) => {
+const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel}) => {
+
+    const {SidePanelStates, setSidePanelState, sidePanelIsOpen, setSidePanelIsOpen} = useProject();
+
+    const handleCreateFragmentClick = () => {
+        setSidePanelState(SidePanelStates.CREATE_FRAGMENT);
+        setSidePanelIsOpen(!sidePanelIsOpen);
+    }
+
     return (
         <Row
             style={{
@@ -13,7 +22,7 @@ const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, showCreateFragm
             <IconButton
                 icon={<MdAddBox />}
                 title='Add new fragment'
-                onClick={() => setShowCreateFragmentPanel(!showCreateFragmentPanel)}
+                onClick={handleCreateFragmentClick}
             />
             <IconButton
                 icon={<MdArticle />}

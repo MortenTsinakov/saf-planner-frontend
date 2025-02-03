@@ -11,7 +11,7 @@ const InputField = ({style,
                      ...props}) => {
     return (
         <div className='input-field-container'{...props}>
-            <label className="input-field-label">{label}</label>
+            {label && <label className="input-field-label">{label}</label> }
             <input
                 className={`input-field-input color-${color ? color : 'primary'}`}
                 style={style}

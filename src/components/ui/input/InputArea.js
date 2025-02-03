@@ -10,11 +10,14 @@ const InputArea = ({style,
                     onChange,
                     ...props}) => {
     return (
-        <div className='input-area-container'{...props}>
-            <label className="input-area-label">{label}</label>
+        <div
+            className='input-area-container'{...props}
+            style={style}
+        >
+            {label && <label className="input-area-label">{label}</label> }
             <textarea
                 className={`input-area-input color-${color ? color : 'primary'}`}
-                style={style}
+                // style={style}
                 type={type}
                 placeholder={placeholder}
                 value={value}

@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { createProjectService, deleteProjectService, fetchUserProjectsService, updateProjectDescriptionService, updateProjectEstimatedLengthService, updateProjectTitleService } from 'services';
+import { updateLabelService } from 'services/label/LabelService';
 
 /**
  * Hook for operations with projects
@@ -67,7 +68,7 @@ export const useProjects = () => {
      * Update project title.
      * If updating succeeded return true, else false.
      */
-    const updateProjectTitle = async (projectId, title) => {
+    const updateProjectTitle = useCallback(async (projectId, title) => {
         try {
             setError(null);
             const response = await updateProjectTitleService(projectId, title);
@@ -78,13 +79,13 @@ export const useProjects = () => {
             setError(err.response?.data?.message || "Updating project title failed");
             return false;
         }
-    }
+    }, [userProjects]);
 
     /**
      * Update project description.
      * If updating succeeded return true, else false.
      */
-    const updateProjectDescription = async (projectId, description) => {
+    const updateProjectDescription = useCallback(async (projectId, description) => {
         try {
             setError(null);
             const response = await updateProjectDescriptionService(projectId, description);
@@ -95,13 +96,13 @@ export const useProjects = () => {
             setError(err.response?.data?.message || "Updating project description failed");
             return false;
         }
-    }
+    }, [userProjects]);
 
     /**
      * Update project's estimated length.
      * If update succeeded return true, else false.
      */
-    const updateProjectEstimatedLength = async (projectId, estimatedLengthInSeconds) => {
+    const updateProjectEstimatedLength = useCallback(async (projectId, estimatedLengthInSeconds) => {
         if (!validateProjectEstimatedLength(estimatedLengthInSeconds)) {
             setError("Project's estimated length cannot be a negative value");
             return false
@@ -116,7 +117,32 @@ export const useProjects = () => {
             setError(err.response?.data?.message || "Updating project's estimated length failed");
             return false;
         }
-    }
+    }, [userProjects, validateProjectEstimatedLength]);
+
+    /**
+     * Update project label
+     * Return true if label update was successful, otherwise false
+     */
+    const updateLabel = useCallback(async (projectId, labelId, description, color) => {
+        try {
+            setError(null);
+            const response = await updateLabelService(labelId, description, color);
+            setUserProjects(prev => prev.map(proj => 
+                proj.id !== projectId
+                ?
+                proj
+                :
+                {
+                    ...proj,
+                    labels: proj.labels.map(label => label.id === labelId ? response : label),
+                }
+            ));
+            return true
+        } catch (err) {
+            setError(err.response?.data?.message || "Updating label failed");
+            return false;
+        }
+    }, []);
 
     /**
      * Delete project with given id.
@@ -139,6 +165,7 @@ export const useProjects = () => {
         updateProjectTitle,
         updateProjectDescription,
         updateProjectEstimatedLength,
+        updateLabel,
         deleteProject,
         userProjects,
         loading,

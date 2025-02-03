@@ -1,4 +1,5 @@
-import { Column, Divider, Modal, OutlineButton, Typography } from 'components';
+import { Column, Divider, Modal, OutlineButton, Row, Typography } from 'components';
+import Label from 'components/ui/labels/Label';
 
 const FragmentDetails = ({fragment, setShowFragmentDetails}) => {
 
@@ -7,9 +8,22 @@ const FragmentDetails = ({fragment, setShowFragmentDetails}) => {
     }
 
     return (
-        <Modal>
+        <Modal
+            style={{
+                minWidth: '350px',
+                width: '750px',
+                maxWidth: '90vw',
+
+                minHeight: '90vh',
+                height: '90vh',
+                maxHeight: '90vh',
+
+                gap: '2rem',
+                justifyContent: 'space-between'
+            }}
+        >
             <Column style={{gap: 0}}>
-                <Typography fontSize='medium'>Project details</Typography>
+                <Typography fontSize='medium'>Fragment details</Typography>
                 <Divider style={{marginTop: '2rem'}} />
                 <Column
                     style={{
@@ -41,7 +55,18 @@ const FragmentDetails = ({fragment, setShowFragmentDetails}) => {
                     {/* Labels */}
                     <Column style={infoFieldStyle}>
                         <Typography fontSize='extrasmall' color='label'>Labels</Typography>
-                        <Typography>TODO: Display a list of labels associated with the fragment</Typography>
+                        <Row
+                            style={{flexWrap: 'wrap'}}
+                        >
+                            {fragment.labels.map(label => (
+                                <Label
+                                    key={label.id}
+                                    color={label.color}
+                                >
+                                    {label.description}
+                                </Label>
+                            ))}
+                        </Row>
                     </Column>
                     {/* Comments */}
                     <Column style={infoFieldStyle}>
@@ -49,14 +74,13 @@ const FragmentDetails = ({fragment, setShowFragmentDetails}) => {
                         <Typography>TODO: Display a list of comments associated with the fragment</Typography>
                     </Column>
                 </Column>
-                <Divider style={{marginBottom: '2rem'}} />
-                <OutlineButton
-                    onClick={() => {setShowFragmentDetails(false)}}
-                    style={{width: 'fit-content'}}
-                >
-                    Close
-                </OutlineButton>
             </Column>
+            <OutlineButton
+                onClick={() => {setShowFragmentDetails(false)}}
+                style={{width: 'fit-content'}}
+            >
+                Close
+            </OutlineButton>
         </Modal>
     );
 }

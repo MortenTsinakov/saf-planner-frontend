@@ -1,9 +1,19 @@
 export {
+    clampNumber,
+    truncateString,
+} from './misc/MiscUtils'
+
+export {
     formatDate,
     formatSecondsToHMS,
-    clampNumber,
     timeInMinsSecsToTimeInSeconds,
-} from './Utils';
+} from './time/TimeUtils';
+
+export {
+    isColorLight,
+    adjustLightness,
+    generateRandomColor,
+} from './color/ColorUtils';
 
 export {
     restrictOnlyFragments

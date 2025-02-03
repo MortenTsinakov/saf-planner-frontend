@@ -29,6 +29,11 @@ button:active {
     border: 1px solid var(--color-success);
 }
 
+.button-filled.disabled {
+    background-color: gray;
+    border-color: gray;
+}
+
 .button-text {
     background: none;
     border: none;

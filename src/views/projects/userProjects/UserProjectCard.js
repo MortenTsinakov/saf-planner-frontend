@@ -9,7 +9,6 @@ const UserProjectCard = (props) => {
 
     const project = props.project;
     const handleDelete = props.handleDelete;
-    const handleUpdate = props.handleUpdate;
     const dateOptions = ['day', 'month', 'year', 'hour', 'minute', 'second'];
 
     const titleStyle = {
@@ -28,15 +27,11 @@ const UserProjectCard = (props) => {
     };
 
     const navigateToProjectPage = () => {
-        navigate(`/project?id=${project.id}`);
+        navigate(`/project?projectId=${project.id}`);
     }
 
     const handleDeleteProject = () => {
         handleDelete(project);
-    }
-
-    const handleUpdateProject = () => {
-        handleUpdate(project);
     }
 
     return (
@@ -44,7 +39,7 @@ const UserProjectCard = (props) => {
             {}
             <Card style={{gap: '1rem', maxWidth: '90vw', width: '750px'}}>
                     <Clickable onClick={() => navigateToProjectPage(project.id)}>
-                        <Column>
+                        <Column style={{width: '100%'}}>
                             <Typography fontSize='medium' style={titleStyle}>{project.title}</Typography>
                             <Typography fontSize='small' style={descriptionStyle}>{project.description || '-'}</Typography>
                             <Column style={{gap:0}}>
@@ -64,7 +59,7 @@ const UserProjectCard = (props) => {
                         </Column>
                     </Clickable>
                     <Row style={{justifyContent: 'right'}}>
-                        <IconButton title='Project settings' style={{fontSize: '3rem'}} icon={<MdSettings />} onClick={handleUpdateProject}/>
+                        <IconButton title='Project settings' style={{fontSize: '3rem'}} icon={<MdSettings />} onClick={() => navigate(`/project-settings?projectId=${project.id}`)}/>
                         <IconButton title='Share project' style={{fontSize: '3rem'}} icon={<MdShare />} onClick={() => {}}/>
                         <IconButton title='Delete project' style={{fontSize: '3rem'}} icon={<MdDelete />} onClick={handleDeleteProject}/>
                     </Row>
