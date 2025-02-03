@@ -1,4 +1,4 @@
-import { PIXELS_PER_SECOND } from './TimelineConstants';
+import { PIXELS_PER_SECOND } from '../TimelineConstants';
 import './TimelineItem.css';
 
 

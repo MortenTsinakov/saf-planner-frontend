@@ -4,7 +4,7 @@ import { useProject } from 'hooks';
 import { useState } from 'react';
 import { MdAdd, MdClose, MdEdit } from 'react-icons/md';
 
-const EditFragment2 = () => {
+const EditFragment = () => {
 
     const {project, fragmentToEdit, attachLabelToFragment, removeLabelFromFragment, setSidePanelState, SidePanelStates} = useProject();
     const [labelSelectionIsOpen, setLabelSelectionIsOpen] = useState(false);
@@ -149,4 +149,4 @@ const EditFragment2 = () => {
     );
 }
  
-export default EditFragment2;
+export default EditFragment;

@@ -1,5 +1,5 @@
 import { IconButton, Row } from 'components';
-import { TIMELINE_MAX_ZOOM, TIMELINE_MIN_ZOOM } from './TimelineConstants';
+import { TIMELINE_MAX_ZOOM, TIMELINE_MIN_ZOOM } from '../TimelineConstants';
 import { useProject } from 'hooks';
 import { MdZoomIn, MdZoomOut, MdOutlineTimer } from 'react-icons/md';
 

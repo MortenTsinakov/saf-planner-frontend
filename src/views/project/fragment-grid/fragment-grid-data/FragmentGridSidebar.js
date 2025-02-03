@@ -1,17 +1,16 @@
 import { IconButton, Row, Sidebar } from 'components';
-import CreateFragment from './CreateFragment';
-import EditFragment2 from './EditFragment2';
 import { useProject } from 'hooks';
 import { MdClose } from 'react-icons/md';
-import EditShortDescription from './EditShortDescription';
-import EditLongDescription from './EditLongDescription';
-import EditDuration from './EditDuration';
-import CreateLabel from './CreateLabel';
+import CreateFragment from '../fragment-grid-actions/CreateFragment';
+import EditFragment from '../fragment-grid-actions/EditFragment';
+import EditShortDescription from '../fragment-grid-actions/EditShortDescription';
+import EditLongDescription from '../fragment-grid-actions/EditLongDescription';
+import EditDuration from '../fragment-grid-actions/EditDuration';
+import CreateLabel from '../fragment-grid-actions/CreateLabel';
 
 const FragmentGridSidebar = ({...props}) => {
 
     const {sidePanelIsOpen, setSidePanelIsOpen, SidePanelStates, sidePanelState} = useProject();
-    console.log(props.isMobile);
 
     return (
         <Sidebar
@@ -32,7 +31,7 @@ const FragmentGridSidebar = ({...props}) => {
             }
             {
                 sidePanelState === SidePanelStates.EDIT_FRAGMENT &&
-                <EditFragment2 />
+                <EditFragment />
             }
             {
                 sidePanelState === SidePanelStates.EDIT_SHORT_DESCRIPTION &&

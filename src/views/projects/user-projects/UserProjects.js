@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import UserProjectCard from './UserProjectCard';
+import UserProjectCard from './user-projects-data/UserProjectCard';
 import { Column, Row, TextButton, Typography } from 'components';
 import { MdAdd } from "react-icons/md";
-import CreateProject from './CreateProject';
-import DeleteProject from './DeleteProject';
+import CreateProject from './user-projects-actions/CreateProject';
+import DeleteProject from './user-projects-actions/DeleteProject';
 
 /**
  * Displays a list of projects that the user has created.

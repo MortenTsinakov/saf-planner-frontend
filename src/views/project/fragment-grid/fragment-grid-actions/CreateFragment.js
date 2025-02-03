@@ -2,9 +2,9 @@ import { Column, Container, IconButton, InputArea, InputField, Row, SortableCont
 import { useState } from 'react';
 import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import { clampNumber } from 'utils';
-import NewCard from './NewCard';
-import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
+import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from '../FragmentGridConstants';
 import { useProject } from 'hooks';
+import NewCard from '../fragment-grid-data/NewCard';
 
 const CreateFragment = ({...props}) => {
 

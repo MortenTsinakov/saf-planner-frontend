@@ -1,7 +1,7 @@
 import { Column, Loading, Row, TextButton, Typography } from 'components';
 import { useEffect, useState } from 'react';
-import UserProjects from './userProjects/UserProjects';
-import SharedProjects from './sharedProjects/SharedProjects';
+import UserProjects from './user-projects/UserProjects';
+import SharedProjects from './shared-projects/SharedProjects';
 import { useAlerts, useProjects } from 'hooks';
 
 /**

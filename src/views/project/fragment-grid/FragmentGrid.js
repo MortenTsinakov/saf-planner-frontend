@@ -1,5 +1,4 @@
 import { Container, SortableContextWrapper, Row, Typography, Column, TextButton } from 'components';
-import FragmentCard from './FragmentCard';
 import { DndContext, DragOverlay, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useState } from 'react';
 import { restrictOnlyFragments } from 'utils';
@@ -8,7 +7,8 @@ import FragmentDragOverlay from './drag_overlays/FragmentDragOverlay';
 import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
 import { useAlerts, useProject } from 'hooks';
 import { MdAdd } from 'react-icons/md';
-import FragmentGridSidebar from './FragmentGridSidebar';
+import FragmentCard from './fragment-grid-data/FragmentCard';
+import FragmentGridSidebar from './fragment-grid-data/FragmentGridSidebar';
 
 /**
  * Grid that displays project fragments.
