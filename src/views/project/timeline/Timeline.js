@@ -1,15 +1,15 @@
 import { Column, Row } from 'components';
-import { useProject } from 'hooks';
 import TimelineItem from './timeline-data/TimelineItem';
 import { useEffect, useState } from 'react';
 import { DEFAULT_ZOOM, PIXELS_PER_SECOND, TIMELINE_BAR_HEIGHT, TIMELINE_HEIGHT, TIMELINE_ITEM_HEIGHT, TIMELINE_MARKING_HEIGHT, TIMELINE_TOOLBAR_HEIGHT } from './TimelineConstants';
 import TimelineMarkings from './timeline-toolbar/TimelineMarkings';
 import TimelineToolbar from './timeline-toolbar/TimelineToolbar';
 import TimelineInfo from './timeline-toolbar/TimelineInfo';
+import { useProjectStore } from 'stores';
 
 const Timeline = ({...props}) => {
 
-    const {project, fragments} = useProject();
+    const {project, fragments} = useProjectStore();
     const [zoom, setZoom] = useState(DEFAULT_ZOOM);
     const [showEstimatedDuration, setShowEstimatedDuration] = useState(false);
 

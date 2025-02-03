@@ -1,11 +1,11 @@
 import { IconButton, Row } from 'components';
 import { TIMELINE_MAX_ZOOM, TIMELINE_MIN_ZOOM } from '../TimelineConstants';
-import { useProject } from 'hooks';
 import { MdZoomIn, MdZoomOut, MdOutlineTimer } from 'react-icons/md';
+import { useProjectStore } from 'stores';
 
 const TimelineToolbar = ({zoom, setZoom, showEstimatedDuration, setShowEstimatedDuration}) => {
 
-    const {project} = useProject();
+    const {project} = useProjectStore();
 
     return (
         <Row>

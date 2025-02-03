@@ -1,5 +1,6 @@
 import { Column, FilledButton, Modal, OutlineButton, Row, Typography } from 'components';
-import { useAlerts, useProject } from 'hooks';
+import { useAlerts } from 'hooks';
+import { useProjectStore } from 'stores';
 
 const DeleteFragment = (
     {
@@ -7,7 +8,7 @@ const DeleteFragment = (
         setShowDeleteFragmentModal}) => 
     {
 
-    const {deleteFragment} = useProject();
+    const {deleteFragment} = useProjectStore();
     const { addAlert } = useAlerts();
 
     const handleDeleteClick = async () => {

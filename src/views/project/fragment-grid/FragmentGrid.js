@@ -5,10 +5,12 @@ import { restrictOnlyFragments } from 'utils';
 import CreateFragmentDragOverlay from './drag_overlays/CreateFragmentDragOverlay';
 import FragmentDragOverlay from './drag_overlays/FragmentDragOverlay';
 import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
-import { useAlerts, useProject } from 'hooks';
+import { useAlerts } from 'hooks';
 import { MdAdd } from 'react-icons/md';
 import FragmentCard from './fragment-grid-data/FragmentCard';
 import FragmentGridSidebar from './fragment-grid-data/FragmentGridSidebar';
+import useProjectStore from 'stores/useProjectStore';
+import { possibleSidebarStates } from './fragment-grid-data/SidebarStates';
 
 /**
  * Grid that displays project fragments.
@@ -16,20 +18,19 @@ import FragmentGridSidebar from './fragment-grid-data/FragmentGridSidebar';
  */
 const FragmentGrid = ({fragmentGridHeight, ...props}) => {
 
+    const sidebarStates = possibleSidebarStates;
     const {
-        fragments, 
+        fragments,
         setFragments, 
-        createFragment, 
+        createFragment,
         moveFragment,
-        SidePanelStates,
-        setSidePanelState,
-        sidePanelIsOpen,
-        setSidePanelIsOpen,
-        activeId,
-        setActiveId,
-        newCards,
-        setNewCards,
-    } = useProject();
+        sidebarState,
+        setSidebarState, 
+        activeId, 
+        setActiveId, 
+        newFragments, 
+        setNewFragments,
+    } = useProjectStore();
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -41,8 +42,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
     const {addAlert} = useAlerts();
 
     const handleCreateFragmentClick = () => {
-        setSidePanelState(SidePanelStates.CREATE_FRAGMENT);
-        setSidePanelIsOpen(true);
+        setSidebarState({content: sidebarStates.CREATE_FRAGMENT, open: true});
     }
 
     /**
@@ -70,7 +70,8 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
      */
     const handleFragmentCreationDrop = async (active, over) => {
         if (active.data.current.sortable.containerId === NEW_FRAGMENT_PANEL_ID && over.id === FRAGMENT_GRID_ID) {
-            const newCard = newCards.find(f => f.id === NEW_FRAGMENT_ID);
+            console.log("1st if");
+            const newCard = newFragments.find(f => f.id === NEW_FRAGMENT_ID);
             const data = {
                 shortDescription: newCard.shortDescription.trim(),
                 longDescription: newCard.longDescription.trim(),
@@ -82,18 +83,19 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
             const fragmentCreatedSuccessfully = await createFragment(data);
             if (fragmentCreatedSuccessfully) {
                 addAlert("Fragment created", "success");
-                setSidePanelIsOpen(false);
-                setSidePanelState(null);
+                setSidebarState({content: null, open: false});
             }
             return;
         }
 
         if (active.data.current.sortable.containerId === NEW_FRAGMENT_PANEL_ID) {
-            setNewCards(newCards.filter(f => f.id === NEW_FRAGMENT_ID));
+            setSidebarState({...sidebarState, open: true});
+            setNewFragments([...newFragments.filter(f => f.id === NEW_FRAGMENT_ID)]);
             return;
         }
         
         if (over.data.current.sortable.containerId === FRAGMENT_GRID_ID) {
+            console.log("3rd if");
             const newCard = fragments.find(f => f.id === NEW_FRAGMENT_ID);
             const overCard = fragments.find(f => f.id === over.id);
             const data = {
@@ -104,18 +106,20 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
                 position: overCard.position || fragments.length,
                 projectId: props.projectId,
             }
-            setFragments(prev => prev.filter(f => f.id !== NEW_FRAGMENT_ID));
+            console.log(data.position);
+            setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
             const fragmentCreatedSuccessfully = await createFragment(data);
             if (fragmentCreatedSuccessfully) {
                 addAlert("Fragment created", "success");
-                setSidePanelIsOpen(false);
-                setSidePanelState(null);
+                setSidebarState({content: null, open: false});
             }
             return;
         }
 
-        setFragments(prev => prev.filter(f => f.id !== NEW_FRAGMENT_ID));
-        setNewCards([...fragments.filter(f => f.id === NEW_FRAGMENT_ID), ...newCards.filter(f => f.id === NEW_FRAGMENT_ID)]);
+        console.log("End of fn");
+        setSidebarState({...sidebarState, open: true});
+        setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
+        setNewFragments([...fragments.filter(f => f.id === NEW_FRAGMENT_ID, ...newFragments.filter(f => f.id === NEW_FRAGMENT_ID))]);
     }
 
     /**
@@ -130,17 +134,19 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
         setActiveId(null);
 
         if (!active || !over) {
-            setFragments(prev => prev.filter(f => f.id !== activeId));
-            const initialState = [...fragments.filter(f => f.id === activeId), ...newCards.filter(f => f.id === activeId)];
-            setNewCards(initialState);
-            setSidePanelIsOpen(true);
+            setFragments([...fragments.filter(f => f.id !== activeId)]);
+            const initialState = [...fragments.filter(f => f.id === activeId), ...newFragments.filter(f => f.id === activeId)];
+            setNewFragments(initialState);
+            setSidebarState({...sidebarState, open: true});
             return;
         }
 
         const activeContainer = active.data.current?.sortable.containerId;
         const overContainer = active.data.current?.sortable.containerId;
 
-        if (!activeContainer || !overContainer) {return;}
+        if (!activeContainer || !overContainer) {
+            return;
+        }
 
         if (active.id !== NEW_FRAGMENT_ID && activeContainer === FRAGMENT_GRID_ID && overContainer === FRAGMENT_GRID_ID) {
             handleMovementInFragmentGrid(active, over);
@@ -174,13 +180,13 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
 
         if (activeContainer === NEW_FRAGMENT_PANEL_ID && overContainer === FRAGMENT_GRID_ID) {
             if (fragments.filter(f => f.id === NEW_FRAGMENT_ID).length === 0) {
-                setFragments(prev => [...prev, ...newCards.filter(f => f.id === NEW_FRAGMENT_ID)]);
-                setNewCards([]);
+                setFragments([...fragments, ...newFragments.filter(f => f.id === NEW_FRAGMENT_ID)]);
+                setNewFragments([]);
             }
         }
 
         if (overContainer === NEW_FRAGMENT_PANEL_ID && active.id === NEW_FRAGMENT_ID) {
-            setFragments(prev => prev.filter(f => f.id !== NEW_FRAGMENT_ID));
+            setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
         }
     }
 
@@ -191,11 +197,11 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
     const handleDragCancel = (e) => {
         const {active} = e;
         setActiveId(null);
-        setSidePanelIsOpen(true);
+        setSidebarState({...sidebarState, open: true});
 
         if (active.id === NEW_FRAGMENT_ID) {
-            setNewCards(fragments.filter(f => f.id === NEW_FRAGMENT_ID));
-            setFragments(prev => prev.filter(f => f.id !== NEW_FRAGMENT_ID));
+            setNewFragments([...fragments.filter(f => f.id === NEW_FRAGMENT_ID)]);
+            setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
             return;
         }
     }
@@ -205,7 +211,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
      * for drag overlays.
      */
     const handleDragStart = (e) => {
-        setSidePanelIsOpen(false);
+        setSidebarState({...sidebarState, open: false});
         setActiveId(e.active.id);
     }
 
@@ -218,8 +224,8 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
 
         if (activeId === NEW_FRAGMENT_ID) {
             let fragment;
-            if (newCards.length > 0) {
-                fragment = newCards.find(f => f.id === NEW_FRAGMENT_ID);
+            if (newFragments.length > 0) {
+                fragment = newFragments.find(f => f.id === NEW_FRAGMENT_ID);
             } else {
                 fragment = fragments.find(f => f.id === NEW_FRAGMENT_ID);
             }
@@ -282,7 +288,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
                                         This project has no fragments yet...
                                     </Typography>
                                     {
-                                        !sidePanelIsOpen &&
+                                        !sidebarState.open &&
                                         <TextButton
                                             onClick={handleCreateFragmentClick}
                                             style={{display: 'flex', alignContent:'center', gap: '5px'}}
@@ -291,7 +297,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
                                         </TextButton>
                                     }
                                     {
-                                        sidePanelIsOpen &&
+                                        sidebarState.open &&
                                         <Typography color='label'>
                                             Once you have filled in the
                                             details, drop the fragment card

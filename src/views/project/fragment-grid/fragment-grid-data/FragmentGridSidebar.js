@@ -1,5 +1,4 @@
 import { IconButton, Row, Sidebar } from 'components';
-import { useProject } from 'hooks';
 import { MdClose } from 'react-icons/md';
 import CreateFragment from '../fragment-grid-actions/CreateFragment';
 import EditFragment from '../fragment-grid-actions/EditFragment';
@@ -7,14 +6,17 @@ import EditShortDescription from '../fragment-grid-actions/EditShortDescription'
 import EditLongDescription from '../fragment-grid-actions/EditLongDescription';
 import EditDuration from '../fragment-grid-actions/EditDuration';
 import CreateLabel from '../fragment-grid-actions/CreateLabel';
+import { possibleSidebarStates } from './SidebarStates';
+import { useProjectStore } from 'stores';
 
 const FragmentGridSidebar = ({...props}) => {
 
-    const {sidePanelIsOpen, setSidePanelIsOpen, SidePanelStates, sidePanelState} = useProject();
+    const sidebarStates = possibleSidebarStates;
+    const {sidebarState, setSidebarState} = useProjectStore();
 
     return (
         <Sidebar
-            isOpen={sidePanelIsOpen}
+            isOpen={sidebarState.open}
             fromRight={true}
             isMobile={props.isMobile}
             style={{justifyContent: 'start'}}
@@ -22,31 +24,31 @@ const FragmentGridSidebar = ({...props}) => {
             <Row style={{width: '100%', padding: '2rem'}}>
                 <IconButton
                     icon={<MdClose />}
-                    onClick={() => setSidePanelIsOpen(false)}
+                    onClick={() => setSidebarState({...sidebarState, open: false})}
                 />
             </Row>
             {
-                sidePanelState === SidePanelStates.CREATE_FRAGMENT &&
+                sidebarState.content === sidebarStates.CREATE_FRAGMENT &&
                 <CreateFragment />
             }
             {
-                sidePanelState === SidePanelStates.EDIT_FRAGMENT &&
+                sidebarState.content === sidebarStates.EDIT_FRAGMENT &&
                 <EditFragment />
             }
             {
-                sidePanelState === SidePanelStates.EDIT_SHORT_DESCRIPTION &&
+                sidebarState.content === sidebarStates.EDIT_SHORT_DESCRIPTION &&
                 <EditShortDescription />
             }
             {
-                sidePanelState === SidePanelStates.EDIT_LONG_DESCRIPTION &&
+                sidebarState.content === sidebarStates.EDIT_LONG_DESCRIPTION &&
                 <EditLongDescription />
             }
             {
-                sidePanelState === SidePanelStates.EDIT_DURATION &&
+                sidebarState.content === sidebarStates.EDIT_DURATION &&
                 <EditDuration />
             }
             {
-                sidePanelState === SidePanelStates.CREATE_LABEL &&
+                sidebarState.content === sidebarStates.CREATE_LABEL &&
                 <CreateLabel />
             }
         </Sidebar>

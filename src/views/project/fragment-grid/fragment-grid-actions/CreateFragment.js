@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import { clampNumber } from 'utils';
 import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from '../FragmentGridConstants';
-import { useProject } from 'hooks';
 import NewCard from '../fragment-grid-data/NewCard';
+import { useProjectStore } from 'stores';
 
 const CreateFragment = ({...props}) => {
 
-    const {newCards, setNewCards} = useProject();
+    const {newFragments, setNewFragments} = useProjectStore();
 
     const projectId = props.projectId;
     const panelWidth = 420;
@@ -147,7 +147,7 @@ const CreateFragment = ({...props}) => {
                         border: '1px dashed var(--primary-color)'
                     }}
                 >
-                    {newCards.map(f => (
+                    {newFragments.map(f => (
                         <NewCard
                             key={f.id}
                             fragment={f}
@@ -160,7 +160,7 @@ const CreateFragment = ({...props}) => {
 
     const handleIncrementPage = () => {
         if (page === 4) {
-            setNewCards([{
+            setNewFragments([{
                 id: NEW_FRAGMENT_ID,
                 shortDescription: shortDescription,
                 longDescription: longDescription,
@@ -182,7 +182,7 @@ const CreateFragment = ({...props}) => {
     return (
         <SortableContextWrapper
             id={NEW_FRAGMENT_PANEL_ID}
-            items={newCards}
+            items={newFragments}
         >
         {({setNodeRef}) =>         
             <Column

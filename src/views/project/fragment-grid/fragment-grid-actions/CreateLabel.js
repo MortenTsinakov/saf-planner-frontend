@@ -1,14 +1,17 @@
 import { ColorPicker, Column, FilledButton, InputField, OutlineButton, Row, Typography } from 'components';
 import Label from 'components/ui/labels/Label';
-import { useAlerts, useProject } from 'hooks';
+import { useAlerts } from 'hooks';
 import { useState } from 'react';
+import { useProjectStore } from 'stores';
 import { generateRandomColor } from 'utils';
+import { possibleSidebarStates } from '../fragment-grid-data/SidebarStates';
 
 const CreateLabel = () => {
     const [description, setDescription] = useState("");
     const [color, setColor] = useState(generateRandomColor());
 
-    const {project, createLabel, SidePanelStates, setSidePanelState} = useProject();
+    const sidebarStates = possibleSidebarStates;
+    const {project, createLabel, setSidebarState} = useProjectStore();
     const {addAlert} = useAlerts();
 
     const handleDescriptionChange = (e) => {
@@ -22,12 +25,12 @@ const CreateLabel = () => {
         const creationWasSuccessful = await createLabel(project, description, color);
         if (creationWasSuccessful) {
             addAlert("Label created - you can attach it to the fragment now", "success");
-            setSidePanelState(SidePanelStates.EDIT_FRAGMENT);
+            setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true});
         }
     }
 
     const handleCancelClick = () => {
-        setSidePanelState(SidePanelStates.EDIT_FRAGMENT);
+        setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true});
     }
 
     return (

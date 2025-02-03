@@ -1,14 +1,15 @@
 import { IconButton, Row } from 'components';
-import { useProject } from 'hooks';
 import { MdAddBox, MdArticle } from "react-icons/md";
+import { useProjectStore } from 'stores';
+import { possibleSidebarStates } from '../fragment-grid/fragment-grid-data/SidebarStates';
 
 const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel}) => {
 
-    const {SidePanelStates, setSidePanelState, sidePanelIsOpen, setSidePanelIsOpen} = useProject();
+    const sidebarStates = possibleSidebarStates;
+    const {setSidebarState} = useProjectStore();
 
     const handleCreateFragmentClick = () => {
-        setSidePanelState(SidePanelStates.CREATE_FRAGMENT);
-        setSidePanelIsOpen(!sidePanelIsOpen);
+        setSidebarState({content: sidebarStates.CREATE_FRAGMENT, open: true});
     }
 
     return (
