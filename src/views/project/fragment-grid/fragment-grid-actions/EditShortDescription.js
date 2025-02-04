@@ -1,10 +1,13 @@
 import { Column, FilledButton, InputArea, OutlineButton, Row, Typography } from 'components';
-import { useAlerts, useProject } from 'hooks';
+import { useAlerts } from 'hooks';
 import { useState } from 'react';
+import { useProjectStore } from 'stores';
+import { possibleSidebarStates } from '../fragment-grid-data/SidebarStates';
 
 const EditShortDescription = () => {
 
-    const {fragmentToEdit, updateFragmentShortDescription, SidePanelStates, setSidePanelState} = useProject();
+    const sidebarStates = possibleSidebarStates;
+    const {fragmentToEdit, updateFragmentShortDescription, setSidebarState} = useProjectStore();
     const [shortDescription, setShortDescription] = useState(fragmentToEdit.shortDescription);
     const {addAlert} = useAlerts();
 
@@ -15,18 +18,18 @@ const EditShortDescription = () => {
     const handleSaveClick = async () => {
         const description = shortDescription.trim()
         if (description === fragmentToEdit.shortDescription) {
-            setSidePanelState(SidePanelStates.EDIT_FRAGMENT);
+            setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true});
             return;
         }
         const updateWasSuccessful = await updateFragmentShortDescription(fragmentToEdit, description);
         if (updateWasSuccessful) {
             addAlert("Short description updated", "success");
-            setSidePanelState(SidePanelStates.EDIT_FRAGMENT);
+            setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true});
         }
     }
 
     const handleCancelClick = () => {
-        setSidePanelState(SidePanelStates.EDIT_FRAGMENT);
+        setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true});
     }
 
     return (

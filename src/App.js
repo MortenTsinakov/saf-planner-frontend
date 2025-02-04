@@ -1,6 +1,6 @@
 import './App.css';
 import { Navbar, AlertTray, Page } from 'components';
-import { AuthProvider, AlertProvider, ProjectProvider } from 'contexts';
+import { AuthProvider, AlertProvider } from 'contexts';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnonymousRoutes, ProtectedRoutes } from 'routes';
@@ -43,11 +43,7 @@ function App() {
                 {/* Protected routes */}
                 <Route element={<ProtectedRoutes />}>
                   <Route path='/projects' element={<Projects {...props} />} />
-                  <Route path='/project' element={
-                    <ProjectProvider>
-                      <Project {...props} />
-                    </ProjectProvider>
-                  } />
+                  <Route path='/project' element={<Project {...props} />} />
                   <Route path='/project-settings' element={<ProjectSettings {...props} />} />
                 </Route>
                 {/* Redirect to 404 if page is not found */}

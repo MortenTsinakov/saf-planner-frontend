@@ -1,10 +1,10 @@
 import { Card, Column, Row, SortableItem, Typography } from 'components';
-import { NEW_FRAGMENT_ID } from './FragmentGridConstants';
-import { useProject } from 'hooks';
+import { NEW_FRAGMENT_ID } from '../FragmentGridConstants';
+import { useProjectStore } from 'stores';
 
 const NewCard = ({fragment}) => {
 
-    const {activeId} = useProject();
+    const {activeId} = useProjectStore();
 
     return (
         <SortableItem

@@ -2,14 +2,14 @@ import { Column, Container, IconButton, Loading, Sidebar } from 'components';
 import { useAlerts, useProjectSettings } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ProjectSettingsInfoPanel from './ProjectSettingsInfoPanel';
+import ProjectSettingsInfoPanel from './project-settings-data/ProjectSettingsInfoPanel';
 import { MdClose } from 'react-icons/md';
-import EditProjectTitle from './EditProjectTitle';
-import EditProjectDescription from './EditProjectDescription';
-import EditProjectEstimatedLength from './EditProjectEstimatedLength';
-import DeleteLabel from './DeleteLabel';
-import CreateLabel from './CreateLabel';
-import EditLabel from './EditLabel';
+import EditProjectTitle from './project-settings-actions/EditProjectTitle';
+import EditProjectDescription from './project-settings-actions/EditProjectDescription';
+import EditProjectEstimatedLength from './project-settings-actions/EditProjectEstimatedLength';
+import DeleteLabel from './project-settings-actions/DeleteLabel';
+import CreateLabel from './project-settings-actions/CreateLabel';
+import EditLabel from './project-settings-actions/EditLabel';
 
 const ProjectSettings = ({...props}) => {
 

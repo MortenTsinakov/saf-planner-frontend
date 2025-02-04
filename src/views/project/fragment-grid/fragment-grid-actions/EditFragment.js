@@ -1,36 +1,40 @@
 import { Column, IconButton, Loading, Row, TextButton, Typography } from 'components';
 import Label from 'components/ui/labels/Label';
-import { useProject } from 'hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdAdd, MdClose, MdEdit } from 'react-icons/md';
+import { possibleSidebarStates } from '../fragment-grid-data/SidebarStates';
+import { useProjectStore } from 'stores';
 
-const EditFragment2 = () => {
+const EditFragment = () => {
 
-    const {project, fragmentToEdit, attachLabelToFragment, removeLabelFromFragment, setSidePanelState, SidePanelStates} = useProject();
+    const sidebarStates = possibleSidebarStates;
+    const {project, fragmentToEdit, attachLabelToFragment, removeLabelFromFragment, setSidebarState} = useProjectStore();
     const [labelSelectionIsOpen, setLabelSelectionIsOpen] = useState(false);
-    const [labels, setLabels] = useState(fragmentToEdit.labels);
+    const [labels, setLabels] = useState([]);
+
+    useEffect(() => {
+        const initializeLabels = () => {
+            if (fragmentToEdit) {
+                setLabels(fragmentToEdit.labels);
+            }
+        }
+        initializeLabels();
+    }, [fragmentToEdit]);
 
     if (!fragmentToEdit) {
         return <Loading />
     }
 
-
-    const handleAttachLabel = async (labelId) => {
-        const attachingWasSuccessful = await attachLabelToFragment(labelId, fragmentToEdit.id);
-        if (attachingWasSuccessful) {
-            setLabels(prev => [...prev, project.labels.find(l => l.id === labelId)]);
-        }
+    const handleAttachLabel = (labelId) => {
+        attachLabelToFragment(labelId, fragmentToEdit.id);
     }
 
     const handleRemoveLabel = async (labelId) => {
-        const removalWasSuccessful = await removeLabelFromFragment(labelId, fragmentToEdit.id);
-        if (removalWasSuccessful) {
-            setLabels(prev => prev.filter(l => l.id !== labelId));
-        }
+        removeLabelFromFragment(labelId, fragmentToEdit.id);
     }
 
     const handleCreateNewLabelClick = () => {
-        setSidePanelState(SidePanelStates.CREATE_LABEL);
+        setSidebarState({content: sidebarStates.CREATE_LABEL, open: true});
     }
 
     const getAvailableLabels = () => {
@@ -49,7 +53,7 @@ const EditFragment2 = () => {
                         {category}
                     </Typography>
                     <IconButton
-                        onClick={() => setSidePanelState(state)}
+                        onClick={() => setSidebarState({content: state, open: true})}
                         icon={<MdEdit />}
                         style={{
                             fontSize: '2rem'
@@ -141,12 +145,12 @@ const EditFragment2 = () => {
 
     return (
         <Column style={{width: '100%', padding: '2rem', gap: '3rem'}}>
-            {getTextField('Short description', fragmentToEdit.shortDescription, SidePanelStates.EDIT_SHORT_DESCRIPTION)}
-            {getTextField('Long description', fragmentToEdit.longDescription, SidePanelStates.EDIT_LONG_DESCRIPTION)}
-            {getTextField('Duration', `${fragmentToEdit.durationInSeconds} seconds`, SidePanelStates.EDIT_DURATION)}
+            {getTextField('Short description', fragmentToEdit.shortDescription, sidebarStates.EDIT_SHORT_DESCRIPTION)}
+            {getTextField('Long description', fragmentToEdit.longDescription, sidebarStates.EDIT_LONG_DESCRIPTION)}
+            {getTextField('Duration', `${fragmentToEdit.durationInSeconds} seconds`, sidebarStates.EDIT_DURATION)}
             {getLabelsField()}
         </Column>
     );
 }
  
-export default EditFragment2;
+export default EditFragment;

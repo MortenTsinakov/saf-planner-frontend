@@ -1,4 +1,4 @@
-import { useAlerts, useProject } from 'hooks';
+import { useAlerts } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FragmentGrid from './fragment-grid/FragmentGrid';
@@ -7,6 +7,7 @@ import Toolbar from './toolbar/Toolbar';
 import ReadAll from './read-all/ReadAll';
 import Timeline from './timeline/Timeline';
 import { TIMELINE_HEIGHT } from './timeline/TimelineConstants';
+import { useProjectStore } from 'stores';
 
 const Project = ({...props}) => {
 
@@ -19,7 +20,7 @@ const Project = ({...props}) => {
     const [readAllWidth, setReadAllWidth] = useState(350);
     const [showReadAllPanel, setShowReadAllPanel] = useState(false);
 
-    const {fetchProject, loading, error, setError} = useProject();
+    const { fetchProject, loading, error, setError } = useProjectStore();
     const {addAlert} = useAlerts();
 
     useEffect(() => {
@@ -34,10 +35,13 @@ const Project = ({...props}) => {
 
     useEffect(() => {
         if (error) {
-            addAlert(error, 'error');
+            if (error.status === 404) {
+                navigate('/404');
+            } 
+            addAlert(error.message, 'error');
             setError(null);
         }
-    }, [setError, error, addAlert]);
+    }, [setError, error, addAlert, navigate]);
 
     if (loading) {
         return (

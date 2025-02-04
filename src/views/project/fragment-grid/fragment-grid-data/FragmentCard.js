@@ -2,9 +2,9 @@ import { Card, Column, IconButton, Row, SortableItem, Typography } from 'compone
 import { useState } from 'react';
 import { MdAccessTime, MdMoreHoriz, MdDelete, MdInfo, MdEditSquare, MdModeComment } from 'react-icons/md';
 import FragmentDetails from './FragmentDetails';
-import DeleteFragment from './DeleteFragment';
-import EditFragment from './EditFragment';
-import { useProject } from 'hooks';
+import DeleteFragment from '../fragment-grid-actions/DeleteFragment';
+import useProjectStore from 'stores/useProjectStore';
+import { possibleSidebarStates } from './SidebarStates';
 
 const FragmentCard = (
     {
@@ -12,14 +12,13 @@ const FragmentCard = (
         ...props}) => 
     {
 
+    const sidebarStates = possibleSidebarStates;
     const {
         updateFragmentOnTimelineStatus,
-        SidePanelStates,
-        setSidePanelState,
-        setSidePanelIsOpen,
+        setSidebarState,
         activeId,
         setFragmentToEdit,
-    } = useProject();
+    } = useProjectStore();
     const [displayButtons, setDisplayButtons] = useState(false);
     const iconStyle = {
         fontSize: '2.2rem',
@@ -32,13 +31,11 @@ const FragmentCard = (
     };
 
     const [showFragmentDetails, setShowFragmentDetails] = useState(false);
-    const [showEditFragmentModal, setShowEditFragmentModal] = useState(false);
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
 
     const handleEditFragmentClick = () => {
         setFragmentToEdit(fragment);
-        setSidePanelState(SidePanelStates.EDIT_FRAGMENT);
-        setSidePanelIsOpen(true);
+        setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true });
     }
 
     return (
@@ -172,13 +169,6 @@ const FragmentCard = (
                             setShowFragmentDetails={setShowFragmentDetails}
                             fragment={fragment}
                             {...props}/>
-                    }
-                    { showEditFragmentModal &&
-                        <EditFragment
-                            fragment={fragment}
-                            setShowEditFragmentModal={setShowEditFragmentModal}
-                            {...props}
-                        />
                     }
                     { showDeleteFragmentModal &&
                         <DeleteFragment

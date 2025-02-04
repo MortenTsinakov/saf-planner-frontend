@@ -1,10 +1,10 @@
 import { Column, Container, Row, Typography } from 'components';
-import { PIXELS_PER_SECOND, ZOOM_TO_INTERVAL, TIMELINE_ITEM_HEIGHT, TIMELINE_MARKING_HEIGHT } from './TimelineConstants';
-import { useProject } from 'hooks';
+import { PIXELS_PER_SECOND, ZOOM_TO_INTERVAL, TIMELINE_ITEM_HEIGHT, TIMELINE_MARKING_HEIGHT } from '../TimelineConstants';
+import { useProjectStore } from 'stores';
 
 const TimelineMarkings = ({maxTimelineWidth, showEstimatedDuration, zoom}) => {
 
-    const {project} = useProject();
+    const {project} = useProjectStore();
 
     const intervalInSeconds = ZOOM_TO_INTERVAL[zoom];
     

@@ -1,10 +1,10 @@
 import { Column, Row, Typography } from 'components';
-import { useProject } from 'hooks';
+import { useProjectStore } from 'stores';
 import { formatSecondsToHMS } from 'utils';
 
 const TimelineInfo = ({currentDuration}) => {
 
-    const {project} = useProject();
+    const {project} = useProjectStore();
 
     if (!project) {return};
 
