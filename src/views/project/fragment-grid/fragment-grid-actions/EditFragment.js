@@ -1,6 +1,6 @@
 import { Column, IconButton, Loading, Row, TextButton, Typography } from 'components';
 import Label from 'components/ui/labels/Label';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdAdd, MdClose, MdEdit } from 'react-icons/md';
 import { possibleSidebarStates } from '../fragment-grid-data/SidebarStates';
 import { useProjectStore } from 'stores';
@@ -10,25 +10,27 @@ const EditFragment = () => {
     const sidebarStates = possibleSidebarStates;
     const {project, fragmentToEdit, attachLabelToFragment, removeLabelFromFragment, setSidebarState} = useProjectStore();
     const [labelSelectionIsOpen, setLabelSelectionIsOpen] = useState(false);
-    const [labels, setLabels] = useState(fragmentToEdit.labels);
+    const [labels, setLabels] = useState([]);
+
+    useEffect(() => {
+        const initializeLabels = () => {
+            if (fragmentToEdit) {
+                setLabels(fragmentToEdit.labels);
+            }
+        }
+        initializeLabels();
+    }, [fragmentToEdit]);
 
     if (!fragmentToEdit) {
         return <Loading />
     }
 
-
-    const handleAttachLabel = async (labelId) => {
-        const attachingWasSuccessful = await attachLabelToFragment(labelId, fragmentToEdit.id);
-        if (attachingWasSuccessful) {
-            setLabels(prev => [...prev, project.labels.find(l => l.id === labelId)]);
-        }
+    const handleAttachLabel = (labelId) => {
+        attachLabelToFragment(labelId, fragmentToEdit.id);
     }
 
     const handleRemoveLabel = async (labelId) => {
-        const removalWasSuccessful = await removeLabelFromFragment(labelId, fragmentToEdit.id);
-        if (removalWasSuccessful) {
-            setLabels(prev => prev.filter(l => l.id !== labelId));
-        }
+        removeLabelFromFragment(labelId, fragmentToEdit.id);
     }
 
     const handleCreateNewLabelClick = () => {

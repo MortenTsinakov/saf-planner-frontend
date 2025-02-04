@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { fetchProject } from './projectActions';
-import { createFragment, deleteFragment, moveFragment, updateFragmentDuration, updateFragmentLongDescription, updateFragmentOnTimelineStatus, updateFragmentShortDescription } from './fragmentActions';
-import { setSidebarState } from './sidebarActions';
-import { setFragmentToEdit } from './sidebarActions';
-import { attachLabelToFragment, createLabel, removeLabelFromFragment } from './labelActions';
+import { fetchProject } from './project-store-actions/projectActions';
+import { createFragment, deleteFragment, moveFragment, updateFragmentDuration, updateFragmentLongDescription, updateFragmentOnTimelineStatus, updateFragmentShortDescription } from './project-store-actions/fragmentActions';
+import { setSidebarState } from './project-store-actions/sidebarActions';
+import { setFragmentToEdit } from './project-store-actions/sidebarActions';
+import { attachLabelToFragment, createLabel, removeLabelFromFragment } from './project-store-actions/labelActions';
 
 const useProjectStore = create((set, get) => ({
     project: null,
