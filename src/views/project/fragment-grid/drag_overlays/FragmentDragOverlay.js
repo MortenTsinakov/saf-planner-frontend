@@ -17,7 +17,7 @@ const FragmentDragOverlay = ({fragment}) => {
                 maxWidth: '90vw',
                 height: '200px',
                 padding: '2rem',
-                gap: '1rem',
+                gap: '0.8rem',
                 justifyContent: 'space-between'
             }}
         >
@@ -59,6 +59,18 @@ const FragmentDragOverlay = ({fragment}) => {
                     {fragment.shortDescription}
                 </Typography>
             </Column>
+            <Row style={{overflow: 'hidden'}}>
+                {fragment.labels.map(label => (
+                    <div
+                        style={{
+                            height: 15,
+                            width: 15,
+                            backgroundColor: label.color,
+                            borderRadius: '50%'
+                        }}
+                    />
+                ))}
+            </Row>
         </Card>
     );
 }

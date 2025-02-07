@@ -51,7 +51,7 @@ const FragmentCard = (
                         maxWidth: '90vw',
                         height: '200px',
                         padding: '2rem',
-                        gap: '1rem',
+                        gap: '0.8rem',
                         justifyContent: 'space-between'
                     }}
                     data-testid={'fragment-card'}
@@ -147,10 +147,6 @@ const FragmentCard = (
                         style={{
                             gap:'0.2rem',
                             flex: 1,
-                            display: '-webkit-box',
-                            WebkitLineClamp: '3',
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
                             cursor: 'move',
                         }}
                     >
@@ -159,10 +155,30 @@ const FragmentCard = (
                                 Short description
                             </Typography>
                         </Row>
-                        <Typography>
+                        <Typography
+                            style={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: '3',
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                            }}
+                        >
                             {fragment.shortDescription}
                         </Typography>
                     </Column>
+                    <Row style={{overflow: 'hidden'}}>
+                        {fragment.labels.map(label => (
+                            <div
+                                style={{
+                                    height: 15,
+                                    width: 15,
+                                    backgroundColor: label.color,
+                                    borderRadius: '50%'
+                                }}
+                                title={label.description}
+                            />
+                        ))}
+                    </Row>
 
                     {showFragmentDetails &&
                         <FragmentDetails
