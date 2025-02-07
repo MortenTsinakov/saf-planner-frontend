@@ -169,6 +169,7 @@ const FragmentCard = (
                     <Row style={{overflow: 'hidden'}}>
                         {fragment.labels.map(label => (
                             <div
+                                key={label.id}
                                 style={{
                                     height: 15,
                                     width: 15,

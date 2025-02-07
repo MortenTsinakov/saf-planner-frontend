@@ -49,6 +49,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
      * Handle moving a fragment inside the fragment grid.
      */
     const handleMovementInFragmentGrid = async(active, over) => {
+
         if (active.id !== over.id) {
             const movedFragment = fragments.find(f => f.id === active.id);
             const overFragment = fragments.find(f => f.id === over.id);
@@ -68,9 +69,10 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
      * If the fragment is dropped onto the fragment grid, it will be saved
      * to the database. Otherwise it will be returned to it's initial position.
      */
-    const handleFragmentCreationDrop = async (active, over) => {
-        if (active.data.current.sortable.containerId === NEW_FRAGMENT_PANEL_ID && over.id === FRAGMENT_GRID_ID) {
-            const newFragment = newFragments.find(f => f.id === NEW_FRAGMENT_ID);
+    const handleFragmentCreationDrop = async (over) => {
+        // New fragment is dragged over fragment grid but not over an existing fragment
+        if (over.id === FRAGMENT_GRID_ID) {
+            const newFragment = newFragments.find(f => f.id === NEW_FRAGMENT_ID) || fragments.find(f => f.id === NEW_FRAGMENT_ID);
             const fragment = {
                 shortDescription: newFragment.shortDescription.trim(),
                 longDescription: newFragment.longDescription.trim(),
@@ -80,6 +82,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
                 projectId: props.projectId,
             }
             const labels = newFragment.labels
+            setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
             const fragmentCreatedSuccessfully = await createFragment(fragment, labels);
             if (fragmentCreatedSuccessfully) {
                 addAlert("Fragment created", "success");
@@ -88,12 +91,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
             return;
         }
 
-        if (active.data.current.sortable.containerId === NEW_FRAGMENT_PANEL_ID) {
-            setSidebarState({...sidebarState, open: true});
-            setNewFragments([...newFragments.filter(f => f.id === NEW_FRAGMENT_ID)]);
-            return;
-        }
-        
+        // Fragment is dragged over an existing fragment
         if (over.data.current.sortable.containerId === FRAGMENT_GRID_ID) {
             const newFragment = fragments.find(f => f.id === NEW_FRAGMENT_ID);
             const overCard = fragments.find(f => f.id === over.id);
@@ -115,9 +113,10 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
             return;
         }
 
+        // Fragment is not over a fragment grid at all - reset
+        // setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
+        // setNewFragments([...fragments.filter(f => f.id === NEW_FRAGMENT_ID, ...newFragments.filter(f => f.id === NEW_FRAGMENT_ID))]);
         setSidebarState({...sidebarState, open: true});
-        setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
-        setNewFragments([...fragments.filter(f => f.id === NEW_FRAGMENT_ID, ...newFragments.filter(f => f.id === NEW_FRAGMENT_ID))]);
     }
 
     /**
@@ -131,11 +130,21 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
     const handleDragEnd = async ({active, over}) => {
         setActiveId(null);
 
-        if (!active || !over) {
-            setFragments([...fragments.filter(f => f.id !== activeId)]);
+        if (!active) {return;};
+
+        // Fragment is not over any container
+        if (!over) {
+            // If dragged fragment is from the fragment grid
+            if (active.id !== NEW_FRAGMENT_ID) {
+                return;
+            }
+
+            // If dragged fragment is a newly created fragment - reset
+            setFragments([...fragments.filter(f => f.id !== active.id)]);
             const initialState = [...fragments.filter(f => f.id === activeId), ...newFragments.filter(f => f.id === activeId)];
             setNewFragments(initialState);
             setSidebarState({...sidebarState, open: true});
+
             return;
         }
 
@@ -151,7 +160,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
         }
 
         if (active.id === NEW_FRAGMENT_ID) {
-            handleFragmentCreationDrop(active, over);
+            handleFragmentCreationDrop(over);
         }
     }
 
