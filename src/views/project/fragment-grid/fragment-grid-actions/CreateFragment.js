@@ -1,14 +1,16 @@
-import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, Switch, Typography } from 'components';
+import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, Switch, TextButton, TickBox, Typography } from 'components';
 import { useState } from 'react';
-import { MdArrowBack, MdArrowForward } from 'react-icons/md';
+import { MdAdd, MdArrowBack, MdArrowForward } from 'react-icons/md';
 import { clampNumber } from 'utils';
 import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from '../FragmentGridConstants';
 import NewCard from '../fragment-grid-data/NewCard';
 import { useProjectStore } from 'stores';
+import Label from 'components/ui/labels/Label';
+import CreateLabel from './CreateLabel';
 
 const CreateFragment = ({...props}) => {
 
-    const {newFragments, setNewFragments} = useProjectStore();
+    const {project, newFragments, setNewFragments} = useProjectStore();
 
     const projectId = props.projectId;
     const panelWidth = 420;
@@ -18,6 +20,8 @@ const CreateFragment = ({...props}) => {
     const [longDescription, setLongDescription] = useState('');
     const [durationInSeconds, setDurationInSeconds] = useState(5);
     const [onTimeline, setOnTimeline] = useState(false);
+    const [selectedLabels, setSelectedLabels] = useState([]);
+    const [createNewLabel, setCreateNewLabel] = useState(false);
 
     const handleDurationChange = (e) => {
         if (isNaN(e.target.value)) {
@@ -25,6 +29,14 @@ const CreateFragment = ({...props}) => {
         }
         const value = Number(e.target.value);
         setDurationInSeconds(clampNumber(value, 0, 999));
+    }
+
+    const handleSelectLabel = (label) => {
+        if (selectedLabels.includes(label)) {
+            setSelectedLabels(prev => prev.filter(l => l !== label));
+            return;
+        }
+        setSelectedLabels(prev => [...prev, label]);
     }
 
     const shortDescriptionPage = () => {
@@ -128,6 +140,47 @@ const CreateFragment = ({...props}) => {
         );
     }
 
+    const createNewLabelPage = () => {
+        return (
+            <CreateLabel exitFn={() => setCreateNewLabel(false)}/>
+        );
+    }
+
+    const addLabelsPage = () => {
+        return (
+            <Column
+                data-testid='create-fragment-select-labels'
+                style={{width: '100%'}}
+            >
+                <Column>
+                    <Typography>Labels</Typography>
+                    <Typography fontSize='extrasmall' color='label'>
+                    Labels can mark anything you want — characters, moods, turning points —
+                    and can be used later for filtering the fragments.
+                    </Typography>
+                </Column>
+                <Column style={{marginTop: '2rem'}}>
+                    {project.labels.map(label => (
+                        <Row key={label.id} style={{justifyContent: 'space-between'}}>
+                            <Label color={label.color}>{label.description}</Label>
+                            <TickBox
+                                size='30px'
+                                selected={selectedLabels.includes(label)}
+                                onClick={() => handleSelectLabel(label)}
+                            />
+                        </Row>
+                    ))}
+                </Column>
+                <TextButton onClick={() => setCreateNewLabel(true)}>
+                    <MdAdd />
+                    <Typography>
+                        Create new label
+                    </Typography>
+                </TextButton>
+            </Column>
+        );
+    }
+
     const finalizeFragmentCreationPage = () => {
         return (
             <Column
@@ -151,6 +204,7 @@ const CreateFragment = ({...props}) => {
                         <NewCard
                             key={f.id}
                             fragment={f}
+                            labels={selectedLabels}
                         />
                     ))}
                 </Container>
@@ -159,7 +213,7 @@ const CreateFragment = ({...props}) => {
     }
 
     const handleIncrementPage = () => {
-        if (page === 4) {
+        if (page === 5) {
             setNewFragments([{
                 id: NEW_FRAGMENT_ID,
                 shortDescription: shortDescription,
@@ -167,12 +221,13 @@ const CreateFragment = ({...props}) => {
                 durationInSeconds: durationInSeconds,
                 onTimeline: onTimeline,
                 position: null,
-                projectId: projectId
+                projectId: projectId,
+                labels: [...selectedLabels],
             }])
-            setPage(5);
+            setPage(6);
         }
         else {
-            setPage(Math.min(4, page + 1))
+            setPage(Math.min(5, page + 1))
         }
     }
 
@@ -197,8 +252,13 @@ const CreateFragment = ({...props}) => {
                 data-testid='create-fragment-panel'
             >
                 {
-                    page < 5 ?
-                    <Typography fontSize='medium'>Create new fragment</Typography>
+                    page < 6 ?
+                    (
+                        createNewLabel ? 
+                        <Typography fontSize='medium'>Create new label</Typography>
+                        :
+                        <Typography fontSize='medium'>Create new fragment</Typography>
+                    )
                     :
                     <Typography fontSize='medium'>Your fragment is ready!</Typography>
                 }
@@ -207,13 +267,17 @@ const CreateFragment = ({...props}) => {
                     {page === 2 && longDescriptionPage()}
                     {page === 3 && durationPage()}
                     {page === 4 && addToTimelinePage()}
-                    {page === 5 && finalizeFragmentCreationPage()}
+                    {page === 5 && (createNewLabel ? createNewLabelPage() : addLabelsPage())}
+                    {page === 6 && finalizeFragmentCreationPage()}
                 </Column>
                 
-                <Row style={{justifyContent: 'space-between', width: '100%'}}>
-                    {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
-                    {page < 5 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
-                </Row>
+                {
+                    !createNewLabel &&
+                    <Row style={{justifyContent: 'space-between', width: '100%'}}>
+                        {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
+                        {page < 6 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
+                    </Row>
+                }
             </Column>
         }
         </SortableContextWrapper>

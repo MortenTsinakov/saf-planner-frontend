@@ -30,3 +30,16 @@
     border: 1px solid var(--primary-color);
     transform: translateX(40px);
 }
+
+.tickbox {
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tickbox-tick {
+    color: var(--primary-color);
+    font-size: 2rem;
+}

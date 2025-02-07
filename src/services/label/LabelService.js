@@ -50,6 +50,18 @@ export const attachLabeltoFragmentService = async (labelId, fragmentId) => {
 }
 
 /**
+ * Attach several labels to fragment
+ */
+export const attachLabelsToFragmentService = async (labelIds, fragmentId) => {
+    const postData = {
+        labelIds: labelIds,
+        fragmentId: fragmentId,
+    }
+    const response = await apiClient.post('/label/fragment/all', postData);
+    return response.data;
+}
+
+/**
  * Remove label from fragment
  */
 export const removeLabelFromFragmentService = async (labelId, fragmentId) => {

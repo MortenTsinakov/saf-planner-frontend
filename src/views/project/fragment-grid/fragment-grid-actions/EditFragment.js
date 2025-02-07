@@ -1,9 +1,10 @@
-import { Column, IconButton, Loading, Row, TextButton, Typography } from 'components';
+import { Column, Divider, IconButton, Loading, Row, TextButton, Typography } from 'components';
 import Label from 'components/ui/labels/Label';
 import { useEffect, useState } from 'react';
 import { MdAdd, MdClose, MdEdit } from 'react-icons/md';
 import { possibleSidebarStates } from '../fragment-grid-data/SidebarStates';
 import { useProjectStore } from 'stores';
+import CreateLabel from './CreateLabel';
 
 const EditFragment = () => {
 
@@ -11,6 +12,7 @@ const EditFragment = () => {
     const {project, fragmentToEdit, attachLabelToFragment, removeLabelFromFragment, setSidebarState} = useProjectStore();
     const [labelSelectionIsOpen, setLabelSelectionIsOpen] = useState(false);
     const [labels, setLabels] = useState([]);
+    const [createNewLabel, setCreateNewLabel] = useState(false);
 
     useEffect(() => {
         const initializeLabels = () => {
@@ -34,7 +36,7 @@ const EditFragment = () => {
     }
 
     const handleCreateNewLabelClick = () => {
-        setSidebarState({content: sidebarStates.CREATE_LABEL, open: true});
+        setCreateNewLabel(true);
     }
 
     const getAvailableLabels = () => {
@@ -100,22 +102,25 @@ const EditFragment = () => {
                         }
                     </Row>
                 }
-                <Column style={{marginTop: '2rem'}}>
+                <Column style={{marginTop: '1rem'}}>
                     {
                         labelSelectionIsOpen ?
-                        <Column style={{top: '3rem', padding: '2rem', backgroundColor: 'var(--background-color-medium)'}}>
-                            {getAvailableLabels().map(label => (
-                                 <Row key={label.id} style={{justifyContent: 'space-between'}}>
-                                 <Label color={label.color}>
-                                     {label.description}
-                                 </Label>
-                                 <IconButton
-                                     onClick={() => handleAttachLabel(label.id)}
-                                     icon={<MdAdd />}
-                                     style={{fontSize: '3rem'}}
-                                 />
-                             </Row>
-                            ))}
+                        <Column style={{top: '3rem', gap: '3rem'}}>
+                            <Divider />
+                            <Column>
+                                {getAvailableLabels().map(label => (
+                                    <Row key={label.id} style={{justifyContent: 'space-between'}}>
+                                    <Label color={label.color}>
+                                        {label.description}
+                                    </Label>
+                                    <IconButton
+                                        onClick={() => handleAttachLabel(label.id)}
+                                        icon={<MdAdd />}
+                                        style={{fontSize: '3rem'}}
+                                    />
+                                </Row>
+                                ))}
+                            </Column>
                             <Row style={{justifyContent: 'space-between'}}>
                                 <TextButton
                                     onClick={handleCreateNewLabelClick}
@@ -126,6 +131,7 @@ const EditFragment = () => {
                                     Close
                                 </TextButton>
                             </Row>
+                            <Divider />
                         </Column>
                         :
                         <TextButton
@@ -144,7 +150,27 @@ const EditFragment = () => {
     }
 
     return (
-        <Column style={{width: '100%', padding: '2rem', gap: '3rem'}}>
+        createNewLabel
+        ?
+        <Column
+            style={{
+                padding: '5rem 3rem',
+                height: '100%',
+                width: '100%',
+                overflow: 'auto',
+                alignItems: 'center',
+            }}
+        >
+            <CreateLabel exitFn={() => setCreateNewLabel(false)}/>
+        </Column>
+        :
+        <Column
+            style={{
+                width: '100%', 
+                padding: '5rem 3rem', 
+                gap: '3rem',
+                overflow: 'auto',
+        }}>
             {getTextField('Short description', fragmentToEdit.shortDescription, sidebarStates.EDIT_SHORT_DESCRIPTION)}
             {getTextField('Long description', fragmentToEdit.longDescription, sidebarStates.EDIT_LONG_DESCRIPTION)}
             {getTextField('Duration', `${fragmentToEdit.durationInSeconds} seconds`, sidebarStates.EDIT_DURATION)}

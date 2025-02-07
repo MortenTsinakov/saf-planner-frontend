@@ -1,4 +1,4 @@
-import { createFragmentService, deleteFragmentService, moveFragmentService, updateFragmentDurationService, updateFragmentLongDescriptionService, updateFragmentOnTimelineStatusService, updateFragmentShortDescriptionService } from 'services';
+import { attachLabelsToFragmentService, createFragmentService, deleteFragmentService, moveFragmentService, updateFragmentDurationService, updateFragmentLongDescriptionService, updateFragmentOnTimelineStatusService, updateFragmentShortDescriptionService } from 'services';
 
 const incrementFragmentPositions = (prev, position) => {
     prev.forEach(f => {
@@ -21,14 +21,24 @@ const decrementFragmentPositions = (prev, position) => {
 /**
  * Create new fragment
  */
-export const createFragment = (get, set) => async (fragment) => {
+export const createFragment = (get, set) => async (fragment, labels) => {
     try {
         set({ error: null});
-        const response = await createFragmentService(fragment);
+
+        const labelIds = labels.map(l => l.id);
+
+        const fragmentResponse = await createFragmentService(fragment);
+        const labelResponse = await attachLabelsToFragmentService(labelIds, fragmentResponse.id);
+
+        const newFragment = {
+            ...fragmentResponse,
+            labels: labelResponse,
+        }
+
         let fragments = [...get().fragments]
         fragments = incrementFragmentPositions(fragments, fragment.position);
-        fragments = [...fragments, response].sort((a, b) => {return a.position - b.position});
-        console.log("After adding:", fragments);
+        fragments = [...fragments, newFragment].sort((a, b) => {return a.position - b.position});
+        
         set({ fragments: fragments });
         return true;
     } catch (err) {

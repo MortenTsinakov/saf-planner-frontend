@@ -49,7 +49,7 @@ const FragmentGridSidebar = ({...props}) => {
             }
             {
                 sidebarState.content === sidebarStates.CREATE_LABEL &&
-                <CreateLabel />
+                <CreateLabel exitFn={() => setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true})}/>
             }
         </Sidebar>
     );

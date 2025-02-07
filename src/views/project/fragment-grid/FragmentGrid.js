@@ -70,17 +70,17 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
      */
     const handleFragmentCreationDrop = async (active, over) => {
         if (active.data.current.sortable.containerId === NEW_FRAGMENT_PANEL_ID && over.id === FRAGMENT_GRID_ID) {
-            console.log("1st if");
-            const newCard = newFragments.find(f => f.id === NEW_FRAGMENT_ID);
-            const data = {
-                shortDescription: newCard.shortDescription.trim(),
-                longDescription: newCard.longDescription.trim(),
-                durationInSeconds: newCard.durationInSeconds <= 0 ? 5 : newCard.durationInSeconds,
-                onTimeline: newCard.onTimeline,
+            const newFragment = newFragments.find(f => f.id === NEW_FRAGMENT_ID);
+            const fragment = {
+                shortDescription: newFragment.shortDescription.trim(),
+                longDescription: newFragment.longDescription.trim(),
+                durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
+                onTimeline: newFragment.onTimeline,
                 position: fragments.length + 1,
                 projectId: props.projectId,
             }
-            const fragmentCreatedSuccessfully = await createFragment(data);
+            const labels = newFragment.labels
+            const fragmentCreatedSuccessfully = await createFragment(fragment, labels);
             if (fragmentCreatedSuccessfully) {
                 addAlert("Fragment created", "success");
                 setSidebarState({content: null, open: false});
@@ -95,20 +95,19 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
         }
         
         if (over.data.current.sortable.containerId === FRAGMENT_GRID_ID) {
-            console.log("3rd if");
-            const newCard = fragments.find(f => f.id === NEW_FRAGMENT_ID);
+            const newFragment = fragments.find(f => f.id === NEW_FRAGMENT_ID);
             const overCard = fragments.find(f => f.id === over.id);
-            const data = {
-                shortDescription: newCard.shortDescription.trim(),
-                longDescription: newCard.longDescription.trim(),
-                durationInSeconds: newCard.durationInSeconds <= 0 ? 5 : newCard.durationInSeconds,
-                onTimeline: newCard.onTimeline,
+            const fragment = {
+                shortDescription: newFragment.shortDescription.trim(),
+                longDescription: newFragment.longDescription.trim(),
+                durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
+                onTimeline: newFragment.onTimeline,
                 position: overCard.position || fragments.length,
                 projectId: props.projectId,
             }
-            console.log(data.position);
+            const labels = newFragment.labels;
             setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
-            const fragmentCreatedSuccessfully = await createFragment(data);
+            const fragmentCreatedSuccessfully = await createFragment(fragment, labels);
             if (fragmentCreatedSuccessfully) {
                 addAlert("Fragment created", "success");
                 setSidebarState({content: null, open: false});
@@ -116,7 +115,6 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
             return;
         }
 
-        console.log("End of fn");
         setSidebarState({...sidebarState, open: true});
         setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
         setNewFragments([...fragments.filter(f => f.id === NEW_FRAGMENT_ID, ...newFragments.filter(f => f.id === NEW_FRAGMENT_ID))]);

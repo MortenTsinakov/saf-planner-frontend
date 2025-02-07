@@ -39,6 +39,7 @@ export { default as DropdownMenu } from 'components/ui/menus/DropdownMenu';
 export { default as Modal } from 'components/ui/modals/Modal';
 // swtich
 export { default as Switch } from 'components/ui/switches/Switch';
+export { default as TickBox } from 'components/ui/switches/TickBox';
 // typography
 export { default as Typography } from 'components/ui/typography/Typography';
 
