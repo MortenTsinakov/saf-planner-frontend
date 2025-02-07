@@ -101,7 +101,7 @@ export const updateFragmentDuration = (get, set) => async (fragment, durationInS
         set({error: null});
         const response = await updateFragmentDurationService(fragment.id, durationInSeconds);
         const fragments = [...get().fragments.map(f => f.id === fragment.id ? response : f)];
-        set({ fragments: fragments });
+        set({ fragments : fragments, fragmentToEdit: response });
         return true;
     } catch (err) {
         set({error: {message: err.response?.data?.message || "Updating fragment failed", status: err.status }});
