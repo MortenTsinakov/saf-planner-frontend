@@ -38,5 +38,6 @@ export {
     updateLabelService,
     deleteLabelService,
     attachLabeltoFragmentService,
+    attachLabelsToFragmentService,
     removeLabelFromFragmentService,
 } from 'services/label/LabelService';
