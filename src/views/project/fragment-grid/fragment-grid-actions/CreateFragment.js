@@ -1,11 +1,12 @@
-import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, Switch, TickBox, Typography } from 'components';
+import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, Switch, TextButton, TickBox, Typography } from 'components';
 import { useState } from 'react';
-import { MdArrowBack, MdArrowForward } from 'react-icons/md';
+import { MdAdd, MdArrowBack, MdArrowForward } from 'react-icons/md';
 import { clampNumber } from 'utils';
 import { NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from '../FragmentGridConstants';
 import NewCard from '../fragment-grid-data/NewCard';
 import { useProjectStore } from 'stores';
 import Label from 'components/ui/labels/Label';
+import CreateLabel from './CreateLabel';
 
 const CreateFragment = ({...props}) => {
 
@@ -20,6 +21,7 @@ const CreateFragment = ({...props}) => {
     const [durationInSeconds, setDurationInSeconds] = useState(5);
     const [onTimeline, setOnTimeline] = useState(false);
     const [selectedLabels, setSelectedLabels] = useState([]);
+    const [createNewLabel, setCreateNewLabel] = useState(false);
 
     const handleDurationChange = (e) => {
         if (isNaN(e.target.value)) {
@@ -138,7 +140,13 @@ const CreateFragment = ({...props}) => {
         );
     }
 
-    const addFragmentsPage = () => {
+    const createNewLabelPage = () => {
+        return (
+            <CreateLabel exitFn={() => setCreateNewLabel(false)}/>
+        );
+    }
+
+    const addLabelsPage = () => {
         return (
             <Column
                 data-testid='create-fragment-select-labels'
@@ -163,6 +171,12 @@ const CreateFragment = ({...props}) => {
                         </Row>
                     ))}
                 </Column>
+                <TextButton onClick={() => setCreateNewLabel(true)}>
+                    <MdAdd />
+                    <Typography>
+                        Create new label
+                    </Typography>
+                </TextButton>
             </Column>
         );
     }
@@ -239,7 +253,12 @@ const CreateFragment = ({...props}) => {
             >
                 {
                     page < 6 ?
-                    <Typography fontSize='medium'>Create new fragment</Typography>
+                    (
+                        createNewLabel ? 
+                        <Typography fontSize='medium'>Create new label</Typography>
+                        :
+                        <Typography fontSize='medium'>Create new fragment</Typography>
+                    )
                     :
                     <Typography fontSize='medium'>Your fragment is ready!</Typography>
                 }
@@ -248,14 +267,17 @@ const CreateFragment = ({...props}) => {
                     {page === 2 && longDescriptionPage()}
                     {page === 3 && durationPage()}
                     {page === 4 && addToTimelinePage()}
-                    {page === 5 && addFragmentsPage()}
+                    {page === 5 && (createNewLabel ? createNewLabelPage() : addLabelsPage())}
                     {page === 6 && finalizeFragmentCreationPage()}
                 </Column>
                 
-                <Row style={{justifyContent: 'space-between', width: '100%'}}>
-                    {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
-                    {page < 6 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
-                </Row>
+                {
+                    !createNewLabel &&
+                    <Row style={{justifyContent: 'space-between', width: '100%'}}>
+                        {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
+                        {page < 6 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
+                    </Row>
+                }
             </Column>
         }
         </SortableContextWrapper>

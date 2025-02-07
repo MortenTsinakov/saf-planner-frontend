@@ -4,14 +4,12 @@ import { useAlerts } from 'hooks';
 import { useState } from 'react';
 import { useProjectStore } from 'stores';
 import { generateRandomColor } from 'utils';
-import { possibleSidebarStates } from '../fragment-grid-data/SidebarStates';
 
-const CreateLabel = () => {
+const CreateLabel = ({exitFn}) => {
     const [description, setDescription] = useState("");
     const [color, setColor] = useState(generateRandomColor());
 
-    const sidebarStates = possibleSidebarStates;
-    const {project, createLabel, setSidebarState} = useProjectStore();
+    const {project, createLabel} = useProjectStore();
     const {addAlert} = useAlerts();
 
     const handleDescriptionChange = (e) => {
@@ -21,55 +19,55 @@ const CreateLabel = () => {
         setDescription(e.target.value);
     }
 
-    const handleSaveLabel = async () => {
+    const handleSaveClick = async () => {
         const creationWasSuccessful = await createLabel(project, description, color);
         if (creationWasSuccessful) {
             addAlert("Label created - you can attach it to the fragment now", "success");
-            setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true});
+            exitFn();
         }
     }
 
     const handleCancelClick = () => {
-        setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true});
+        exitFn();
     }
 
     return (
         <Column
-        style={{
-            gap: '3rem',
-            width: '100%',
-            height: '100%',
-            padding: '5rem 3rem',
-            alignItems: 'center',
-        }}
+            style={{
+                gap: '3rem',
+                width: '100%',
+            }}
         >
-            <Typography fontSize='medium'>Create new label</Typography>
-            <div style={{minHeight: '75px', textAlign: 'start', alignContent: 'center'}}>
+            <Typography color='label'>
+                When saved, the new label will be added to the project so that you can
+                use it in the other fragments as well.
+            </Typography>
+            <div style={{textAlign: 'start', alignContent: 'center'}}>
                 {
                     description.length > 0 ?
                     <Label color={color}>{description}</Label> :
                     <Typography fontSize='extrasmall' color='label'>Your label will appear here once you start typing...</Typography>
                 }
             </div>
-            <Column style={{textAlign: 'start', width: 'inherit'}}>
+            <Column style={{textAlign: 'start'}}>
                 <Typography color='label'>Label text</Typography>
                 <InputField
                     value={description}
                     onChange={handleDescriptionChange}
                 />
             </Column>
-            <Column style={{textAlign: 'start', width: 'inherit'}}>
+            <Column>
                 <Typography color='label'>Color</Typography>
                 <ColorPicker
                     value={color}
                     setColorFn={setColor}
                 />
             </Column>
-            <Row style={{justifyContent: 'space-between', width: 'inherit'}}>
+            <Row style={{justifyContent: 'space-between'}}>
                 <OutlineButton onClick={handleCancelClick}>
                     Cancel
                 </OutlineButton>
-                <FilledButton onClick={handleSaveLabel}>
+                <FilledButton onClick={handleSaveClick}>
                     Save
                 </FilledButton>
             </Row>
