@@ -47,6 +47,7 @@ const Timeline = ({...props}) => {
                     backgroundColor: 'var(--background-color-medium)',
                     justifyContent: 'start',
                     overflowX: 'auto',
+                    overflowY: 'hidden',
                 }}
                 data-testid='timeline-component'
             >

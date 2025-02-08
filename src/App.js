@@ -38,7 +38,7 @@ function App() {
                 <Route element={<AnonymousRoutes />}>
                   <Route path='/sign-in' element={<SignIn {...props} />} />
                   <Route path='/sign-up' element={<SignUp {...props} />} />
-                  <Route path='/' element={<SignIn />} />
+                  <Route path='/' element={<SignIn {...props} />} />
                 </Route>
                 {/* Protected routes */}
                 <Route element={<ProtectedRoutes />}>
