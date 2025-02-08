@@ -14,7 +14,10 @@ const TimelineInfo = ({currentDuration}) => {
                 <Typography color='label' fontSize='extrasmall'>
                     Current duration
                 </Typography>
-                <Typography fontSize='extrasmall'>
+                <Typography
+                    color={currentDuration > project.estimatedLengthInSeconds ? 'error' : ''}
+                    fontSize='extrasmall'
+                >
                     {formatSecondsToHMS(currentDuration)}
                 </Typography>
             </Column>
@@ -22,7 +25,9 @@ const TimelineInfo = ({currentDuration}) => {
                 <Typography color='label' fontSize='extrasmall'>
                     Target duration
                 </Typography>
-                <Typography fontSize='extrasmall'>
+                <Typography
+                    fontSize='extrasmall'
+                >
                     {formatSecondsToHMS(project.estimatedLengthInSeconds)}
                 </Typography>
             </Column>

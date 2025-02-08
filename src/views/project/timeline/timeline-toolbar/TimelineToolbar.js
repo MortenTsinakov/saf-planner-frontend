@@ -1,12 +1,8 @@
 import { IconButton, Row } from 'components';
 import { TIMELINE_MAX_ZOOM, TIMELINE_MIN_ZOOM } from '../TimelineConstants';
-import { MdZoomIn, MdZoomOut, MdOutlineTimer } from 'react-icons/md';
-import { useProjectStore } from 'stores';
+import { MdZoomIn, MdZoomOut } from 'react-icons/md';
 
-const TimelineToolbar = ({zoom, setZoom, showEstimatedDuration, setShowEstimatedDuration}) => {
-
-    const {project} = useProjectStore();
-
+const TimelineToolbar = ({zoom, setZoom}) => {
     return (
         <Row>
             <IconButton
@@ -19,14 +15,6 @@ const TimelineToolbar = ({zoom, setZoom, showEstimatedDuration, setShowEstimated
                 icon={<MdZoomOut />}
                 title='Zoom out'
             />
-            {
-                project.estimatedLengthInSeconds !== 0 &&
-                <IconButton
-                    onClick={() => {setShowEstimatedDuration(!showEstimatedDuration)}}
-                    icon={<MdOutlineTimer />}
-                    title={showEstimatedDuration ? 'Hide target duration indicator' : 'Show target duration indicator'}
-                />
-            }
         </Row>
     );
 }
