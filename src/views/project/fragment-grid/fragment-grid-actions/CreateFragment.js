@@ -184,7 +184,7 @@ const CreateFragment = ({...props}) => {
     const finalizeFragmentCreationPage = () => {
         return (
             <Column
-                style={{width: panelWidth}}
+                style={{width: props.isMobile ? '100%' : panelWidth, alignItems: 'center'}}
             >
                 <Typography
                     color='label'
@@ -196,6 +196,7 @@ const CreateFragment = ({...props}) => {
                 <Container
                     style={{
                         height: 220,
+                        width: props.isMobile ? 390 : '100%',
                         borderRadius: 10,
                         border: '1px dashed var(--primary-color)'
                     }}

@@ -1,4 +1,4 @@
-import { Container, SortableContextWrapper, Row, Typography, Column, TextButton } from 'components';
+import { Container, SortableContextWrapper, Row, Typography, Column, TextButton, IconButton } from 'components';
 import { DndContext, DragOverlay, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { useState } from 'react';
 import { restrictOnlyFragments } from 'utils';
@@ -6,7 +6,7 @@ import CreateFragmentDragOverlay from './drag_overlays/CreateFragmentDragOverlay
 import FragmentDragOverlay from './drag_overlays/FragmentDragOverlay';
 import { FRAGMENT_GRID_ID, NEW_FRAGMENT_ID, NEW_FRAGMENT_PANEL_ID } from './FragmentGridConstants';
 import { useAlerts } from 'hooks';
-import { MdAdd } from 'react-icons/md';
+import { MdAdd, MdAddBox } from 'react-icons/md';
 import FragmentCard from './fragment-grid-data/FragmentCard';
 import FragmentGridSidebar from './fragment-grid-data/FragmentGridSidebar';
 import useProjectStore from 'stores/useProjectStore';
@@ -252,7 +252,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
             onDragCancel={handleDragCancel}
             onDragStart={handleDragStart}
         >
-            <Row>
+            <Row style={{position: 'relative'}}>
                 <SortableContextWrapper
                     id={FRAGMENT_GRID_ID}
                     items={fragments}
@@ -338,7 +338,21 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
                     </Container>
                 }
                     </SortableContextWrapper>
-                        
+
+                {
+                    fragments.length > 0 &&
+                    <IconButton
+                        onClick={handleCreateFragmentClick}
+                        icon={<MdAddBox />}
+                        style={{
+                            color: 'var(--primary-color)',
+                            fontSize: '8rem',
+                            position: 'absolute',
+                            right: props.isMobile ? 10 : 50,
+                            bottom: props.isMobile ? 10 : 50,
+                        }}
+                    />
+                } 
             </Row>
             <FragmentGridSidebar {...props}/>
             <DragOverlay>
