@@ -29,27 +29,27 @@ const FragmentGridSidebar = ({...props}) => {
             </Row>
             {
                 sidebarState.content === sidebarStates.CREATE_FRAGMENT &&
-                <CreateFragment />
+                <CreateFragment {...props} />
             }
             {
                 sidebarState.content === sidebarStates.EDIT_FRAGMENT &&
-                <EditFragment />
+                <EditFragment {...props} />
             }
             {
                 sidebarState.content === sidebarStates.EDIT_SHORT_DESCRIPTION &&
-                <EditShortDescription />
+                <EditShortDescription {...props} />
             }
             {
                 sidebarState.content === sidebarStates.EDIT_LONG_DESCRIPTION &&
-                <EditLongDescription />
+                <EditLongDescription {...props} />
             }
             {
                 sidebarState.content === sidebarStates.EDIT_DURATION &&
-                <EditDuration />
+                <EditDuration {...props} />
             }
             {
                 sidebarState.content === sidebarStates.CREATE_LABEL &&
-                <CreateLabel exitFn={() => setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true})}/>
+                <CreateLabel exitFn={() => setSidebarState({content: sidebarStates.EDIT_FRAGMENT, open: true})} {...props}/>
             }
         </Sidebar>
     );

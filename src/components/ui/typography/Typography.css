@@ -37,3 +37,7 @@
 .typography.color-label {
     color: rgb(165, 165, 165);
 }
+
+.typography.color-error {
+    color: var(--color-error);
+}

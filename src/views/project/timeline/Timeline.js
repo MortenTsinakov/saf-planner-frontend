@@ -91,7 +91,8 @@ const Timeline = ({...props}) => {
                     padding: '2rem', 
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    borderTop: '1px solid var(--main-gray)'
+                    borderTop: '1px solid var(--main-gray)',
+                    borderBottom: '1px solid var(--main-gray)',
                 }}
                 data-testid='timeline-toolbar-component'
             >

@@ -1,14 +1,9 @@
 import { Column, Container, Row, Typography } from 'components';
-import { PIXELS_PER_SECOND, ZOOM_TO_INTERVAL, TIMELINE_ITEM_HEIGHT, TIMELINE_MARKING_HEIGHT } from '../TimelineConstants';
-import { useProjectStore } from 'stores';
+import { PIXELS_PER_SECOND, ZOOM_TO_INTERVAL } from '../TimelineConstants';
 
-const TimelineMarkings = ({maxTimelineWidth, showEstimatedDuration, zoom}) => {
+const TimelineMarkings = ({maxTimelineWidth, zoom}) => {
 
-    const {project} = useProjectStore();
-
-    const intervalInSeconds = ZOOM_TO_INTERVAL[zoom];
-    
-    const estimatedDuration = project.estimatedLengthInSeconds ? project.estimatedLengthInSeconds : 0;
+    const intervalInSeconds = ZOOM_TO_INTERVAL[zoom];    
     const nrOfMarkings = Math.ceil((maxTimelineWidth / PIXELS_PER_SECOND / zoom) / intervalInSeconds);
     
     const markings = Array.from({length: nrOfMarkings}, (_, index) => ({
@@ -54,38 +49,6 @@ const TimelineMarkings = ({maxTimelineWidth, showEstimatedDuration, zoom}) => {
                     </Row>
                 ))}
             </Container>
-            { showEstimatedDuration && project.estimatedLengthInSeconds !== 0 &&                
-                <Column
-                    style={{
-                        border: '2px solid var(--color-error)',
-                        width: 'fit-content', 
-                        height: 'fit-content', 
-                        padding: '2px 10px', 
-                        borderRadius: '10px', 
-                        marginLeft: estimatedDuration * PIXELS_PER_SECOND * zoom,
-                        transform: 'translate(-50%, 10px)',
-                    }}
-                >
-                    <Column
-                        style={{
-                            width: '2px', 
-                            height: TIMELINE_ITEM_HEIGHT + TIMELINE_MARKING_HEIGHT - 2, 
-                            backgroundColor: 'var(--color-error)', 
-                            position: 'absolute', 
-                            transform: `translate(52px, -${TIMELINE_ITEM_HEIGHT + TIMELINE_MARKING_HEIGHT}px)`
-                        }} 
-                    />
-                    <Typography
-                        fontSize='extrasmall'
-                        style={{
-                            textWrap: 'nowrap',
-                            color: 'var(--text-color',
-                        }}
-                    >
-                        Target Duration
-                    </Typography>
-                </Column>
-            }
         </Column>
     );
 }

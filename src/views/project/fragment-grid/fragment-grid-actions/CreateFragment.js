@@ -184,7 +184,7 @@ const CreateFragment = ({...props}) => {
     const finalizeFragmentCreationPage = () => {
         return (
             <Column
-                style={{width: panelWidth}}
+                style={{width: props.isMobile ? '100%' : panelWidth, alignItems: 'center'}}
             >
                 <Typography
                     color='label'
@@ -196,6 +196,7 @@ const CreateFragment = ({...props}) => {
                 <Container
                     style={{
                         height: 220,
+                        width: props.isMobile ? 390 : '100%',
                         borderRadius: 10,
                         border: '1px dashed var(--primary-color)'
                     }}
@@ -252,6 +253,13 @@ const CreateFragment = ({...props}) => {
                 data-testid='create-fragment-panel'
             >
                 {
+                    !createNewLabel &&
+                    <Row style={{justifyContent: 'space-between', width: '100%'}}>
+                        {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
+                        {page < 6 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
+                    </Row>
+                }
+                {
                     page < 6 ?
                     (
                         createNewLabel ? 
@@ -271,13 +279,6 @@ const CreateFragment = ({...props}) => {
                     {page === 6 && finalizeFragmentCreationPage()}
                 </Column>
                 
-                {
-                    !createNewLabel &&
-                    <Row style={{justifyContent: 'space-between', width: '100%'}}>
-                        {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
-                        {page < 6 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
-                    </Row>
-                }
             </Column>
         }
         </SortableContextWrapper>
