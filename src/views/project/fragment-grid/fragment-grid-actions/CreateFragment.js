@@ -253,6 +253,13 @@ const CreateFragment = ({...props}) => {
                 data-testid='create-fragment-panel'
             >
                 {
+                    !createNewLabel &&
+                    <Row style={{justifyContent: 'space-between', width: '100%'}}>
+                        {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
+                        {page < 6 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
+                    </Row>
+                }
+                {
                     page < 6 ?
                     (
                         createNewLabel ? 
@@ -272,13 +279,6 @@ const CreateFragment = ({...props}) => {
                     {page === 6 && finalizeFragmentCreationPage()}
                 </Column>
                 
-                {
-                    !createNewLabel &&
-                    <Row style={{justifyContent: 'space-between', width: '100%'}}>
-                        {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
-                        {page < 6 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
-                    </Row>
-                }
             </Column>
         }
         </SortableContextWrapper>
