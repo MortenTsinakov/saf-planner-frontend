@@ -17,7 +17,7 @@ const TimelineMarkings = ({maxTimelineWidth, zoom}) => {
                 borderTop: '1px solid gray',
                 paddingBottom: '20px',
                 height: 80,
-                position: 'relative'
+                position: 'relative',
             }}
         >
             <Container>

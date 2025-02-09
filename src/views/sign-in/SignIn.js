@@ -40,16 +40,18 @@ const SignIn = (props) => {
     return (
         <Container
             style={{
-                height:'calc(100vh - var(--navbar-height))',
-                backgroundColor:'var(--primary-color)',
+                minHeight:'calc(100vh - var(--navbar-height))',
+                backgroundColor: !props.isMobile && 'var(--primary-color)',
+                overflow: 'auto',
             }}
         > 
             <Form
                 ariaLabel={'sign in form'}
                 style={{
-                    height: props.isMobile ? '100%' : '75%',
-                    width: '60rem',
-                    zIndex: '1',
+                    height: '100%',
+                    width: props.isMobile ? '100%' : '60rem',
+                    paddingTop: '100px',
+                    overflow: 'auto',
                 }}
             >
                 <Column>
