@@ -8,8 +8,14 @@ import ReadAll from './read-all/ReadAll';
 import Timeline from './timeline/Timeline';
 import { TIMELINE_HEIGHT } from './timeline/TimelineConstants';
 import { useProjectStore } from 'stores';
+import Presentation from './presentation/Presentation';
 
 const Project = ({...props}) => {
+
+    const views = Object.freeze({
+        FRAGMENT_GRID: 0,
+        PRESENTATION: 1,
+    });
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -19,6 +25,7 @@ const Project = ({...props}) => {
     const toolBarHeight = 55;
     const [readAllWidth, setReadAllWidth] = useState(350);
     const [showReadAllPanel, setShowReadAllPanel] = useState(false);
+    const [currentView, setCurrentView] = useState(views.FRAGMENT_GRID);
 
     const { fetchProject, loading, error, setError } = useProjectStore();
     const {addAlert} = useAlerts();
@@ -52,7 +59,7 @@ const Project = ({...props}) => {
     return (
         <Column
             style={{
-                height: '100%',
+                height: 'calc(100vh - var(--navbar-height)',
                 width: '100%',
                 gap: 0,
             }}
@@ -61,10 +68,14 @@ const Project = ({...props}) => {
                 height={toolBarHeight}
                 showReadAllPanel={showReadAllPanel}
                 setShowReadAllPanel={setShowReadAllPanel}
+                views={views}
+                currentView={currentView}
+                setCurrentView={setCurrentView}
             />
             <Row
                 style={{
                     gap: 0,
+                    height: '100%',
                 }}
             >
                 {showReadAllPanel &&                
@@ -75,23 +86,30 @@ const Project = ({...props}) => {
                         {...props}
                     />
                 }
-                <Column
-                    style={{
-                        gap: 0,
-                        flex: 1,
-                        width: '100%',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Timeline
-                        {...props}
-                    />
-                    <FragmentGrid
-                        fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${TIMELINE_HEIGHT}px)`}
-                        projectId={projectId}
-                        {...props}
-                    />
-                </Column>
+                {
+                    currentView === views.FRAGMENT_GRID &&
+                    <Column
+                        style={{
+                            gap: 0,
+                            flex: 1,
+                            width: '100%',
+                            overflow: 'auto',
+                        }}
+                    >
+                        <Timeline
+                            {...props}
+                        />
+                        <FragmentGrid
+                            fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${TIMELINE_HEIGHT}px)`}
+                            projectId={projectId}
+                            {...props}
+                        />
+                    </Column>
+                }
+                {
+                    currentView === views.PRESENTATION &&
+                    <Presentation {...props}/>
+                }
             </Row>
         </Column>
     );
