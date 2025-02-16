@@ -1,9 +1,9 @@
 import { Column, Row, Typography } from 'components';
 import { useProjectStore } from 'stores';
 
-const LabelTimeline = ({selectedFragment, ...props}) => {
+const LabelTimeline = ({filteredFragments, selectedFragment}) => {
 
-    const {project, fragments} = useProjectStore();
+    const {project} = useProjectStore();
 
     const getFragmentInTimeline = (fragment) => {
         return (
@@ -12,7 +12,7 @@ const LabelTimeline = ({selectedFragment, ...props}) => {
                 style={{
                     gap: '1rem',
                     justifyContent: 'space-between',
-                    backgroundColor: fragment.id === fragments[selectedFragment].id && 'var(--background-color-highest)',
+                    backgroundColor: fragment.id === filteredFragments[selectedFragment].id && 'var(--background-color-highest)',
                     borderRadius: '5px',
                     flex: `${fragment.durationInSeconds} ${fragment.durationInSeconds} auto`,
                 }}
@@ -48,7 +48,7 @@ const LabelTimeline = ({selectedFragment, ...props}) => {
         );
     }
 
-    if (fragments.lenfth === 0) {
+    if (filteredFragments.lenfth === 0) {
         return (
             <Column>
                 <Typography>
@@ -92,7 +92,7 @@ const LabelTimeline = ({selectedFragment, ...props}) => {
                         gap: '0.2rem',
                     }}
                 >
-                    {fragments.map(fragment => (
+                    {filteredFragments.map(fragment => (
                         getFragmentInTimeline(fragment)
                     ))}
                 </Row>

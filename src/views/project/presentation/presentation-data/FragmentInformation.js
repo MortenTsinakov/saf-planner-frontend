@@ -1,20 +1,10 @@
 import { Column, Row, Typography } from 'components';
 import Label from 'components/ui/labels/Label';
 import { MdAccessTime } from 'react-icons/md';
-import { useProjectStore } from 'stores';
 
-const FragmentInformation = ({selectedFragment}) => {
+const FragmentInformation = ({filteredFragments, selectedFragment}) => {
 
-    const {fragments} = useProjectStore();
-    const fragment = fragments.length > selectedFragment ? fragments[selectedFragment] : null;
-
-    if (!fragment) {
-        return (
-            <Column>
-                There are no fragments yet...
-            </Column>
-        );
-    }
+    const fragment = filteredFragments[selectedFragment];
 
     return (
         <Column

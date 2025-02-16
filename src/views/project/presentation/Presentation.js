@@ -9,6 +9,7 @@ import { MdAdd, MdArrowBack, MdArrowForward } from 'react-icons/md';
 const Presentation = ({...props}) => {
 
     const {fragments} = useProjectStore();
+    const filteredFragments = fragments.filter(f => f.onTimeline === true);
     const [selectedFragment, setSelectedFragment] = useState(fragments.length > 0 ? 0 : null);
 
     const selectPreviousFragment = useCallback(() => {
@@ -16,8 +17,8 @@ const Presentation = ({...props}) => {
     }, [selectedFragment]);
 
     const selectNextFragment = useCallback(() => {
-        setSelectedFragment(Math.min(fragments.length - 1, selectedFragment + 1));
-    }, [fragments.length, selectedFragment]);
+        setSelectedFragment(Math.min(filteredFragments.length - 1, selectedFragment + 1));
+    }, [filteredFragments.length, selectedFragment]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -58,19 +59,32 @@ const Presentation = ({...props}) => {
         );
     }
 
+    if (filteredFragments.length === 0) {
+        return (
+            <Column style={{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', padding: '2rem'}}>
+                <Typography fontSize='medium'>
+                    No fragments on the timeline
+                </Typography>
+                <Typography color='label'>
+                    There are no fragments on the timeline or they have been filtered out.
+                </Typography>
+            </Column>
+        );
+    }
+
     return (
         <Column
             style={{width: '100%', height: '100%'}}
         >
-            <LabelTimeline selectedFragment={selectedFragment} {...props} />
+            <LabelTimeline filteredFragments={filteredFragments} selectedFragment={selectedFragment} {...props} />
             <Row style={{alignItems: 'center', justifyContent: 'center'}}>
                 <IconButton icon={<MdArrowBack />} title='Previous fragment' onClick={selectPreviousFragment}/>
-                <Typography>{selectedFragment + 1} / {fragments.length}</Typography>
+                <Typography>{selectedFragment + 1} / {filteredFragments.length}</Typography>
                 <IconButton icon={<MdArrowForward />} title='Next fragment' onClick={selectNextFragment}/>
             </Row>
             <Row style={{height: 'inherit', padding: '2rem', flexWrap: 'wrap'}}>
-                <FragmentInformation selectedFragment={selectedFragment} {...props} />
-                <FragmentImages selectedFragment={selectedFragment} {...props} />
+                <FragmentInformation filteredFragments={filteredFragments} selectedFragment={selectedFragment} {...props} />
+                <FragmentImages filteredFragments={filteredFragments} selectedFragment={selectedFragment} {...props} />
             </Row>
         </Column>
     );
