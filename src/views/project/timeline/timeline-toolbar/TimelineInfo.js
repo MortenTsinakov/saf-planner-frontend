@@ -15,7 +15,7 @@ const TimelineInfo = ({currentDuration}) => {
                     Current duration
                 </Typography>
                 <Typography
-                    color={currentDuration > project.estimatedLengthInSeconds ? 'error' : ''}
+                    color={project.estimatedLengthInSeconds && currentDuration > project.estimatedLengthInSeconds ? 'error' : ''}
                     fontSize='extrasmall'
                 >
                     {formatSecondsToHMS(currentDuration)}

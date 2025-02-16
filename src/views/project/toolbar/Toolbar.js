@@ -1,7 +1,7 @@
 import { IconButton, Row } from 'components';
-import { MdArticle } from "react-icons/md";
+import { MdArticle, MdGridView, MdOutlineTv } from "react-icons/md";
 
-const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel}) => {
+const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, views, currentView, setCurrentView}) => {
     return (
         <Row
             style={{
@@ -15,6 +15,20 @@ const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel}) => {
                 title='Read detailed descriptions'
                 onClick={() => setShowReadAllPanel(!showReadAllPanel)}
             />
+            {
+                currentView === views.FRAGMENT_GRID ?
+                <IconButton
+                    icon={<MdOutlineTv />}
+                    title='Switch to Presentation View'
+                    onClick={() => setCurrentView(views.PRESENTATION)}
+                />
+                :
+                <IconButton
+                    icon={<MdGridView />}
+                    title='Switch to Grid View'
+                    onClick={() => setCurrentView(views.FRAGMENT_GRID)}
+                />
+            }
         </Row>
     );
 }
