@@ -146,5 +146,6 @@ export const useProjectSettings = () => {
         deleteLabel,
         loading,
         error,
+        setError,
     };
 }

@@ -18,11 +18,10 @@ export const createLabelService = async (projectId, description, color) => {
  */
 export const updateLabelService = async (labelId, description, color) => {
     const putData = {
-        labelId: labelId,
         description: description,
         color: color,
     }
-    const response = await apiClient.put('/label', putData);
+    const response = await apiClient.put(`/label?id=${labelId}`, putData);
     return response.data;
 }
 
@@ -30,10 +29,7 @@ export const updateLabelService = async (labelId, description, color) => {
  * Delete label from entire project
  */
 export const deleteLabelService = async (labelId) => {
-    const deleteData = {
-        labelId: labelId
-    };
-    const response = await apiClient.delete('/label', {data: deleteData});
+    const response = await apiClient.delete(`/label?id=${labelId}`);
     return response.data;
 }
 
@@ -45,7 +41,7 @@ export const attachLabeltoFragmentService = async (labelId, fragmentId) => {
         labelId: labelId,
         fragmentId: fragmentId,
     }
-    const response = await apiClient.post('/label/fragment', postData);
+    const response = await apiClient.post('/fragment/label', postData);
     return response.data;
 }
 
@@ -57,7 +53,7 @@ export const attachLabelsToFragmentService = async (labelIds, fragmentId) => {
         labelIds: labelIds,
         fragmentId: fragmentId,
     }
-    const response = await apiClient.post('/label/fragment/all', postData);
+    const response = await apiClient.post('/fragment/labels', postData);
     return response.data;
 }
 
@@ -65,10 +61,6 @@ export const attachLabelsToFragmentService = async (labelIds, fragmentId) => {
  * Remove label from fragment
  */
 export const removeLabelFromFragmentService = async (labelId, fragmentId) => {
-    const deleteData = {
-        labelId: labelId,
-        fragmentId: fragmentId,
-    }
-    const response = await apiClient.delete('/label/fragment', {data: deleteData});
+    const response = await apiClient.delete(`/label/fragment?labelId=${labelId}&fragmentId=${fragmentId}`);
     return response.data;
 }

@@ -5,7 +5,7 @@ import apiClient from 'services/api/ApiClient'
  * GET request for fetching project with given id
  */
 export const fetchProjectByIdService = async(projectId) => {
-    const response = await apiClient.get(`/project?projectId=${projectId}`);
+    const response = await apiClient.get(`/projects?id=${projectId}`);
     return response.data;
 }
 
@@ -13,7 +13,7 @@ export const fetchProjectByIdService = async(projectId) => {
  * GET request for fetching all user projects.
  */
 export const fetchUserProjectsService = async () => {
-    const response = await apiClient.get('/project/all');
+    const response = await apiClient.get('/projects');
     return response.data;
 }
 
@@ -27,46 +27,43 @@ export const createProjectService = async (title, description, estimatedLengthIn
         estimatedLengthInSeconds: estimatedLengthInSeconds
     };
 
-    const response = await apiClient.post('/project', postData);
+    const response = await apiClient.post('/projects', postData);
     return response.data;
 }
 
 /**
- * PUT request for updating project title
+ * PATCH request for updating project title
  */
 export const updateProjectTitleService = async (projectId, title) => {
-    const putData = {
-        projectId: projectId,
+    const patchData = {
         title: title,
     }
 
-    const response = await apiClient.put('/project/title', putData);
+    const response = await apiClient.patch(`/projects?id=${projectId}`, patchData);
     return response.data;
 }
 
 /**
- * PUT request for updating project description.
+ * PATCH request for updating project description.
  */
 export const updateProjectDescriptionService = async (projectId, description) => {
-    const putData = {
-        projectId: projectId,
+    const patchData = {
         description: description,
     }
 
-    const response = await apiClient.put('/project/description', putData);
+    const response = await apiClient.patch(`/projects?id=${projectId}`, patchData);
     return response.data;
 }
 
 /**
- * PUT request for updating project's estimated length.
+ * PATCH request for updating project's estimated length.
  */
 export const updateProjectEstimatedLengthService = async (projectId, estimatedLengthInSeconds) => {
-    const putData = {
-        projectId: projectId,
+    const patchData = {
         estimatedLengthInSeconds: estimatedLengthInSeconds,
     }
 
-    const response = await apiClient.put('/project/estimated-length', putData);
+    const response = await apiClient.patch(`/projects?id=${projectId}`, patchData);
     return response.data;
 }
 
@@ -74,10 +71,6 @@ export const updateProjectEstimatedLengthService = async (projectId, estimatedLe
  * Delete request for deleting a project with given id.
  */
 export const deleteProjectService = async (projectId) => {
-    const deleteData = {
-        projectId: projectId
-    };
-    
-    const response = await apiClient.delete('/project', {data: deleteData});
+    const response = await apiClient.delete(`/projects?id=${projectId}`);
     return response.data;
 }
