@@ -26,8 +26,9 @@ const Project = ({...props}) => {
     const [readAllWidth, setReadAllWidth] = useState(350);
     const [showReadAllPanel, setShowReadAllPanel] = useState(false);
     const [currentView, setCurrentView] = useState(views.FRAGMENT_GRID);
+    const [filters, setFilters] = useState([]);
 
-    const { fetchProject, loading, error, setError } = useProjectStore();
+    const { fetchProject, loading, error, setError, fragments } = useProjectStore();
     const {addAlert} = useAlerts();
 
     useEffect(() => {
@@ -56,6 +57,28 @@ const Project = ({...props}) => {
         );
     }
 
+    const filterFragments = () => {
+
+        if (filters.length === 0) {
+            return fragments;
+        }
+
+        let filteredFragments = [];
+
+        for (const fragment of fragments) {
+            for (const label of fragment.labels) {
+                if (filters.includes(label.id)) {
+                    filteredFragments.push(fragment);
+                    break;
+                }
+            }
+        }
+
+        return filteredFragments;
+    }
+
+    const filteredFragments = filterFragments();
+
     return (
         <Column
             style={{
@@ -71,6 +94,8 @@ const Project = ({...props}) => {
                 views={views}
                 currentView={currentView}
                 setCurrentView={setCurrentView}
+                filters={filters}
+                setFilters={setFilters}
             />
             <Row
                 style={{
@@ -83,6 +108,7 @@ const Project = ({...props}) => {
                         readAllWidth={readAllWidth}
                         setReadAllWidth={setReadAllWidth}
                         readAllHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px)`}
+                        fragments={filteredFragments}
                         {...props}
                     />
                 }
@@ -97,18 +123,23 @@ const Project = ({...props}) => {
                         }}
                     >
                         <Timeline
+                            filteredFragments={filteredFragments}
                             {...props}
                         />
                         <FragmentGrid
                             fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${TIMELINE_HEIGHT}px)`}
                             projectId={projectId}
+                            filteredFragments={filteredFragments}
                             {...props}
                         />
                     </Column>
                 }
                 {
                     currentView === views.PRESENTATION &&
-                    <Presentation {...props}/>
+                    <Presentation
+                        filters={filters}
+                        {...props}
+                    />
                 }
             </Row>
         </Column>

@@ -1,7 +1,21 @@
-import { IconButton, Row } from 'components';
+import { IconButton, Row} from 'components';
 import { MdArticle, MdGridView, MdOutlineTv } from "react-icons/md";
+import { useProjectStore } from 'stores';
+import ApplyFilters from './toolbar-actions/ApplyFilters';
 
-const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, views, currentView, setCurrentView}) => {
+const Toolbar = ({
+    height,
+    showReadAllPanel,
+    setShowReadAllPanel,
+    views,
+    currentView,
+    setCurrentView,
+    filters,
+    setFilters
+}) => {
+
+    const {project} = useProjectStore();
+
     return (
         <Row
             style={{
@@ -15,6 +29,10 @@ const Toolbar = ({height, showReadAllPanel, setShowReadAllPanel, views, currentV
                 title='Read detailed descriptions'
                 onClick={() => setShowReadAllPanel(!showReadAllPanel)}
             />
+            {
+                project.labels.length > 0 &&
+                <ApplyFilters filters={filters} setFilters={setFilters}/>
+            }
             {
                 currentView === views.FRAGMENT_GRID ?
                 <IconButton
