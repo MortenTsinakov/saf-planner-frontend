@@ -2,10 +2,10 @@ import { PIXELS_PER_SECOND } from '../TimelineConstants';
 import './TimelineItem.css';
 
 
-const TimelineItem = ({fragment, zoom}) => {
+const TimelineItem = ({fragment, isFiltered, zoom}) => {
     return (
         <div
-            className="timeline-item"
+            className={`timeline-item ${isFiltered && 'filtered'}`}
             style={{
                 width: `${fragment.durationInSeconds * zoom * PIXELS_PER_SECOND}px`,
                 minWidth: `${fragment.durationInSeconds * zoom * PIXELS_PER_SECOND}px`,

@@ -1,9 +1,10 @@
 import { Column, Row, Typography } from 'components';
 import { useProjectStore } from 'stores';
 
-const LabelTimeline = ({filteredFragments, selectedFragment}) => {
+const LabelTimeline = ({filters, selectedFragment}) => {
 
-    const {project} = useProjectStore();
+    const {project, fragments} = useProjectStore();
+    const filteredFragments = fragments.filter(f => f.onTimeline);
 
     const getFragmentInTimeline = (fragment) => {
         return (
@@ -12,36 +13,40 @@ const LabelTimeline = ({filteredFragments, selectedFragment}) => {
                 style={{
                     gap: '1rem',
                     justifyContent: 'space-between',
-                    backgroundColor: fragment.id === filteredFragments[selectedFragment].id && 'var(--background-color-highest)',
+                    backgroundColor: fragment.id === filteredFragments[selectedFragment].id && 'var(--background-color-high)',
+                    filter: fragment.id === filteredFragments[selectedFragment].id && 'brightness(125%)',
                     borderRadius: '5px',
                     flex: `${fragment.durationInSeconds} ${fragment.durationInSeconds} auto`,
                 }}
             >
                 {            
                     project.labels.map(label => {
-                    if (fragment.labels.some(l => l.id === label.id)) {
-                        return (
-                            <div
-                                key={label.id}
-                                style={{
-                                    boxSizing: 'border-box',
-                                    backgroundColor: label.color,
-                                    height: '100%',
-                                    width: '100%',
-                                    borderRadius: '5px',
-                                }}
-                            />
-                        );
-                    } else {
-                        return (
-                            <div 
-                                key={label.id}
-                                style={{
-                                    height: '100%',
-                                    width: '100%',
-                                }}
-                            />
-                        );
+                        if (filters.length > 0 && !filters.includes(label.id)) {
+                            return null;
+                        }
+                        if (fragment.labels.some(l => l.id === label.id)) {
+                            return (
+                                <div
+                                    key={label.id}
+                                    style={{
+                                        boxSizing: 'border-box',
+                                        backgroundColor: label.color,
+                                        height: '100%',
+                                        width: '100%',
+                                        borderRadius: '5px',
+                                    }}
+                                />
+                            );
+                        } else {
+                            return (
+                                <div 
+                                    key={label.id}
+                                    style={{
+                                        height: '100%',
+                                        width: '100%',
+                                    }}
+                                />
+                            );
                     }
                 })}
             </Column>
@@ -76,6 +81,7 @@ const LabelTimeline = ({filteredFragments, selectedFragment}) => {
                     }}
                 >
                     {project.labels.map(label => (
+                        (filters.length === 0 || filters.includes(label.id)) &&
                         <Typography
                             key={label.id}
                             style={{textWrap: 'nowrap'}}

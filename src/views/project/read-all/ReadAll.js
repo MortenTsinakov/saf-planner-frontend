@@ -2,9 +2,9 @@ import { Column, Divider, Row, Typography } from 'components';
 import { useState } from 'react';
 import { useProjectStore } from 'stores';
 
-const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth}) => {
+const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth, fragments}) => {
 
-    const {project, fragments} = useProjectStore();
+    const {project} = useProjectStore();
 
     const [isResizing, setIsResizing] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -55,6 +55,7 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth}) => {
                 <Divider />
                 {
                 fragments.map(f => (
+                    f.onTimeline &&
                     <Column
                         key={f.id}
                         data-testid='fragment'
@@ -66,7 +67,7 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth}) => {
                 ))}
                 </Column>
                 :
-                <Typography>This project has no fragments yet...</Typography>
+                <Typography>No fragments to display...</Typography>
                 }
             </Column>
             <Column

@@ -7,7 +7,7 @@ import TimelineToolbar from './timeline-toolbar/TimelineToolbar';
 import TimelineInfo from './timeline-toolbar/TimelineInfo';
 import { useProjectStore } from 'stores';
 
-const Timeline = ({...props}) => {
+const Timeline = ({filteredFragments, ...props}) => {
 
     const {project, fragments} = useProjectStore();
     const [zoom, setZoom] = useState(DEFAULT_ZOOM);
@@ -65,6 +65,7 @@ const Timeline = ({...props}) => {
                         <TimelineItem
                             key={f.id}
                             fragment={f}
+                            isFiltered={filteredFragments.includes(f)}
                             zoom={zoom}
                         />
                     ))}

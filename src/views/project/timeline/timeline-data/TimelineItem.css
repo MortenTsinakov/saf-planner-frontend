@@ -1,6 +1,10 @@
 .timeline-item {
     height: 100%;
     border: 1px solid var(--background-color-low);
-    background-color: var(--primary-color);
     border-radius: 5px;
+    background-color: var(--background-color-highest);
+}
+
+.timeline-item.filtered {
+    background-color: var(--primary-color);
 }

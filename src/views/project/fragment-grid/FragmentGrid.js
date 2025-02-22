@@ -16,7 +16,7 @@ import { possibleSidebarStates } from './fragment-grid-data/SidebarStates';
  * Grid that displays project fragments.
  * It's also possible to add new fragments on the grid.
  */
-const FragmentGrid = ({fragmentGridHeight, ...props}) => {
+const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
 
     const sidebarStates = possibleSidebarStates;
     const {
@@ -330,6 +330,7 @@ const FragmentGrid = ({fragmentGridHeight, ...props}) => {
                                     <FragmentCard
                                         key={f.id}
                                         fragment={f}
+                                        isFiltered={filteredFragments.includes(f)}
                                         {...props}
                                     />
                                 ))}

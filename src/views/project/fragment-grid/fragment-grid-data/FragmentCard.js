@@ -9,6 +9,7 @@ import { possibleSidebarStates } from './SidebarStates';
 const FragmentCard = (
     {
         fragment,
+        isFiltered,
         ...props}) => 
     {
 
@@ -52,7 +53,8 @@ const FragmentCard = (
                         height: '200px',
                         padding: '2rem',
                         gap: '0.8rem',
-                        justifyContent: 'space-between'
+                        justifyContent: 'space-between',
+                        filter: !isFiltered && 'brightness(60%)'
                     }}
                     data-testid={'fragment-card'}
                 >
