@@ -324,6 +324,7 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                                     maxHeight: fragmentGridHeight,
                                     overflow: 'auto',
                                     flex: '1 1 0',
+                                    height: 'inherit',
                                 }}
                             >
                                 {fragments.map(f => (

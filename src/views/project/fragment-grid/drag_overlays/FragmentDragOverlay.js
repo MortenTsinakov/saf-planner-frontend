@@ -1,15 +1,7 @@
 import { Card, Column, IconButton, Row, Typography } from 'components';
-import { MdAccessTime, MdMoreHoriz } from 'react-icons/md';
+import { MdAccessTime, MdDragIndicator } from 'react-icons/md';
 
 const FragmentDragOverlay = ({fragment}) => {
-
-    const iconStyle = {
-        fontSize: '2.2rem',
-        margin: 0,
-        padding: 0,
-        alignItems: 'center',
-    };
-
     return (
         <Card
             style={{
@@ -24,9 +16,11 @@ const FragmentDragOverlay = ({fragment}) => {
             <Row
                 style={{height: '2rem', gap: '1rem', justifyContent: 'space-between'}}
             >
-                <IconButton
-                    icon={<MdMoreHoriz />}
-                    style={iconStyle}
+                <MdDragIndicator
+                    style={{
+                        fontSize: '2.5rem',
+                        marginLeft: -5
+                    }}
                 />
                 <IconButton
                     style={{
