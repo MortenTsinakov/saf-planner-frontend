@@ -2,10 +2,7 @@ import { Column, Row, Typography } from 'components';
 import Label from 'components/ui/labels/Label';
 import { MdAccessTime } from 'react-icons/md';
 
-const FragmentInformation = ({filteredFragments, selectedFragment}) => {
-
-    const fragment = filteredFragments[selectedFragment];
-
+const FragmentInformation = ({fragment}) => {
     return (
         <Column
             style={{

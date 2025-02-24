@@ -124,8 +124,8 @@ const Presentation = ({filters, ...props}) => {
                 <IconButton icon={<MdArrowForward />} title='Next fragment' onClick={selectNextFragment}/>
             </Row>
             <Row style={{height: 'inherit', padding: '2rem', flexWrap: 'wrap'}}>
-                <FragmentInformation filteredFragments={filteredFragments} selectedFragment={selectedFragment} {...props} />
-                <FragmentImages filteredFragments={filteredFragments} selectedFragment={selectedFragment} {...props} />
+                <FragmentInformation fragment={filteredFragments[selectedFragment]} {...props} />
+                <FragmentImages fragment={filteredFragments[selectedFragment]} {...props} />
             </Row>
         </Column>
     );
