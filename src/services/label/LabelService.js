@@ -61,6 +61,6 @@ export const attachLabelsToFragmentService = async (labelIds, fragmentId) => {
  * Remove label from fragment
  */
 export const removeLabelFromFragmentService = async (labelId, fragmentId) => {
-    const response = await apiClient.delete(`/label/fragment?labelId=${labelId}&fragmentId=${fragmentId}`);
+    const response = await apiClient.delete(`/fragment/label?labelId=${labelId}&fragmentId=${fragmentId}`);
     return response.data;
 }
