@@ -6,7 +6,7 @@ const FragmentInformation = ({fragment}) => {
     return (
         <Column
             style={{
-                width: '45%',
+                width: '30%',
                 minWidth: '350px',
                 paddingBottom: '2rem',
             }}

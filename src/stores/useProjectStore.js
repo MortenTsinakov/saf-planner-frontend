@@ -4,10 +4,12 @@ import { createFragment, deleteFragment, moveFragment, updateFragmentDuration, u
 import { setSidebarState } from './project-store-actions/sidebarActions';
 import { setFragmentToEdit } from './project-store-actions/sidebarActions';
 import { attachLabelToFragment, createLabel, removeLabelFromFragment } from './project-store-actions/labelActions';
+import { fetchImage, uploadImage } from './project-store-actions/imageActions';
 
 const useProjectStore = create((set, get) => ({
     project: null,
     fragments: [],
+    images: new Map(),
     loading: true,
     error: null,
     sidebarState: {content: null, open: false},
@@ -18,6 +20,7 @@ const useProjectStore = create((set, get) => ({
     // Basic setters
     setProject: (project) => set({ project }),
     setFragments: (fragments) => set({ fragments }),
+    setImages: (images) => set({ images }),
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
     setNewFragments: (newFragments) => set({ newFragments }),
@@ -41,6 +44,10 @@ const useProjectStore = create((set, get) => ({
     createLabel: createLabel(get, set),
     attachLabelToFragment: attachLabelToFragment(get, set),
     removeLabelFromFragment: removeLabelFromFragment(get, set),
+
+    // Image actions
+    fetchImage: fetchImage(get, set),
+    uploadImage: uploadImage(get, set),
 }));
 
 export default useProjectStore;

@@ -6,3 +6,17 @@ export const fetchImageService = async (imageId) => {
     });
     return response.data;
 }
+
+export const uploadImageService = async (fragmentId, file) => {
+    const formData = new FormData();
+    formData.append("fragmentId", fragmentId);
+    formData.append("image", file);
+
+    const response = await apiClient.post("/images", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+
+    return response.data;
+}

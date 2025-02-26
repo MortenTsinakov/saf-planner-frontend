@@ -18,3 +18,9 @@ export {
 export {
     restrictOnlyFragments
 } from './custom-modifiers/restrictOnlyFragments';
+
+export {
+    isValidImageFile,
+    isCorrectSize,
+    scaleImage,
+} from './image/ImageUtils';

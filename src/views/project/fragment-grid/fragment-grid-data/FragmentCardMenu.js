@@ -2,8 +2,7 @@ import { Column, Row, TextButton, Typography } from "components";
 import { MdDelete, MdEdit, MdImage, MdModeComment } from "react-icons/md";
 import { useProjectStore } from "stores";
 import { possibleSidebarStates } from "./SidebarStates";
-
-const FragmentCardMenu = ({fragment, x, y, handleCloseMenu, setShowDeleteFragmentModal, ...props}) => {
+const FragmentCardMenu = ({fragment, x, y, handleCloseMenu, setShowDeleteFragmentModal, setShowAttachImageModal, ...props}) => {
 
     const {setFragmentToEdit, setSidebarState} = useProjectStore();
     const sidebarStates = possibleSidebarStates;
@@ -16,6 +15,11 @@ const FragmentCardMenu = ({fragment, x, y, handleCloseMenu, setShowDeleteFragmen
 
     const handleDeleteFragmentClick = () => {
         setShowDeleteFragmentModal(true);
+    }
+
+    const handleAttachImageClick = () => {
+        handleCloseMenu();
+        setShowAttachImageModal(true);
     }
 
 
@@ -42,7 +46,9 @@ const FragmentCardMenu = ({fragment, x, y, handleCloseMenu, setShowDeleteFragmen
                     <Typography>Edit fragment</Typography>
                 </Row>
             </TextButton>
-            <TextButton>
+            <TextButton
+                onClick={handleAttachImageClick}
+            >
                 <Row style={{justifyContent: 'space-between'}}>
                     <MdImage />
                     <Typography>Attach image</Typography>

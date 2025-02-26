@@ -1,15 +1,14 @@
-import { Column, IconButton, Loading } from 'components';
+import { Column, IconButton, Loading, Row } from 'components';
 import Image from './Image';
-import { useImages } from 'hooks';
 import { useCallback, useEffect, useState } from 'react';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { useProjectStore } from 'stores';
 
 const FragmentImages = ({fragment, ...props}) => {
 
-    const {fetchImage} = useImages();
+    const {fetchImage} = useProjectStore();
     const [images, setImages] = useState(null);
     const [currentImageIdx, setCurrentImageIdx] = useState(0);
-    const [imageIsHovered, setImageIsHovered] = useState(false);
 
     const handleNextImageClick = useCallback(() => {
         setCurrentImageIdx(Math.min(images.length - 1, currentImageIdx + 1));
@@ -18,6 +17,14 @@ const FragmentImages = ({fragment, ...props}) => {
     const handlePreviousImageClick = useCallback(() => {
         setCurrentImageIdx(Math.max(0, currentImageIdx - 1));
     }, [currentImageIdx]);
+
+    useEffect(() => {
+        const resetCurrentImageIdx = () => {
+            setCurrentImageIdx(0);
+        }
+
+        resetCurrentImageIdx();
+    }, [fragment.id]);
 
     useEffect(() => {
         const fetchFragmentImages = async () => {
@@ -66,59 +73,87 @@ const FragmentImages = ({fragment, ...props}) => {
         );
     }
 
+    if (images.length <= currentImageIdx) {
+        return;
+    }
+
     return (
-        <Column
+        images.length > 0 &&
+        <Row
             style={{
-                borderRadius: '10px',
                 flex: 1,
-                minWidth: '300px', 
-                textAlign: 'center',
-                height: 'fit-content',
-                border: fragment.images.length > 0 && '1px solid var(--main-gray)',
+                height: '100%',
+                justifyContent: 'center',
             }}
-            onMouseEnter={() => setImageIsHovered(true)}
-            onMouseLeave={() => setImageIsHovered(false)}
         >
-            {
-                images.length > 0 &&
-                <Column style={{position: 'relative'}}>
-                    {
-                        imageIsHovered &&
-                        currentImageIdx > 0 &&
+            <Row
+                style={{
+                    borderRadius: '10px',
+                }}
+            >
+                <Image
+                    imageId={images[currentImageIdx].imageId}
+                    imageBlob={images[currentImageIdx].imageBlob}
+                />
+                <Column
+                    style={{
+                        overflow: 'hidden',
+                        maxHeight: 750,
+                        height: '100%',
+                        borderRadius: '10px',
+                        backgroundColor: 'var(--background-color-medium)',
+                        position: 'relative',
+                    }}
+                >
+                    <Column
+                        style={{
+                            gap: 0,
+                            transform: `translateY(${-currentImageIdx * 150 + 300}px)`,
+                        }}
+                    >
+                        {images.map((im, index) => (
+                            <img
+                                key={im.imageId}
+                                src={URL.createObjectURL(im.imageBlob)}
+                                alt='carousel-image'
+                                style={{
+                                    width: 150,
+                                    height: 150,
+                                    objectFit: 'cover',
+                                    padding: 5,
+                                    borderRadius: '10px',
+                                    border: currentImageIdx === index && '1px solid var(--primary-color)'
+                                }}
+                            />
+                        ))}
+                    </Column>
+                    <Row>
                         <IconButton
+                            style={{
+                                position: 'absolute',
+                                background: 'linear-gradient(to bottom, var(--background-color-low), transparent',
+                                width: '100%',
+                                top: 0,
+                            }}
                             icon={<MdKeyboardArrowUp />}
                             onClick={handlePreviousImageClick}
-                            style={{
-                                position: 'absolute',
-                                width: '100%',
-                                backgroundColor: 'rgba(150, 150, 150, 0.15)',
-                                borderRadius: '10px 10px 0 0'
-                            }}
                         />
-                    }
-                    <Image
-                        key={images[currentImageIdx].imageId}
-                        imageId={images[currentImageIdx].imageId}
-                        imageBlob={images[currentImageIdx].imageBlob}
-                    />
-                    {
-                        imageIsHovered &&
-                        currentImageIdx < images.length - 1 &&
+                    </Row>
+                    <Row>
                         <IconButton
-                            icon={<MdKeyboardArrowDown />}
-                            onClick={handleNextImageClick}
                             style={{
                                 position: 'absolute',
+                                background: 'linear-gradient(to top, var(--background-color-low), transparent',
                                 width: '100%',
-                                backgroundColor: 'rgba(150, 150, 150, 0.15)',
-                                borderRadius: '0 0 10px 10px ',
                                 bottom: 0,
                             }}
+                            icon={<MdKeyboardArrowDown />}
+                            onClick={handleNextImageClick}
                         />
-                    }
+                    </Row>
                 </Column>
-            }
-        </Column>
+            </Row>
+        </Row>
     );
 }
  
