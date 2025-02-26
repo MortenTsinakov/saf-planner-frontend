@@ -1,30 +1,57 @@
-import { Loading } from "components";
+import { Loading, Typography } from "components";
+import { useState } from "react";
 
 const Image = ({
-    imageId,
     imageBlob,
-    maxSize=750,
 }) => {
 
     const imageUrl = URL.createObjectURL(imageBlob);
+    const [hovering, setHovering] = useState(false);
 
     return (
         imageUrl ?
-        <img
-            src={imageUrl}
-            alt=""
+        <div
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
             style={{
-                borderRadius: '10px',
-                width: '100%',
-                minWidth: 200,
-                maxWidth: 750,
-                height: '100%',
-                minHeight: 200,
-                maxHeight: 750,
-                objectFit: 'contain',
-                backgroundColor: 'var(--background-color-medium)',
+                position: 'relative', 
+                height: 'fit-content'
             }}
-        /> :
+        >    
+            <img
+                src={imageUrl}
+                alt=""
+                style={{
+                    borderRadius: '10px',
+                    aspectRatio: 16 / 9,
+                    width: '100%',
+                    minWidth: 256,
+                    maxWidth: 1024,
+                    height: 576,
+                    minHeight: 144,
+                    maxHeight: 576,
+                    objectFit: 'contain',
+                    backgroundColor: 'var(--background-color-medium)',
+                }}
+            />
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                    borderRadius: '0 0 10px 10px',
+                    padding: '1rem',
+                    opacity: hovering ? 1 : 0,
+                    transition: 'opacity 0.2s ease-in-out',
+                }}
+            >
+                <Typography fontSize='small' color='label'>
+                    This is where the image description will appear
+                </Typography>
+            </div>
+        </div>
+        :
         <Loading />
     );
 }

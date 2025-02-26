@@ -84,6 +84,8 @@ const FragmentImages = ({fragment, ...props}) => {
                 flex: 1,
                 height: '100%',
                 justifyContent: 'center',
+                flexWrap: 'wrap',
+                minWidth: 500,
             }}
         >
             <Row
@@ -91,24 +93,22 @@ const FragmentImages = ({fragment, ...props}) => {
                     borderRadius: '10px',
                 }}
             >
-                <Image
-                    imageId={images[currentImageIdx].imageId}
-                    imageBlob={images[currentImageIdx].imageBlob}
-                />
                 <Column
                     style={{
                         overflow: 'hidden',
-                        maxHeight: 750,
+                        maxHeight: 576,
                         height: '100%',
-                        borderRadius: '10px',
-                        backgroundColor: 'var(--background-color-medium)',
+                        borderRadius: '10px 0 0 10px',
+                        paddingRight: '1rem',
+                        borderRight: '1px solid var(--primary-color)',
                         position: 'relative',
                     }}
                 >
                     <Column
                         style={{
                             gap: 0,
-                            transform: `translateY(${-currentImageIdx * 150 + 300}px)`,
+                            transform: currentImageIdx > 1 && `translateY(${-(currentImageIdx - 1) * 150}px)`,
+                            transition: 'transform 0.5s ease-in-out',
                         }}
                     >
                         {images.map((im, index) => (
@@ -122,36 +122,46 @@ const FragmentImages = ({fragment, ...props}) => {
                                     objectFit: 'cover',
                                     padding: 5,
                                     borderRadius: '10px',
-                                    border: currentImageIdx === index && '1px solid var(--primary-color)'
+                                    opacity: currentImageIdx === index ? 1 : 0.2,
+                                    transition: 'opacity 0.5s ease-in-out',
                                 }}
                             />
                         ))}
                     </Column>
-                    <Row>
-                        <IconButton
-                            style={{
-                                position: 'absolute',
-                                background: 'linear-gradient(to bottom, var(--background-color-low), transparent',
-                                width: '100%',
-                                top: 0,
-                            }}
-                            icon={<MdKeyboardArrowUp />}
-                            onClick={handlePreviousImageClick}
-                        />
-                    </Row>
-                    <Row>
-                        <IconButton
-                            style={{
-                                position: 'absolute',
-                                background: 'linear-gradient(to top, var(--background-color-low), transparent',
-                                width: '100%',
-                                bottom: 0,
-                            }}
-                            icon={<MdKeyboardArrowDown />}
-                            onClick={handleNextImageClick}
-                        />
-                    </Row>
+                    {
+                        currentImageIdx > 0 &&
+                        <Row>
+                            <IconButton
+                                style={{
+                                    position: 'absolute',
+                                    background: 'linear-gradient(to bottom, var(--background-color-low), transparent',
+                                    width: '100%',
+                                    top: 0,
+                                }}
+                                icon={<MdKeyboardArrowUp />}
+                                onClick={handlePreviousImageClick}
+                            />
+                        </Row>
+                    }
+                    {
+                        currentImageIdx < images.length - 1 &&
+                        <Row>
+                            <IconButton
+                                style={{
+                                    position: 'absolute',
+                                    background: 'linear-gradient(to top, var(--background-color-low), transparent',
+                                    width: '100%',
+                                    bottom: 0,
+                                }}
+                                icon={<MdKeyboardArrowDown />}
+                                onClick={handleNextImageClick}
+                            />
+                        </Row>
+                    }
                 </Column>
+                <Image
+                    imageBlob={images[currentImageIdx].imageBlob}
+                />
             </Row>
         </Row>
     );
