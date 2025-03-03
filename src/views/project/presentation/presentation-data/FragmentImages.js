@@ -3,7 +3,7 @@ import Image from './Image';
 import { useCallback, useEffect, useState } from 'react';
 import { MdAddPhotoAlternate, MdDelete, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { useProjectStore } from 'stores';
-import AttachImage from 'views/project/fragment-grid/attach_image/AttachImage';
+import AttachImage from 'views/project/attach_image/AttachImage';
 import { useAlerts } from 'hooks';
 
 const FragmentImages = ({fragment, ...props}) => {
@@ -38,6 +38,9 @@ const FragmentImages = ({fragment, ...props}) => {
         const deletionWasSuccessful = await deleteImage(fragmentId, imageId);
         if (deletionWasSuccessful) {
             setShowDeleteImageModal(false);
+            if (currentImageIdx + 1 >= images.length) {
+                setCurrentImageIdx(currentImageIdx - 1);
+            }
             addAlert("Image deleted", "success");
         } else {
             addAlert(error.message, "error");
@@ -55,10 +58,11 @@ const FragmentImages = ({fragment, ...props}) => {
     useEffect(() => {
         const fetchFragmentImages = async () => {
             let fetchedImages = [];
-            for (const imageId of fragment.images) {
-                const imageBlob = await fetchImage(imageId);
+            for (const image of fragment.images) {
+                const imageBlob = await fetchImage(image.image);
                 fetchedImages.push({
-                    imageId: imageId,
+                    imageId: image.image,
+                    description: image.description,
                     imageBlob: imageBlob,
                 });
             }
@@ -99,7 +103,7 @@ const FragmentImages = ({fragment, ...props}) => {
         );
     }
 
-    if (images.length <= currentImageIdx) {
+    if (images.length === 0) {
         return (
             <Column
                 style={{
@@ -180,8 +184,8 @@ const FragmentImages = ({fragment, ...props}) => {
                                     opacity: currentImageIdx === index ? 1 : 0.2,
                                     transition: 'opacity 0.5s ease-in-out',
                                 }}
-                                />
-                            ))}
+                            />
+                        ))}
                     </Column>
                     {
                         currentImageIdx > 0 &&
@@ -217,6 +221,7 @@ const FragmentImages = ({fragment, ...props}) => {
                 <Row>
                     <Image
                         imageBlob={images[currentImageIdx].imageBlob}
+                        description={images[currentImageIdx].description}
                     />
                     <Column>
                         <IconButton

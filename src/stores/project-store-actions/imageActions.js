@@ -16,11 +16,11 @@ export const fetchImage = (get, set) => async (imageId) => {
     }
 }
 
-export const uploadImage = (get, set) => async (fragmentId, image) => {
+export const uploadImage = (get, set) => async (fragmentId, image, description) => {
     try {
         set({error: null});
-        const response = await uploadImageService(fragmentId, image);
-        const fragments = [...get().fragments.map(f => f.id !== response.fragmentId ? f : {...f, images: [...f.images, response.image]})];
+        const response = await uploadImageService(fragmentId, image, description);
+        const fragments = [...get().fragments.map(f => f.id !== response.fragmentId ? f : {...f, images: [...f.images, response]})];
         set({ fragments: fragments });
         return true;
     } catch (err) {
@@ -33,7 +33,7 @@ export const deleteImage = (get, set) => async (fragmentId, imageId) => {
     try {
         set({error: null});
         const response = await deleteImageService(imageId);
-        const fragments = [...get().fragments.map(f => f.id !== fragmentId ? f : {...f, images: [...f.images.filter(i => i !== response.image)]})];
+        const fragments = [...get().fragments.map(f => f.id !== fragmentId ? f : {...f, images: [...f.images.filter(i => i.image !== response.image)]})];
         get().images.delete(imageId);
         set({ fragments: fragments });
         return true;

@@ -28,12 +28,13 @@
 }
 
 .input-area-input {
-    padding: 1rem;
+    /* padding: 1rem; */
     background-color: var(--text-color);
     outline: none;
     resize: none;
     border-radius: 5px;
-    height: inherit;
+    height: 50px;
+    overflow-y: auto;
 }
 
 .input-area-input:focus {

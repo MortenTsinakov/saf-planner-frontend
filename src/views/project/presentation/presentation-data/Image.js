@@ -3,6 +3,7 @@ import { useState } from "react";
 
 const Image = ({
     imageBlob,
+    description,
 }) => {
 
     const imageUrl = URL.createObjectURL(imageBlob);
@@ -34,22 +35,25 @@ const Image = ({
                     backgroundColor: 'var(--background-color-medium)',
                 }}
             />
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    width: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                    borderRadius: '0 0 10px 10px',
-                    padding: '1rem',
-                    opacity: hovering ? 1 : 0,
-                    transition: 'opacity 0.2s ease-in-out',
-                }}
-            >
-                <Typography fontSize='small' color='label'>
-                    This is where the image description will appear
-                </Typography>
-            </div>
+            {
+                description.length > 0 &&            
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        width: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                        borderRadius: '0 0 10px 10px',
+                        padding: '1rem',
+                        opacity: hovering ? 1 : 0,
+                        transition: 'opacity 0.2s ease-in-out',
+                    }}
+                >
+                    <Typography fontSize='small' color='label'>
+                        {description}
+                    </Typography>
+                </div>
+            }
         </div>
         :
         <Loading />

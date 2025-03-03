@@ -17,7 +17,6 @@ const InputArea = ({style,
             {label && <label className="input-area-label">{label}</label> }
             <textarea
                 className={`input-area-input color-${color ? color : 'primary'}`}
-                // style={style}
                 type={type}
                 placeholder={placeholder}
                 value={value}

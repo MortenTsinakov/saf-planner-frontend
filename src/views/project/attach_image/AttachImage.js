@@ -2,7 +2,7 @@ import { Column, FilledButton, Modal, OutlineButton } from "components";
 import { useState } from "react";
 import UploadImageFromDevice from "./UploadImageFromDevice";
 
-const AttachImage = ({fragment, setShowAttachImageModal}) => {
+const AttachImage = ({fragment, setShowAttachImageModal, ...props}) => {
 
     const AttachImageModes = Object.freeze({
         FROM_DEVICE: 0,
@@ -38,6 +38,7 @@ const AttachImage = ({fragment, setShowAttachImageModal}) => {
             <UploadImageFromDevice
                 fragment={fragment} 
                 setShowAttachImageModal={setShowAttachImageModal}
+                {...props}
             />
         );
     }

@@ -7,10 +7,11 @@ export const fetchImageService = async (imageId) => {
     return response.data;
 }
 
-export const uploadImageService = async (fragmentId, file) => {
+export const uploadImageService = async (fragmentId, file, description) => {
     const formData = new FormData();
     formData.append("fragmentId", fragmentId);
     formData.append("image", file);
+    formData.append("description", description)
 
     const response = await apiClient.post("/images", formData, {
         headers: {

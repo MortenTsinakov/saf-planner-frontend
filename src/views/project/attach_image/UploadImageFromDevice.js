@@ -1,11 +1,11 @@
-import { Column, FilledButton, IconButton, Modal, OutlineButton, Row, Typography } from "components";
+import { Column, FilledButton, IconButton, InputArea, Modal, OutlineButton, Row, Typography } from "components";
 import { useAlerts } from "hooks";
 import { useRef, useState } from "react";
 import { MdAdd, MdClose } from "react-icons/md";
 import { useProjectStore } from "stores";
 import { isCorrectSize, isValidImageFile, scaleImage } from "utils";
 
-const UploadImageFromDevice = ({fragment, setShowAttachImageModal}) => {
+const UploadImageFromDevice = ({fragment, setShowAttachImageModal, ...props}) => {
 
     const {addAlert} = useAlerts();
     const {uploadImage, error} = useProjectStore();
@@ -13,6 +13,7 @@ const UploadImageFromDevice = ({fragment, setShowAttachImageModal}) => {
     const fileInputRef = useRef(null);
     const [image, setImage] = useState(null);
     const [file, setFile] = useState(null);
+    const [description, setDescription] = useState("");
 
     const handleSelectImage = async (file) => {
         if (!isValidImageFile(file)) {
@@ -45,6 +46,10 @@ const UploadImageFromDevice = ({fragment, setShowAttachImageModal}) => {
         }
     }
 
+    const handleDescriptionChange = (e) => {
+        setDescription(e.target.value);
+    }
+
     const handleRemoveImageClick = () => {
         setImage(null);
         setFile(null);
@@ -57,7 +62,7 @@ const UploadImageFromDevice = ({fragment, setShowAttachImageModal}) => {
     }
 
     const handleSaveClick = async () => {
-        const uploadWasSuccessful = await uploadImage(fragment.id, file);
+        const uploadWasSuccessful = await uploadImage(fragment.id, file, description);
         if (uploadWasSuccessful) {
             addAlert("Attached image to the fragment", "success");
             setImage(null);
@@ -87,7 +92,7 @@ const UploadImageFromDevice = ({fragment, setShowAttachImageModal}) => {
                     <Column
                         style={{
                             width: '100%',
-                            height: '300px',
+                            height: !props.isMobile && '300px',
                             border: '1px dashed gray',
                             borderRadius: '10px',
                             padding: '2rem',
@@ -121,9 +126,33 @@ const UploadImageFromDevice = ({fragment, setShowAttachImageModal}) => {
                             icon={<MdClose />}
                             onClick={handleRemoveImageClick}
                         />
-                        <img src={image} alt='Upload' style={{borderRadius: '10px'}}/>
+                        <img
+                            src={image}
+                            alt='Upload'
+                            style={{
+                                borderRadius: '10px',
+                                backgroundColor: 'var(--background-color-highest)',
+                                width: 750,
+                                aspectRatio: 16 / 9,
+                                objectFit: 'contain',
+                            }}
+                        />
                     </Column>
                 }
+                <Column>
+                    <Typography>Description</Typography>
+                    <Typography 
+                        fontSize='extrasmall' 
+                        color='label'
+                        style={{textWrap: 'wrap'}}
+                    >
+                        Would you like to describe why the image is attached to the fragment? You can do it here.
+                    </Typography>
+                    <InputArea
+                        value={description}
+                        onChange={handleDescriptionChange}
+                    />
+                </Column>
                 <Row style={{justifyContent: 'space-between'}}>
                     <OutlineButton
                         onClick={handleCancelClick}
