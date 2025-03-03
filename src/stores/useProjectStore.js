@@ -4,7 +4,7 @@ import { createFragment, deleteFragment, moveFragment, updateFragmentDuration, u
 import { setSidebarState } from './project-store-actions/sidebarActions';
 import { setFragmentToEdit } from './project-store-actions/sidebarActions';
 import { attachLabelToFragment, createLabel, removeLabelFromFragment } from './project-store-actions/labelActions';
-import { fetchImage, uploadImage } from './project-store-actions/imageActions';
+import { deleteImage, fetchImage, uploadImage } from './project-store-actions/imageActions';
 
 const useProjectStore = create((set, get) => ({
     project: null,
@@ -48,6 +48,7 @@ const useProjectStore = create((set, get) => ({
     // Image actions
     fetchImage: fetchImage(get, set),
     uploadImage: uploadImage(get, set),
+    deleteImage: deleteImage(get, set),
 }));
 
 export default useProjectStore;

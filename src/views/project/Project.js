@@ -139,6 +139,7 @@ const Project = ({...props}) => {
                     <Presentation
                         presentationViewHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px`}
                         filters={filters}
+                        filteredFragments={filteredFragments}
                         {...props}
                     />
                 }

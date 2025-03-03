@@ -1,14 +1,20 @@
-import { Column, IconButton, Loading, Row } from 'components';
+import { Column, FilledButton, IconButton, Loading, Modal, Row, Typography } from 'components';
 import Image from './Image';
 import { useCallback, useEffect, useState } from 'react';
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { MdAddPhotoAlternate, MdDelete, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { useProjectStore } from 'stores';
+import AttachImage from 'views/project/fragment-grid/attach_image/AttachImage';
+import { useAlerts } from 'hooks';
 
 const FragmentImages = ({fragment, ...props}) => {
 
-    const {fetchImage} = useProjectStore();
+    const {fetchImage, deleteImage, error} = useProjectStore();
+    const {addAlert} = useAlerts();
+
     const [images, setImages] = useState(null);
     const [currentImageIdx, setCurrentImageIdx] = useState(0);
+    const [showAttachImageModal, setShowAttachImageModal] = useState(false);
+    const [showDeleteImageModal, setShowDeleteImageModal] = useState(false);
 
     const handleNextImageClick = useCallback(() => {
         setCurrentImageIdx(Math.min(images.length - 1, currentImageIdx + 1));
@@ -18,13 +24,33 @@ const FragmentImages = ({fragment, ...props}) => {
         setCurrentImageIdx(Math.max(0, currentImageIdx - 1));
     }, [currentImageIdx]);
 
+    const handleAttachImageClick = () => {
+        setShowAttachImageModal(true);
+    }
+
+    const handleDeleteImageClick = () => {
+        setShowDeleteImageModal(true);
+    }
+
+    const handleConfirmDelete = async () => {
+        const fragmentId = fragment.id;
+        const imageId = images[currentImageIdx].imageId;
+        const deletionWasSuccessful = await deleteImage(fragmentId, imageId);
+        if (deletionWasSuccessful) {
+            setShowDeleteImageModal(false);
+            addAlert("Image deleted", "success");
+        } else {
+            addAlert(error.message, "error");
+        }
+    }
+
     useEffect(() => {
         const resetCurrentImageIdx = () => {
             setCurrentImageIdx(0);
         }
 
         resetCurrentImageIdx();
-    }, [fragment.id]);
+    }, [fragment.id, images]);
 
     useEffect(() => {
         const fetchFragmentImages = async () => {
@@ -40,7 +66,7 @@ const FragmentImages = ({fragment, ...props}) => {
         }
 
         fetchFragmentImages();
-    }, [fetchImage, fragment]);
+    }, [fetchImage, fragment.images]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -74,25 +100,54 @@ const FragmentImages = ({fragment, ...props}) => {
     }
 
     if (images.length <= currentImageIdx) {
-        return;
+        return (
+            <Column
+                style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: '2rem',
+                    padding: '2rem',
+                    border: '1px dashed gray',
+                    borderRadius: '10px',
+                }}
+            >
+                <IconButton
+                    style={{fontSize: '6rem'}}
+                    icon={<MdAddPhotoAlternate />}
+                    onClick={handleAttachImageClick}
+                />
+
+                {
+                    showAttachImageModal &&
+                    <AttachImage
+                    fragment={fragment}
+                    setShowAttachImageModal={setShowAttachImageModal}
+                        {...props}
+                        />
+                    }
+            </Column>
+        );
     }
 
     return (
         images.length > 0 &&
-        <Row
-            style={{
-                flex: 1,
-                height: '100%',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-                minWidth: 500,
-            }}
+        <Column
+        style={{
+            flex: 1,
+            height: '100%',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            minWidth: 500,
+            marginLeft: '2rem',
+            alignItems: 'center',
+        }}
         >
             <Row
                 style={{
                     borderRadius: '10px',
                 }}
-            >
+                >
                 <Column
                     style={{
                         overflow: 'hidden',
@@ -103,14 +158,14 @@ const FragmentImages = ({fragment, ...props}) => {
                         borderRight: '1px solid var(--primary-color)',
                         position: 'relative',
                     }}
-                >
+                    >
                     <Column
                         style={{
                             gap: 0,
                             transform: currentImageIdx > 1 && `translateY(${-(currentImageIdx - 1) * 150}px)`,
                             transition: 'transform 0.5s ease-in-out',
                         }}
-                    >
+                        >
                         {images.map((im, index) => (
                             <img
                                 key={im.imageId}
@@ -125,8 +180,8 @@ const FragmentImages = ({fragment, ...props}) => {
                                     opacity: currentImageIdx === index ? 1 : 0.2,
                                     transition: 'opacity 0.5s ease-in-out',
                                 }}
-                            />
-                        ))}
+                                />
+                            ))}
                     </Column>
                     {
                         currentImageIdx > 0 &&
@@ -140,7 +195,7 @@ const FragmentImages = ({fragment, ...props}) => {
                                 }}
                                 icon={<MdKeyboardArrowUp />}
                                 onClick={handlePreviousImageClick}
-                            />
+                                />
                         </Row>
                     }
                     {
@@ -155,15 +210,61 @@ const FragmentImages = ({fragment, ...props}) => {
                                 }}
                                 icon={<MdKeyboardArrowDown />}
                                 onClick={handleNextImageClick}
-                            />
+                                />
                         </Row>
                     }
                 </Column>
-                <Image
-                    imageBlob={images[currentImageIdx].imageBlob}
-                />
+                <Row>
+                    <Image
+                        imageBlob={images[currentImageIdx].imageBlob}
+                    />
+                    <Column>
+                        <IconButton
+                            icon={<MdAddPhotoAlternate />}
+                            onClick={handleAttachImageClick}
+                        />
+                        <IconButton
+                            icon={<MdDelete />}
+                            onClick={handleDeleteImageClick}
+                        />
+                    </Column>
+                </Row>
             </Row>
-        </Row>
+
+            {
+                showAttachImageModal &&
+                <AttachImage
+                    fragment={fragment}
+                    setShowAttachImageModal={setShowAttachImageModal}
+                    {...props}
+                />
+            }
+
+            {
+                showDeleteImageModal &&
+                <Modal
+                    style={{gap: '2rem'}}
+                >
+                    <Typography>
+                        Are you sure you want to delete this image?
+                    </Typography>
+                    <Row style={{width: '100%', justifyContent: 'space-between'}}>
+                        <FilledButton
+                            onClick={() => setShowDeleteImageModal(false)}
+                        >
+                            Cancel
+                        </FilledButton>
+                        <FilledButton
+                            color='error'
+                            onClick={handleConfirmDelete}
+                        >
+                            Delete
+                        </FilledButton>
+                    </Row>
+                </Modal>
+            }
+
+        </Column>
     );
 }
  

@@ -6,45 +6,18 @@ import { useCallback, useEffect, useState } from 'react';
 import { useProjectStore } from 'stores';
 import { MdAdd, MdArrowBack, MdArrowForward } from 'react-icons/md';
 
-const Presentation = ({filters, presentationViewHeight, ...props}) => {
+const Presentation = ({filters, filteredFragments, presentationViewHeight, ...props}) => {
     
     const {fragments} = useProjectStore();
-    const filteredFragments = fragments.filter(f => f.onTimeline === true);
     const [selectedFragment, setSelectedFragment] = useState(filteredFragments.length > 0 ? 0 : null);
 
     const selectPreviousFragment = useCallback(() => {
-        if (filters.length === 0) {
-            setSelectedFragment(Math.max(0, selectedFragment - 1));
-            return;
-        }
-        if (selectedFragment === 0) {
-            return;
-        }
-        for (const [index, fragment] of filteredFragments.slice(0, selectedFragment).reverse().entries()) {
-            if (fragment.labels.some(l => filters.includes(l.id))) {
-                setSelectedFragment(selectedFragment - (index + 1));
-                return;
-            }
-        }
-    }, [selectedFragment, filteredFragments, filters]);
+        setSelectedFragment(Math.max(0, selectedFragment - 1));
+    }, [selectedFragment]);
 
     const selectNextFragment = useCallback(() => {
-        if (filters.length === 0) {
-            setSelectedFragment(Math.min(filteredFragments.length - 1, selectedFragment + 1));
-            return;
-        }
-
-        if (selectedFragment === filteredFragments.length - 1) {
-            return;
-        }
-
-        for (const [index, fragment] of filteredFragments.slice(selectedFragment + 1, filteredFragments.length).entries()) {
-            if (fragment.labels.some(l => filters.includes(l.id))) {
-                setSelectedFragment(selectedFragment + index + 1);
-                return;
-            }
-        }
-    }, [filters, filteredFragments, selectedFragment]);
+        setSelectedFragment(Math.min(filteredFragments.length - 1, selectedFragment + 1));
+    }, [filteredFragments, selectedFragment]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -69,18 +42,11 @@ const Presentation = ({filters, presentationViewHeight, ...props}) => {
 
     useEffect(() => {
         const findFirstFragmentOnFilterChange = () => {
-            for (const [index, fragment] of fragments.filter(f => f.onTimeline).entries()) {
-                if (fragment.onTimeline && fragment.labels.some(l => filters.includes(l.id))) {
-                    setSelectedFragment(index);
-                    return;
-                }
-            }
-
             setSelectedFragment(0);
         }
 
         findFirstFragmentOnFilterChange();
-    }, [filters, fragments]);
+    }, [filteredFragments.length]);
 
     if (fragments.length === 0) {
         return (

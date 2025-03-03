@@ -1,4 +1,4 @@
-import { fetchImageService, uploadImageService } from "services";
+import { deleteImageService, fetchImageService, uploadImageService } from "services";
 
 export const fetchImage = (get, set) => async (imageId) => {
 
@@ -25,6 +25,20 @@ export const uploadImage = (get, set) => async (fragmentId, image) => {
         return true;
     } catch (err) {
         set({error: {message: err.response?.data?.message || "Uploading image failed", status: err.status }});
+        return false;
+    }
+}
+
+export const deleteImage = (get, set) => async (fragmentId, imageId) => {
+    try {
+        set({error: null});
+        const response = await deleteImageService(imageId);
+        const fragments = [...get().fragments.map(f => f.id !== fragmentId ? f : {...f, images: [...f.images.filter(i => i !== response.image)]})];
+        get().images.delete(imageId);
+        set({ fragments: fragments });
+        return true;
+    } catch (err) {
+        set({error: {message: err.response?.data?.message || "Deleting image failed", status: err.status}});
         return false;
     }
 }

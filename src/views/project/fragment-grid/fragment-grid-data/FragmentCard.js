@@ -5,7 +5,7 @@ import useProjectStore from 'stores/useProjectStore';
 import { possibleSidebarStates } from './SidebarStates';
 import FragmentCardMenu from './FragmentCardMenu';
 import DeleteFragment from '../fragment-grid-actions/DeleteFragment';
-import AttachImage from '../fragment-grid-actions/AttachImage';
+import AttachImage from '../attach_image/AttachImage';
 
 const FragmentCard = (
     {

@@ -46,4 +46,5 @@ export {
 export {
     fetchImageService,
     uploadImageService,
+    deleteImageService,
 } from 'services/image/ImageService';
