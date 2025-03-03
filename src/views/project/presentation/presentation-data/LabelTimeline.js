@@ -1,10 +1,9 @@
 import { Column, Row, Typography } from 'components';
 import { useProjectStore } from 'stores';
 
-const LabelTimeline = ({filters, selectedFragment}) => {
+const LabelTimeline = ({filters, filteredFragments, selectedFragment}) => {
 
-    const {project, fragments} = useProjectStore();
-    const filteredFragments = fragments.filter(f => f.onTimeline);
+    const {project} = useProjectStore();
 
     const getFragmentInTimeline = (fragment) => {
         return (
@@ -53,7 +52,7 @@ const LabelTimeline = ({filters, selectedFragment}) => {
         );
     }
 
-    if (filteredFragments.lenfth === 0) {
+    if (filteredFragments.length === 0) {
         return (
             <Column>
                 <Typography>

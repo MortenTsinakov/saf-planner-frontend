@@ -5,6 +5,7 @@ import useProjectStore from 'stores/useProjectStore';
 import { possibleSidebarStates } from './SidebarStates';
 import FragmentCardMenu from './FragmentCardMenu';
 import DeleteFragment from '../fragment-grid-actions/DeleteFragment';
+import AttachImage from '../../attach_image/AttachImage';
 
 const FragmentCard = (
     {
@@ -22,6 +23,7 @@ const FragmentCard = (
     } = useProjectStore();
 
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
+    const [showAttachImageModal, setShowAttachImageModal] = useState(false);
     const cardRef = useRef(null);
     const [menuState, setMenuState] = useState({visible: false, x: 0, y: 0});
 
@@ -151,12 +153,21 @@ const FragmentCard = (
                             y={menuState.y}
                             handleCloseMenu={handleCloseMenu}
                             setShowDeleteFragmentModal={setShowDeleteFragmentModal}
+                            setShowAttachImageModal={setShowAttachImageModal}
                         />
                     }
                     { showDeleteFragmentModal &&
                         <DeleteFragment
                             fragment={fragment}
                             setShowDeleteFragmentModal={setShowDeleteFragmentModal}
+                            {...props}
+                        />
+                    }
+                    {
+                        showAttachImageModal &&
+                        <AttachImage
+                            fragment={fragment}
+                            setShowAttachImageModal={setShowAttachImageModal}
                             {...props}
                         />
                     }

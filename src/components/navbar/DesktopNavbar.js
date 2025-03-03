@@ -42,6 +42,7 @@ const DesktopNavbar = () => {
                 borderBottom: '1px solid var(--main-gray)',    
                 position: 'fixed',
                 width: '100vw',
+                zIndex: '10',
             }}
         >
             <Container>

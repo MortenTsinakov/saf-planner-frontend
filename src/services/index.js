@@ -41,3 +41,10 @@ export {
     attachLabelsToFragmentService,
     removeLabelFromFragmentService,
 } from 'services/label/LabelService';
+
+// Image service
+export {
+    fetchImageService,
+    uploadImageService,
+    deleteImageService,
+} from 'services/image/ImageService';
