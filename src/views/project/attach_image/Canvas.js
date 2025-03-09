@@ -1,6 +1,6 @@
 import { Row } from "components";
 import getStroke from "perfect-freehand";
-import { forwardRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 import { getSvgPathFromStroke } from "utils";
 import SketchingToolbar from "./SketchingToolbar";
 
@@ -32,6 +32,55 @@ const Canvas = forwardRef(({...props}, ref) => {
         backgroundColor: '#FFFFFF'
     });
 
+    const [undoStack, setUndoStack] = useState([]);
+
+    const handleUndo = useCallback(() => {
+        if (isDrawing) {
+            return;
+        }
+
+        if (allPaths.length > 0) {
+            setUndoStack([...undoStack, allPaths[allPaths.length - 1]]);
+            setAllPaths([...allPaths.slice(0, allPaths.length - 1)]);
+        }
+
+    }, [isDrawing, allPaths, undoStack]);
+
+    const handleRedo = useCallback(() => {
+        if (isDrawing) {
+            return;
+        }
+
+        if (undoStack.length > 0) {
+            setAllPaths([...allPaths, undoStack[undoStack.length - 1]]);
+            setUndoStack([...undoStack.slice(0, undoStack.length - 1)]);
+        }
+    }, [isDrawing, allPaths, undoStack]);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key.toLowerCase()) {
+                    case "z":
+                        e.preventDefault();
+                        handleUndo();
+                        break;
+                    case "y":
+                        e.preventDefault();
+                        handleRedo();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        }
+    }, [handleUndo, handleRedo]);
+
     const getMousePosition = (e) => {
         const rect = ref.current.getBoundingClientRect();
         return [
@@ -43,12 +92,14 @@ const Canvas = forwardRef(({...props}, ref) => {
     const penDown = (e) => {
         setInputPoints([getMousePosition(e)]);
         setIsDrawing(true);
+        setUndoStack([]);
     }
 
     const penUp = (e) => {
         setIsDrawing(false);
         setAllPaths([...allPaths, pathData]);
         setInputPoints([]);
+        setPathData(['', drawingParameters.color]);
     }
 
     const penMove = (e) => {
