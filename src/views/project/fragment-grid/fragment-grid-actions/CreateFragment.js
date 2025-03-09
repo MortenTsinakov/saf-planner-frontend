@@ -1,4 +1,4 @@
-import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, Switch, TextButton, TickBox, Typography } from 'components';
+import { Column, Container, IconButton, InputArea, InputField, Row, SortableContextWrapper, TextButton, TickBox, Typography } from 'components';
 import { useState } from 'react';
 import { MdAdd, MdArrowBack, MdArrowForward } from 'react-icons/md';
 import { clampNumber } from 'utils';
@@ -12,14 +12,12 @@ const CreateFragment = ({...props}) => {
 
     const {project, newFragments, setNewFragments} = useProjectStore();
 
-    const projectId = props.projectId;
     const panelWidth = 420;
 
     const [page, setPage] = useState(1);
     const [shortDescription, setShortDescription] = useState('');
     const [longDescription, setLongDescription] = useState('');
     const [durationInSeconds, setDurationInSeconds] = useState(5);
-    const [onTimeline, setOnTimeline] = useState(false);
     const [selectedLabels, setSelectedLabels] = useState([]);
     const [createNewLabel, setCreateNewLabel] = useState(false);
 
@@ -111,35 +109,6 @@ const CreateFragment = ({...props}) => {
         );
     }
 
-    const addToTimelinePage = () => {
-        return (
-            <Column
-                data-testid='create-fragment-timeline-status'
-                style={{width: '100%'}}
-            >
-                <Column>
-                    <Typography>On timeline</Typography>
-                    <Typography fontSize='extrasmall' color='label'>
-                        Decide if this fragment should be shown on the timeline or kept as a draft.
-                    </Typography>
-                </Column>
-                <Switch
-                    style={{marginTop: '2rem', marginBottom: '2rem'}}
-                    selected={onTimeline}
-                    onClick={() => setOnTimeline(!onTimeline)}
-                    data-testid='on-timeline-toggle'
-                />
-                {
-                onTimeline 
-                ?
-                <Typography color='label'>The fragment will appear on the timeline</Typography>
-                :
-                <Typography color='label'>The fragment will not appear on the timeline</Typography>
-                }
-            </Column>
-        );
-    }
-
     const createNewLabelPage = () => {
         return (
             <CreateLabel exitFn={() => setCreateNewLabel(false)}/>
@@ -214,21 +183,21 @@ const CreateFragment = ({...props}) => {
     }
 
     const handleIncrementPage = () => {
-        if (page === 5) {
+        if (page === 4) {
             setNewFragments([{
                 id: NEW_FRAGMENT_ID,
                 shortDescription: shortDescription,
                 longDescription: longDescription,
                 durationInSeconds: durationInSeconds,
-                onTimeline: onTimeline,
+                onTimeline: true,
                 position: null,
-                projectId: projectId,
+                projectId: project.id,
                 labels: [...selectedLabels],
             }])
-            setPage(6);
+            setPage(5);
         }
         else {
-            setPage(Math.min(5, page + 1))
+            setPage(Math.min(4, page + 1))
         }
     }
 
@@ -256,11 +225,11 @@ const CreateFragment = ({...props}) => {
                     !createNewLabel &&
                     <Row style={{justifyContent: 'space-between', width: '100%'}}>
                         {page > 1 ? <IconButton icon={<MdArrowBack />} onClick={handleDecrementPage} data-testid='backward-button'/> : <div />}
-                        {page < 6 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
+                        {page < 5 ? <IconButton icon={<MdArrowForward />} onClick={handleIncrementPage} data-testid='forward-button'/> : <div />}
                     </Row>
                 }
                 {
-                    page < 6 ?
+                    page < 5 ?
                     (
                         createNewLabel ? 
                         <Typography fontSize='medium'>Create new label</Typography>
@@ -274,9 +243,8 @@ const CreateFragment = ({...props}) => {
                     {page === 1 && shortDescriptionPage()}
                     {page === 2 && longDescriptionPage()}
                     {page === 3 && durationPage()}
-                    {page === 4 && addToTimelinePage()}
-                    {page === 5 && (createNewLabel ? createNewLabelPage() : addLabelsPage())}
-                    {page === 6 && finalizeFragmentCreationPage()}
+                    {page === 4 && (createNewLabel ? createNewLabelPage() : addLabelsPage())}
+                    {page === 5 && finalizeFragmentCreationPage()}
                 </Column>
                 
             </Column>

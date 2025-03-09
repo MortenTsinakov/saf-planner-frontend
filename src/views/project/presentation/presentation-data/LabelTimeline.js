@@ -69,8 +69,6 @@ const LabelTimeline = ({filters, filteredFragments, selectedFragment}) => {
                 width: '100%',
                 padding: '3rem',
                 backgroundColor: 'var(--background-color-medium)',
-                borderTop: '1px solid var(--main-gray)',
-                borderBottom: '1px solid var(--main-gray)',
                 paddingBottom: 75,
             }}
         >

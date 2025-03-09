@@ -109,7 +109,8 @@ const Project = ({...props}) => {
                 style={{
                     overflow: 'hidden',
                     height: 'inherit',
-                    gap:0
+                    width: '100%',
+                    gap:0,
                 }}
             >
                 <ReadAllPanel
@@ -119,7 +120,7 @@ const Project = ({...props}) => {
                 />
                 <Row style={{flex: 1, gap: 0}}>
                     <Column
-                        
+                        style={{width: '100%'}}
                     >
                         <Timeline
                             timelinePanelSettings={timelinePanelSettings}
@@ -131,14 +132,17 @@ const Project = ({...props}) => {
                             filteredFragments={filteredFragments}
                         />
                     </Column>
-                    <div
-                        style={{
-                            minWidth: 350,
-                            backgroundColor: 'blue'
-                        }}
-                    >
-                        Images
-                    </div>
+                    {
+                        filteredFragments.length > 0 &&
+                        <div
+                            style={{
+                                minWidth: 350,
+                                backgroundColor: 'var(--background-color-medium)'
+                            }}
+                        >
+                            Images
+                        </div>
+                    }
                 </Row>
             </Row>
         </Column>

@@ -79,7 +79,7 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                 durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
                 onTimeline: newFragment.onTimeline,
                 position: fragments.length + 1,
-                projectId: props.projectId,
+                projectId: newFragment.projectId,
             }
             const labels = newFragment.labels
             setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
@@ -101,7 +101,7 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                 durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
                 onTimeline: newFragment.onTimeline,
                 position: overCard.position || fragments.length,
-                projectId: props.projectId,
+                projectId: newFragment.projectId,
             }
             const labels = newFragment.labels;
             setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
@@ -252,10 +252,16 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
             onDragCancel={handleDragCancel}
             onDragStart={handleDragStart}
         >
-            <Row 
+            <div
                 style={{
                     position: 'relative',
+                    overflow: 'hidden',
                     height: '100%',
+                }}
+            >
+            <Row 
+                style={{
+                    height: 'inherit',
                     overflowY: 'auto',
                 }}
             >
@@ -267,9 +273,8 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                     <Container
                         ref={setNodeRef}
                         style={{
-                            width: '100%',
-                            // height: fragmentGridHeight,
                             alignItems: 'flex-start',
+                            width: '100%',
                         }}
                     >
                         {
@@ -279,8 +284,9 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                                 style={{
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                    height: fragmentGridHeight,
+                                    height: '100%',
                                     width: '100%',
+                                    bacakgroundColor: 'blue',
                                 }}
                             >
                                 <Column
@@ -351,8 +357,9 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                     fragments.length > 0 &&
                     <Column
                         style={{
-                            position: 'sticky',
-                            top: 0,
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 0,
                             justifyContent: 'end',
                             alignItems: 'end',
                         }}
@@ -369,6 +376,7 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                     </Column>
                 } 
             </Row>
+            </div>
             <FragmentGridSidebar {...props}/>
             <DragOverlay>
                 {getDragOverlay()}

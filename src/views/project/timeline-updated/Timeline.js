@@ -1,7 +1,7 @@
 import { Column, IconButton, Row } from "components";
 import { useState } from "react";
 import LabelTimeline from "../presentation/presentation-data/LabelTimeline";
-import { MdArrowDropDown, MdArrowDropUp, MdClose, MdCompress, MdExpand } from "react-icons/md";
+import { MdArrowDropDown, MdArrowDropUp, MdClose } from "react-icons/md";
 import BasicTimeline from "./BasicTimeline";
 
 const Timeline = ({
@@ -12,12 +12,12 @@ const Timeline = ({
     ...props
 }) => {
 
-    const [displayDetailedTimeline, setDisplayDetailedTimeline] = useState(false);
+    const [displayDetailedTimeline, setDisplayDetailedTimeline] = useState(true);
     const iconStyle = {
         fontSize: '3rem',
     };
 
-    if (!timelinePanelSettings.isOpen) {
+    if (!timelinePanelSettings.isOpen || filteredFragments.length === 0) {
         return;
     }
 
@@ -62,7 +62,7 @@ const Timeline = ({
                 <LabelTimeline
                     filteredFragments={filteredFragments}
                     filters={filters}
-                    selectedFragment={2}
+                    selectedFragment={0}
                     {...props}
                 />
                 :

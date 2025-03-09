@@ -1,6 +1,6 @@
 import { Column, Divider, IconButton, Row, Typography } from 'components';
 import { useState } from 'react';
-import { MdArrowLeft, MdArrowRight, MdClose } from 'react-icons/md';
+import { MdClose } from 'react-icons/md';
 import { useProjectStore } from 'stores';
 
 const ReadAllPanel = ({readAllPanelSettings, setReadAllPanelSettings, filteredFragments}) => {
@@ -42,7 +42,7 @@ const ReadAllPanel = ({readAllPanelSettings, setReadAllPanelSettings, filteredFr
         });
     }
 
-    if (!readAllPanelSettings.isOpen) {
+    if (!readAllPanelSettings.isOpen || filteredFragments.length === 0) {
         return;
     }
 
