@@ -1,12 +1,11 @@
 import { Row } from "components";
 import getStroke from "perfect-freehand";
-import { useRef, useState } from "react";
+import { forwardRef, useState } from "react";
 import { getSvgPathFromStroke } from "utils";
 import SketchingToolbar from "./SketchingToolbar";
 
-const Canvas = ({...props}) => {
+const Canvas = forwardRef(({...props}, ref) => {
 
-    const svgRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [inputPoints, setInputPoints] = useState([]);
     const [pathData, setPathData] = useState(['', '#000000']);
@@ -34,7 +33,7 @@ const Canvas = ({...props}) => {
     });
 
     const getMousePosition = (e) => {
-        const rect = svgRef.current.getBoundingClientRect();
+        const rect = ref.current.getBoundingClientRect();
         return [
             e.clientX - rect.left,
             e.clientY - rect.top,
@@ -80,7 +79,7 @@ const Canvas = ({...props}) => {
                 setDrawingParameters={setDrawingParameters}
             />
             <svg
-                ref={svgRef}
+                ref={ref}
                 width="100%"
                 height="100%"
                 xmlns="http://www.w3.org/2000/svg"
@@ -102,6 +101,6 @@ const Canvas = ({...props}) => {
             </svg>
         </Row>
     );
-}
+});
  
 export default Canvas;

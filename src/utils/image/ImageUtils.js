@@ -20,7 +20,7 @@ export const isCorrectSize = (file) => {
     return true;
 }
 
-export const scaleImage = (file, callback) => {
+export const scaleImage = (file) => {
 
     const MAX_SIZE = 750;
 
@@ -101,4 +101,26 @@ export const getSvgPathFromStroke = (points, closed = true) => {
     }
 
     return result;
+}
+
+export const svgElementToFile = (element) => {
+    return new Promise((resolve, reject) => {
+        const clonedSvg = element.cloneNode(true);
+        const rect = element.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+
+        clonedSvg.setAttribute("width", width);
+        clonedSvg.setAttribute("height", height);
+        clonedSvg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+        const svgData = new XMLSerializer().serializeToString(clonedSvg);
+        const svgBlob = new Blob([svgData], { type: "image/svg+xml" });
+        const file = new File([svgBlob], "sketch.svg", {
+            type: "image/svg+xml",
+            lastModified: Date.now(),
+        });
+
+        resolve(file);
+    });
 }
