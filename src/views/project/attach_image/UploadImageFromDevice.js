@@ -15,25 +15,25 @@ const UploadImageFromDevice = ({fragment, setShowAttachImageModal, ...props}) =>
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState("");
 
-    const handleSelectImage = async (file) => {
-        if (!isValidImageFile(file)) {
+    const handleSelectImage = async (selectedFile) => {
+        if (!isValidImageFile(selectedFile)) {
             addAlert("Please attach a valid image file", "error");
             return;
         }
-        if (!isCorrectSize(file)) {
+        if (!isCorrectSize(selectedFile)) {
             addAlert("Maximum file size allowed is 5MB", "error");
             return;
         }
 
-        const scaledImage = await scaleImage(file);
+        const scaledImage = await scaleImage(selectedFile);
         setFile(scaledImage);
         setImage(URL.createObjectURL(scaledImage));
     }
 
     const handleChange = (e) => {
         if (e.target.files.length > 0) {
-            const file = e.target.files[0];
-            handleSelectImage(file);
+            const selectedFile = e.target.files[0];
+            handleSelectImage(selectedFile);
         }
     }
     
@@ -41,8 +41,8 @@ const UploadImageFromDevice = ({fragment, setShowAttachImageModal, ...props}) =>
         e.preventDefault();
         const files = e.dataTransfer.files;
         if (files.length > 0) {
-            const file = files[0];
-            handleSelectImage(file);
+            const selectedFile = files[0];
+            handleSelectImage(selectedFile);
         }
     }
 

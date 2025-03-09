@@ -23,4 +23,6 @@ export {
     isValidImageFile,
     isCorrectSize,
     scaleImage,
+    getSvgPathFromStroke,
+    svgElementToFile,
 } from './image/ImageUtils';

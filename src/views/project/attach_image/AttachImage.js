@@ -1,12 +1,13 @@
 import { Column, FilledButton, Modal, OutlineButton } from "components";
 import { useState } from "react";
 import UploadImageFromDevice from "./UploadImageFromDevice";
+import UploadSketch from "./UploadSketch";
 
 const AttachImage = ({fragment, setShowAttachImageModal, ...props}) => {
 
     const AttachImageModes = Object.freeze({
         FROM_DEVICE: 0,
-        DRAW: 1
+        SKETCH: 1
     });
 
     const [attachImageMode, setAttachImageMode] = useState(null);
@@ -20,7 +21,9 @@ const AttachImage = ({fragment, setShowAttachImageModal, ...props}) => {
                     >
                         Upload from device
                     </OutlineButton>
-                    <OutlineButton>
+                    <OutlineButton
+                        onClick={() => setAttachImageMode(AttachImageModes.SKETCH)}
+                    >
                         Draw new image
                     </OutlineButton>
                     <FilledButton
@@ -37,6 +40,16 @@ const AttachImage = ({fragment, setShowAttachImageModal, ...props}) => {
         return (
             <UploadImageFromDevice
                 fragment={fragment} 
+                setShowAttachImageModal={setShowAttachImageModal}
+                {...props}
+            />
+        );
+    }
+
+    if (attachImageMode === AttachImageModes.SKETCH) {
+        return (
+            <UploadSketch
+                fragment={fragment}
                 setShowAttachImageModal={setShowAttachImageModal}
                 {...props}
             />

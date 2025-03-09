@@ -37,6 +37,8 @@ export { default as Loading } from 'components/ui/loading/Loading';
 export { default as DropdownMenu } from 'components/ui/menus/DropdownMenu';
 // modal
 export { default as Modal } from 'components/ui/modals/Modal';
+// slider
+export { default as Slider} from 'components/ui/sliders/Slider';
 // swtich
 export { default as Switch } from 'components/ui/switches/Switch';
 export { default as TickBox } from 'components/ui/switches/TickBox';
