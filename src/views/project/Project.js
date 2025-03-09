@@ -3,30 +3,39 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FragmentGrid from './fragment-grid/FragmentGrid';
 import { Column, Loading, Row } from 'components';
-import Toolbar from './toolbar/Toolbar';
-import ReadAll from './read-all/ReadAll';
-import Timeline from './timeline/Timeline';
+import Toolbar from './toolbar-updated/Toolbar';
+import ReadAllPanel from './read-all-panel/ReadAllPanel';
+import Timeline from './timeline-updated/Timeline';
 import { TIMELINE_HEIGHT } from './timeline/TimelineConstants';
 import { useProjectStore } from 'stores';
 import Presentation from './presentation/Presentation';
+import LabelTimeline from './presentation/presentation-data/LabelTimeline';
 
 const Project = ({...props}) => {
 
-    const views = Object.freeze({
-        FRAGMENT_GRID: 0,
-        PRESENTATION: 1,
-    });
+    // const views = Object.freeze({
+    //     FRAGMENT_GRID: 0,
+    //     PRESENTATION: 1,
+    // });
+
+    // const toolbarTypes = Object.freeze({
+    //     REGULAR: 0,
+    //     LABEL: 1,
+    // });
 
     const location = useLocation();
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const projectId = searchParams.get('projectId');
 
-    const toolBarHeight = 55;
-    const [readAllWidth, setReadAllWidth] = useState(350);
-    const [showReadAllPanel, setShowReadAllPanel] = useState(false);
-    const [currentView, setCurrentView] = useState(views.FRAGMENT_GRID);
+    // const toolBarHeight = 55;
+    // const [currentView, setCurrentView] = useState(views.FRAGMENT_GRID);
+    // const [toolbarType, setToolbarType] = useState(toolbarTypes.LABEL);
     const [filters, setFilters] = useState([]);
+
+    const [readAllPanelSettings, setReadAllPanelSettings] = useState({width: 350, isOpen: true});
+    const [timelinePanelSettings, setTimelinePanelSettings] = useState({isOpen: true});
+    const [imagePanelSettings, setImagePanelSettings] = useState({isOpen: true});
 
     const { fetchProject, loading, error, setError, fragments } = useProjectStore();
     const {addAlert} = useAlerts();
@@ -64,6 +73,7 @@ const Project = ({...props}) => {
         }
 
         let filteredFragments = [];
+        let totalLength = 0;
 
         for (const fragment of fragments) {
             for (const label of fragment.labels) {
@@ -82,69 +92,134 @@ const Project = ({...props}) => {
     return (
         <Column
             style={{
-                height: 'calc(100vh - var(--navbar-height)',
+                height: 'calc(100vh - var(--navbar-height))',
                 width: '100%',
                 gap: 0,
             }}
         >
             <Toolbar
-                height={toolBarHeight}
-                showReadAllPanel={showReadAllPanel}
-                setShowReadAllPanel={setShowReadAllPanel}
-                views={views}
-                currentView={currentView}
-                setCurrentView={setCurrentView}
-                filters={filters}
-                setFilters={setFilters}
+                readAllPanelSettings={readAllPanelSettings}
+                setReadAllPanelSettings={setReadAllPanelSettings}
+                timelinePanelSettings={timelinePanelSettings}
+                setTimelinePanelSettings={setTimelinePanelSettings}
+                imagePanelSettings={imagePanelSettings}
+                setImagePanelSettings={setImagePanelSettings}
             />
             <Row
                 style={{
-                    gap: 0,
-                    height: '100%',
+                    overflow: 'hidden',
+                    height: 'inherit',
+                    gap:0
                 }}
             >
-                {showReadAllPanel &&                
-                    <ReadAll
-                        readAllWidth={readAllWidth}
-                        setReadAllWidth={setReadAllWidth}
-                        readAllHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px)`}
-                        fragments={filteredFragments}
-                        {...props}
-                    />
-                }
-                {
-                    currentView === views.FRAGMENT_GRID &&
+                <ReadAllPanel
+                    readAllPanelSettings={readAllPanelSettings}
+                    setReadAllPanelSettings={setReadAllPanelSettings}
+                    filteredFragments={filteredFragments}
+                />
+                <Row style={{flex: 1, gap: 0}}>
                     <Column
-                        style={{
-                            gap: 0,
-                            flex: 1,
-                            width: '100%',
-                            overflow: 'auto',
-                        }}
+                        
                     >
                         <Timeline
+                            timelinePanelSettings={timelinePanelSettings}
+                            setTimelinePanelSettings={setTimelinePanelSettings}
                             filteredFragments={filteredFragments}
-                            {...props}
+                            filters={filters}
                         />
                         <FragmentGrid
-                            fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${TIMELINE_HEIGHT}px)`}
-                            projectId={projectId}
                             filteredFragments={filteredFragments}
-                            {...props}
                         />
                     </Column>
-                }
-                {
-                    currentView === views.PRESENTATION &&
-                    <Presentation
-                        presentationViewHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px`}
-                        filters={filters}
-                        filteredFragments={filteredFragments}
-                        {...props}
-                    />
-                }
+                    <div
+                        style={{
+                            minWidth: 350,
+                            backgroundColor: 'blue'
+                        }}
+                    >
+                        Images
+                    </div>
+                </Row>
             </Row>
         </Column>
+        // <Column
+        //     style={{
+        //         height: 'calc(100vh - var(--navbar-height)',
+        //         width: '100%',
+        //         gap: 0,
+        //     }}
+        // >
+        //     <Toolbar
+        //         height={toolBarHeight}
+        //         showReadAllPanel={showReadAllPanel}
+        //         setShowReadAllPanel={setShowReadAllPanel}
+        //         views={views}
+        //         currentView={currentView}
+        //         setCurrentView={setCurrentView}
+        //         filters={filters}
+        //         setFilters={setFilters}
+        //     />
+        //     <Row
+        //         style={{
+        //             gap: 0,
+        //             height: '100%',
+        //         }}
+        //     >
+        //         {showReadAllPanel &&                
+        //             <ReadAll
+        //                 readAllWidth={readAllWidth}
+        //                 setReadAllWidth={setReadAllWidth}
+        //                 readAllHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px)`}
+        //                 fragments={filteredFragments}
+        //                 {...props}
+        //             />
+        //         }
+        //         {
+        //             currentView === views.FRAGMENT_GRID &&
+        //             <Column
+        //                 style={{
+        //                     gap: 0,
+        //                     flex: 1,
+        //                     width: '100%',
+        //                     overflow: 'auto',
+        //                 }}
+        //             >
+        //                 {
+        //                     toolbarType === toolbarTypes.REGULAR &&
+        //                     <Timeline
+        //                         filteredFragments={filteredFragments}
+        //                         {...props}
+        //                     />
+        //                 }
+        //                 {
+        //                     toolbarType === toolbarTypes.LABEL &&
+        //                     <LabelTimeline
+        //                         filters={filters}
+        //                         filteredFragments={filteredFragments}
+        //                         // selectedFragment={selectedFragment}
+        //                         selectedFragment={2}
+        //                         {...props}
+        //                     />
+        //                 }
+        //                 <FragmentGrid
+        //                     fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${TIMELINE_HEIGHT}px)`}
+        //                     projectId={projectId}
+        //                     filteredFragments={filteredFragments}
+        //                     {...props}
+        //                 />
+        //             </Column>
+        //         }
+        //         {
+        //             currentView === views.PRESENTATION &&
+        //             <Presentation
+        //                 presentationViewHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px`}
+        //                 filters={filters}
+        //                 filteredFragments={filteredFragments}
+        //                 {...props}
+        //             />
+        //         }
+        //     </Row>
+        // </Column>
     );
 }
  

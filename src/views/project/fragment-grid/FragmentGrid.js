@@ -252,7 +252,13 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
             onDragCancel={handleDragCancel}
             onDragStart={handleDragStart}
         >
-            <Row style={{position: 'relative'}}>
+            <Row 
+                style={{
+                    position: 'relative',
+                    height: '100%',
+                    overflowY: 'auto',
+                }}
+            >
                 <SortableContextWrapper
                     id={FRAGMENT_GRID_ID}
                     items={fragments}
@@ -262,7 +268,7 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                         ref={setNodeRef}
                         style={{
                             width: '100%',
-                            height: fragmentGridHeight,
+                            // height: fragmentGridHeight,
                             alignItems: 'flex-start',
                         }}
                     >
@@ -343,17 +349,24 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
 
                 {
                     fragments.length > 0 &&
-                    <IconButton
-                        onClick={handleCreateFragmentClick}
-                        icon={<MdAddBox />}
+                    <Column
                         style={{
-                            color: 'var(--primary-color)',
-                            fontSize: '8rem',
-                            position: 'absolute',
-                            right: props.isMobile ? 10 : 50,
-                            bottom: props.isMobile ? 10 : 50,
+                            position: 'sticky',
+                            top: 0,
+                            justifyContent: 'end',
+                            alignItems: 'end',
                         }}
-                    />
+                    >
+                        <IconButton
+                            onClick={handleCreateFragmentClick}
+                            icon={<MdAddBox />}
+                            style={{
+                                bacakgroundColor: 'red',
+                                color: 'var(--primary-color)',
+                                fontSize: '8rem',
+                            }}
+                        />
+                    </Column>
                 } 
             </Row>
             <FragmentGridSidebar {...props}/>

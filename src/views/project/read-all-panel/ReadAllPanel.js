@@ -1,13 +1,18 @@
-import { Column, Divider, Row, Typography } from 'components';
+import { Column, Divider, IconButton, Row, Typography } from 'components';
 import { useState } from 'react';
+import { MdArrowLeft, MdArrowRight, MdClose } from 'react-icons/md';
 import { useProjectStore } from 'stores';
 
-const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth, fragments}) => {
+const ReadAllPanel = ({readAllPanelSettings, setReadAllPanelSettings, filteredFragments}) => {
 
     const {project} = useProjectStore();
 
     const [isResizing, setIsResizing] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+
+    const iconStyle = {
+        fontSize: '3rem',
+    };
 
     const handleResizeClick = (e) => {
         e.preventDefault();
@@ -17,8 +22,11 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth, fragments}) => {
     }
 
     const handleMouseMove = (e) => {
-        const newSize = e.clientX;
-        setReadAllWidth(newSize);
+        const width = e.clientX;
+        setReadAllPanelSettings({
+            ...readAllPanelSettings,
+            width: width,
+        })
     }
 
     const handleMouseUp = () => {
@@ -27,18 +35,29 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth, fragments}) => {
         setIsResizing(false);
     }
 
+    const handleClosePanel = () => {
+        setReadAllPanelSettings({
+            ...readAllPanelSettings,
+            isOpen: false,
+        });
+    }
+
+    if (!readAllPanelSettings.isOpen) {
+        return;
+    }
+
     return (
         <Row
             style={{
                 backgroundColor: 'var(--background-color-medium)',
-                width: readAllWidth,
+                width: readAllPanelSettings.width,
                 minWidth: '250px',
-                height: readAllHeight,
                 overflowY: 'auto',
                 gap: 0,
             }}
             data-testid='read-all'
         >
+            
             <Column
                 style={{
                     padding: '4rem 2rem 4rem 2rem',
@@ -46,15 +65,26 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth, fragments}) => {
                     overflowY: 'auto',
                 }}
             >
+                <Row
+                    style={{
+                        justifyContent: 'end',
+                    }}
+                >
+                    <IconButton
+                        icon={<MdClose />}
+                        onClick={handleClosePanel}
+                        style={iconStyle}
+                    />
+                </Row>
                 <Typography></Typography>
                 {
-                fragments.length > 0 
+                filteredFragments.length > 0 
                 ?
                 <Column style={{gap:'2rem'}}>
                 <Typography fontSize='medium'>{project.title}</Typography>
                 <Divider />
                 {
-                fragments.map(f => (
+                filteredFragments.map(f => (
                     f.onTimeline &&
                     <Column
                         key={f.id}
@@ -75,7 +105,6 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth, fragments}) => {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 style={{
-                    height: readAllHeight,
                     width: '5px',
                     borderRight: (isHovered || isResizing) ? '5px solid var(--primary-color)' : '1px solid var(--main-gray)',
                     cursor: 'col-resize',
@@ -86,4 +115,4 @@ const ReadAll = ({readAllHeight, readAllWidth, setReadAllWidth, fragments}) => {
     );
 }
  
-export default ReadAll;
+export default ReadAllPanel;
