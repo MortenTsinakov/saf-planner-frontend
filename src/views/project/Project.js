@@ -1,13 +1,12 @@
 import { useAlerts } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import FragmentGrid from './fragment-grid/FragmentGrid';
 import { Column, Loading, Row } from 'components';
-import Toolbar from './toolbar-updated/Toolbar';
+import Toolbar from './toolbar/Toolbar';
 import ReadAllPanel from './read-all-panel/ReadAllPanel';
-import Timeline from './timeline-updated/Timeline';
+import Timeline from './timeline/Timeline';
 import { useProjectStore } from 'stores';
-import Presentation from './presentation/Presentation';
+import MainPanel from './main-panel/MainPanel';
 
 const Project = ({...props}) => {
 
@@ -16,27 +15,24 @@ const Project = ({...props}) => {
         PRESENTATION: 1,
     });
 
-    // const toolbarTypes = Object.freeze({
-    //     REGULAR: 0,
-    //     LABEL: 1,
-    // });
-
+    // Initialize view
     const location = useLocation();
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const projectId = searchParams.get('projectId');
 
-    // const toolBarHeight = 55;
-    // const [currentView, setCurrentView] = useState(views.FRAGMENT_GRID);
-    // const [toolbarType, setToolbarType] = useState(toolbarTypes.LABEL);
+    // Fragment filters
     const [filters, setFilters] = useState([]);
     const [selectedFragmentIdx, setSelectedFragmentIdx] = useState(0);
+
+    // View in the main panel
     const [mainPanelView, setMainPanelView] = useState(mainPanelViews.FRAGMENT_GRID);
 
+    // Settings for panels
     const [readAllPanelSettings, setReadAllPanelSettings] = useState({width: 350, isOpen: true});
     const [timelinePanelSettings, setTimelinePanelSettings] = useState({isOpen: true});
-    const [imagePanelSettings, setImagePanelSettings] = useState({isOpen: true});
 
+    // Hooks
     const { fetchProject, loading, error, setError, fragments } = useProjectStore();
     const {addAlert} = useAlerts();
 
@@ -101,8 +97,6 @@ const Project = ({...props}) => {
                 setReadAllPanelSettings={setReadAllPanelSettings}
                 timelinePanelSettings={timelinePanelSettings}
                 setTimelinePanelSettings={setTimelinePanelSettings}
-                imagePanelSettings={imagePanelSettings}
-                setImagePanelSettings={setImagePanelSettings}
                 filters={filters}
                 setFilters={setFilters}
                 mainPanelViews={mainPanelViews}
@@ -135,17 +129,12 @@ const Project = ({...props}) => {
                             selectedFragmentIdx={selectedFragmentIdx}
                             setSelectedFragmentIdx={setSelectedFragmentIdx}
                         />
-                        {
-                            mainPanelView === mainPanelViews.FRAGMENT_GRID &&
-                            <FragmentGrid
-                                filteredFragments={filteredFragments}
-                                selectedFragmentIdx={selectedFragmentIdx}
-                            />
-                        }
-                        {
-                            mainPanelView === mainPanelViews.PRESENTATION &&
-                            <Presentation fragment={filteredFragments[selectedFragmentIdx]} />
-                        }
+                        <MainPanel
+                            mainPanelViews={mainPanelViews}
+                            mainPanelView={mainPanelView}
+                            filteredFragments={filteredFragments}
+                            selectedFragmentIdx={selectedFragmentIdx}
+                        />
                     </Column>
                 </Row>
             </Row>

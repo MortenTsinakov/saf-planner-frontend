@@ -1,4 +1,4 @@
-import { NEW_FRAGMENT_ID } from 'views/project/fragment-grid/FragmentGridConstants';
+import { NEW_FRAGMENT_ID } from 'views/project/main-panel/fragment-grid/FragmentGridConstants';
 
 export const restrictOnlyFragments = ({
     active,

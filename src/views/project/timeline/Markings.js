@@ -52,7 +52,7 @@ const Markings = ({filteredFragments}) => {
                         style={{
                             display: 'flex',
                             flex: '1 1 0',
-                            height: index % 6 == 0 ? 20 : 10,
+                            height: index % 6 === 0 ? 20 : 10,
                             borderLeft: '1px solid gray',
                             transform: 'translateY(-20px)'
                         }}

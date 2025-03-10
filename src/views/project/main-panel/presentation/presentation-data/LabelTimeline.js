@@ -1,8 +1,8 @@
 import { Column, Row, Typography } from 'components';
 import { useProjectStore } from 'stores';
-import Markings from 'views/project/timeline-updated/Markings';
+import Markings from 'views/project/timeline/Markings';
 
-const LabelTimeline = ({filters, filteredFragments, selectedFragmentIdx}) => {
+const LabelTimeline = ({filters, filteredFragments, selectedFragment}) => {
 
     const {project} = useProjectStore();
 
@@ -13,8 +13,8 @@ const LabelTimeline = ({filters, filteredFragments, selectedFragmentIdx}) => {
                 style={{
                     gap: '1rem',
                     justifyContent: 'space-between',
-                    backgroundColor: fragment.id === filteredFragments[selectedFragmentIdx].id && 'var(--background-color-high)',
-                    filter: fragment.id === filteredFragments[selectedFragmentIdx].id && 'brightness(125%)',
+                    backgroundColor: fragment.id === filteredFragments[selectedFragment].id && 'var(--background-color-high)',
+                    filter: fragment.id === filteredFragments[selectedFragment].id && 'brightness(125%)',
                     borderRadius: '5px',
                     flex: `${fragment.durationInSeconds} ${fragment.durationInSeconds} auto`,
                 }}
@@ -28,11 +28,10 @@ const LabelTimeline = ({filters, filteredFragments, selectedFragmentIdx}) => {
                             return (
                                 <div
                                     key={label.id}
-                                    title={label.description}
                                     style={{
                                         boxSizing: 'border-box',
                                         backgroundColor: label.color,
-                                        height: '1rem',
+                                        height: '100%',
                                         width: '100%',
                                         borderRadius: '5px',
                                     }}
@@ -43,7 +42,7 @@ const LabelTimeline = ({filters, filteredFragments, selectedFragmentIdx}) => {
                                 <div 
                                     key={label.id}
                                     style={{
-                                        height: '1rem',
+                                        height: '100%',
                                         width: '100%',
                                     }}
                                 />
@@ -68,43 +67,30 @@ const LabelTimeline = ({filters, filteredFragments, selectedFragmentIdx}) => {
         <Column
             style={{
                 width: '100%',
-                padding: '1rem',
+                padding: '3rem',
                 backgroundColor: 'var(--background-color-medium)',
                 borderTop: '1px solid var(--main-gray)',
                 borderBottom: '1px solid var(--main-gray)',
                 paddingBottom: 75,
             }}
         >
-            <Row
-                style={{flexWrap: 'wrap'}}
-            >
-                {project.labels.map(l => (
-                    (filters.length === 0 || filters.includes(l.id)) &&
-                    <Row 
-                        key={l.id}
-                        style={{
-                            alignItems: 'center',
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: '1rem',
-                                height: '1rem',
-                                borderRadius: '50%',
-                                backgroundColor: l.color
-                            }}
-                        />
+            <Row style={{gap:'3rem'}}>
+                <Column
+                    style={{
+                        gap: '1rem',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    {project.labels.map(label => (
+                        (filters.length === 0 || filters.includes(label.id)) &&
                         <Typography
-                            fontSize='extrasmall'
-                            color='label'
+                            key={label.id}
                             style={{textWrap: 'nowrap'}}
                         >
-                            {l.description}
+                            {label.description}
                         </Typography>
-                    </Row>
-                ))}
-            </Row>
-            <Row style={{gap:'3rem'}}>
+                    ))}
+                </Column>
                 <Row
                     style={{
                         backgroundColor: 'var(--background-color-low)',
@@ -115,7 +101,6 @@ const LabelTimeline = ({filters, filteredFragments, selectedFragmentIdx}) => {
                     }}
                 >
                     {filteredFragments.map(fragment => (
-                        fragment.onTimeline &&
                         getFragmentInTimeline(fragment)
                     ))}
                     <div 
