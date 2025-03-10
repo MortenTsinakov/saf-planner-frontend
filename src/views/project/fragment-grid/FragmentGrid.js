@@ -16,7 +16,7 @@ import { possibleSidebarStates } from './fragment-grid-data/SidebarStates';
  * Grid that displays project fragments.
  * It's also possible to add new fragments on the grid.
  */
-const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
+const FragmentGrid = ({filteredFragments, selectedFragmentIdx, ...props}) => {
 
     const sidebarStates = possibleSidebarStates;
     const {
@@ -333,7 +333,6 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                                     flexWrap: 'wrap',
                                     justifyContent: 'start',
                                     alignContent: 'flex-start',
-                                    maxHeight: fragmentGridHeight,
                                     overflow: 'auto',
                                     flex: '1 1 0',
                                     height: 'inherit',
@@ -344,6 +343,7 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                                         key={f.id}
                                         fragment={f}
                                         isFiltered={filteredFragments.includes(f)}
+                                        isSelected={f.id === filteredFragments[selectedFragmentIdx].id}
                                         {...props}
                                     />
                                 ))}
@@ -368,7 +368,6 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                             onClick={handleCreateFragmentClick}
                             icon={<MdAddBox />}
                             style={{
-                                bacakgroundColor: 'red',
                                 color: 'var(--primary-color)',
                                 fontSize: '8rem',
                             }}

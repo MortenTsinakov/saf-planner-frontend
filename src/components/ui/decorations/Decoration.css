@@ -3,3 +3,9 @@
     height: 1.5px;
     background-color: var(--main-gray);
 }
+
+.divider.vertical {
+    height: 80%;
+    width: 1.5px;
+    background-color: var(--main-gray);
+}

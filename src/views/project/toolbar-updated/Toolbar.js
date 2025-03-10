@@ -1,5 +1,7 @@
-import { IconButton, Row } from "components";
-import { MdAutoStories, MdImage, MdLibraryBooks, MdViewTimeline } from "react-icons/md";
+import { Divider, IconButton, Row } from "components";
+import { MdAutoStories, MdGridView, MdImage, MdLibraryBooks, MdTv, MdViewTimeline } from "react-icons/md";
+import { useProjectStore } from "stores";
+import ApplyFilters from "./ApplyFilters";
 
 const Toolbar = ({
     readAllPanelSettings,
@@ -8,7 +10,14 @@ const Toolbar = ({
     setTimelinePanelSettings,
     imagePanelSettings,
     setImagePanelSettings,
+    filters,
+    setFilters,
+    mainPanelViews,
+    mainPanelView,
+    setMainPanelView,
 }) => {
+
+    const {project, sidebarState, setSidebarState} = useProjectStore();
 
     const iconStyle = {
         fontSize: '3rem',
@@ -28,11 +37,16 @@ const Toolbar = ({
         });
     }
 
-    const toggleImagePanel = () => {
-        setImagePanelSettings({
-            ...imagePanelSettings,
-            isOpen: !imagePanelSettings.isOpen,
+    const changeViewToPresentation = () => {
+        setSidebarState({
+            ...sidebarState,
+            open: false,
         });
+        setMainPanelView(mainPanelViews.PRESENTATION);
+    }
+
+    const changeViewToFragmentGrid = () => {
+        setMainPanelView(mainPanelViews.FRAGMENT_GRID);
     }
 
     return (
@@ -40,7 +54,8 @@ const Toolbar = ({
             style={{
                 height: 55,
                 alignItems: 'center',
-                paddingLeft: '1rem'
+                paddingLeft: '1rem',
+                borderBottom: '1px solid var(--main-gray)',
             }}
         >
             <IconButton
@@ -53,11 +68,31 @@ const Toolbar = ({
                 style={iconStyle}
                 onClick={toggleTimelinePanel}
             />
-            <IconButton
-                icon={<MdImage />}
-                style={iconStyle}
-                onClick={toggleImagePanel}
-            />
+            {
+                mainPanelView === mainPanelViews.FRAGMENT_GRID &&
+                <IconButton
+                    icon={<MdTv />}
+                    style={iconStyle}
+                    onClick={changeViewToPresentation}
+                />
+            }
+            {
+                mainPanelView === mainPanelViews.PRESENTATION &&
+                <IconButton
+                    icon={<MdGridView />}
+                    style={iconStyle}
+                    onClick={changeViewToFragmentGrid}
+                />
+            }
+            <Divider horizontal={false} />
+            {
+                project.labels.length > 0 &&
+                <ApplyFilters
+                    filters={filters}
+                    setFilters={setFilters}
+                    style={iconStyle}
+                />
+            }
         </Row>
     );
 }

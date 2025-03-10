@@ -11,6 +11,7 @@ const FragmentCard = (
     {
         fragment,
         isFiltered,
+        isSelected,
         ...props}) => 
     {
 
@@ -69,7 +70,8 @@ const FragmentCard = (
                         padding: '2rem',
                         gap: '0.8rem',
                         justifyContent: 'space-between',
-                        filter: !isFiltered && 'brightness(60%)'
+                        filter: !isFiltered && 'brightness(60%)',
+                        borderColor: isSelected && 'gray',
                     }}
                     onContextMenu={(e) => handleContextMenu(e)}
                     onMouseLeave={handleCloseMenu}

@@ -3,6 +3,7 @@ import Markings from "./Markings";
 
 const BasicTimeline = ({
     filteredFragments,
+    selectedFragmentIdx,
     ...props
 }) => {
     return (
@@ -26,7 +27,7 @@ const BasicTimeline = ({
                             display: 'flex',
                             flex: `${f.durationInSeconds} ${f.durationInSeconds} auto`,
                             height: '2rem',
-                            backgroundColor: 'gray',
+                            backgroundColor: f.id === filteredFragments[selectedFragmentIdx].id ? 'var(--text-color' : 'gray',
                             borderRadius: 5,
                             border: '1px solid var(--background-color-lowest)'
                         }}

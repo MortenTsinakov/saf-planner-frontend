@@ -54,6 +54,7 @@ const ReadAllPanel = ({readAllPanelSettings, setReadAllPanelSettings, filteredFr
                 minWidth: '250px',
                 overflowY: 'auto',
                 gap: 0,
+                position: 'relative',
             }}
             data-testid='read-all'
         >
@@ -67,7 +68,9 @@ const ReadAllPanel = ({readAllPanelSettings, setReadAllPanelSettings, filteredFr
             >
                 <Row
                     style={{
-                        justifyContent: 'end',
+                        position: 'absolute',
+                        right: 5,
+                        top: 5,
                     }}
                 >
                     <IconButton
