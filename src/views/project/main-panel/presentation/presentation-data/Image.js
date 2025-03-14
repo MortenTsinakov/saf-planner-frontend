@@ -16,7 +16,6 @@ const Image = ({
             onMouseLeave={() => setHovering(false)}
             style={{
                 position: 'relative', 
-                height: 'fit-content'
             }}
         >    
             <img

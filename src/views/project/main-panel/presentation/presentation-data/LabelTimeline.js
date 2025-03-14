@@ -1,5 +1,6 @@
 import { Column, Row, Typography } from 'components';
 import { useProjectStore } from 'stores';
+import Markings from 'views/project/timeline/Markings';
 
 const LabelTimeline = ({filters, filteredFragments, selectedFragment}) => {
 
@@ -70,6 +71,7 @@ const LabelTimeline = ({filters, filteredFragments, selectedFragment}) => {
                 backgroundColor: 'var(--background-color-medium)',
                 borderTop: '1px solid var(--main-gray)',
                 borderBottom: '1px solid var(--main-gray)',
+                paddingBottom: 75,
             }}
         >
             <Row style={{gap:'3rem'}}>
@@ -95,11 +97,22 @@ const LabelTimeline = ({filters, filteredFragments, selectedFragment}) => {
                         borderRadius: '5px',
                         width: '100%',
                         gap: '0.2rem',
+                        position: 'relative',
                     }}
                 >
                     {filteredFragments.map(fragment => (
                         getFragmentInTimeline(fragment)
                     ))}
+                    <div 
+                        style={{
+                            position: 'absolute',
+                            width: '100%',
+                            bottom: 0,
+                            transform: 'translateY(65px)'
+                        }}
+                    >
+                        <Markings filteredFragments={filteredFragments} />
+                    </div>
                 </Row>
             </Row>
         </Column>

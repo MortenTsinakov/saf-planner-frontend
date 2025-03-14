@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { MdOutlineFilterAlt } from 'react-icons/md';
 import { useProjectStore } from 'stores';
 
-const ApplyFilters = ({filters, setFilters}) => {
+const ApplyFilters = ({filters, setFilters, style}) => {
 
     const {project} = useProjectStore();
         const [filterMenuIsOpen, setFilterMenuIsOpen] = useState(false);
@@ -29,6 +29,7 @@ const ApplyFilters = ({filters, setFilters}) => {
             <IconButton
                 icon={<MdOutlineFilterAlt />}
                 style={{
+                    ...style,
                     color: filters.length > 0 && 'var(--color-error)'
                 }}
                 onClick={() => setFilterMenuIsOpen(!filterMenuIsOpen)}

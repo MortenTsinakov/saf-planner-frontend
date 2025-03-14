@@ -1,16 +1,17 @@
 import { Card, Column, IconButton, Row, SortableItem, Typography } from 'components';
 import { useRef, useState } from 'react';
-import { MdAccessTime, MdDragIndicator} from 'react-icons/md';
+import { MdDragIndicator, MdOutlineLinearScale } from 'react-icons/md';
 import useProjectStore from 'stores/useProjectStore';
 import { possibleSidebarStates } from './SidebarStates';
 import FragmentCardMenu from './FragmentCardMenu';
 import DeleteFragment from '../fragment-grid-actions/DeleteFragment';
-import AttachImage from '../../attach_image/AttachImage';
+import AttachImage from '../../../attach_image/AttachImage';
 
 const FragmentCard = (
     {
         fragment,
         isFiltered,
+        isSelected,
         ...props}) => 
     {
 
@@ -69,7 +70,8 @@ const FragmentCard = (
                         padding: '2rem',
                         gap: '0.8rem',
                         justifyContent: 'space-between',
-                        filter: !isFiltered && 'brightness(60%)'
+                        filter: !isFiltered && 'brightness(60%)',
+                        borderColor: isSelected && 'gray',
                     }}
                     onContextMenu={(e) => handleContextMenu(e)}
                     onMouseLeave={handleCloseMenu}
@@ -96,7 +98,7 @@ const FragmentCard = (
                                 alignItems: 'center',
                                 color: fragment.onTimeline ? 'var(--text-color)' : 'var(--main-gray)'
                             }}
-                            icon={<MdAccessTime />}
+                            icon={<MdOutlineLinearScale />}
                             title={fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}
                             onClick={() => updateFragmentOnTimelineStatus(fragment, !fragment.onTimeline)}
                             data-testid='on-timeline-button'

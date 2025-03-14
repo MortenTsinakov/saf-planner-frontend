@@ -16,8 +16,12 @@ import { possibleSidebarStates } from './fragment-grid-data/SidebarStates';
  * Grid that displays project fragments.
  * It's also possible to add new fragments on the grid.
  */
-const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
-
+const FragmentGrid = ({
+    filteredFragments, 
+    selectedFragmentIdx, 
+    hideNonTimelineFragments, 
+    ...props
+}) => {
     const sidebarStates = possibleSidebarStates;
     const {
         fragments,
@@ -79,7 +83,7 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                 durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
                 onTimeline: newFragment.onTimeline,
                 position: fragments.length + 1,
-                projectId: props.projectId,
+                projectId: newFragment.projectId,
             }
             const labels = newFragment.labels
             setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
@@ -101,7 +105,7 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                 durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
                 onTimeline: newFragment.onTimeline,
                 position: overCard.position || fragments.length,
-                projectId: props.projectId,
+                projectId: newFragment.projectId,
             }
             const labels = newFragment.labels;
             setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
@@ -252,7 +256,19 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
             onDragCancel={handleDragCancel}
             onDragStart={handleDragStart}
         >
-            <Row style={{position: 'relative'}}>
+            <div
+                style={{
+                    position: 'relative',
+                    overflow: 'hidden',
+                    height: '100%',
+                }}
+            >
+            <Row 
+                style={{
+                    height: 'inherit',
+                    overflowY: 'auto',
+                }}
+            >
                 <SortableContextWrapper
                     id={FRAGMENT_GRID_ID}
                     items={fragments}
@@ -261,9 +277,8 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                     <Container
                         ref={setNodeRef}
                         style={{
-                            width: '100%',
-                            height: fragmentGridHeight,
                             alignItems: 'flex-start',
+                            width: '100%',
                         }}
                     >
                         {
@@ -273,8 +288,9 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                                 style={{
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                    height: fragmentGridHeight,
+                                    height: '100%',
                                     width: '100%',
+                                    bacakgroundColor: 'blue',
                                 }}
                             >
                                 <Column
@@ -321,17 +337,18 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
                                     flexWrap: 'wrap',
                                     justifyContent: 'start',
                                     alignContent: 'flex-start',
-                                    maxHeight: fragmentGridHeight,
                                     overflow: 'auto',
                                     flex: '1 1 0',
-                                    height: 'inherit',
+                                    height: '100%',
                                 }}
                             >
                                 {fragments.map(f => (
+                                    (f.onTimeline || !hideNonTimelineFragments) &&
                                     <FragmentCard
                                         key={f.id}
                                         fragment={f}
                                         isFiltered={filteredFragments.includes(f)}
+                                        isSelected={filteredFragments.length > 0 && f.id === filteredFragments[selectedFragmentIdx].id}
                                         {...props}
                                     />
                                 ))}
@@ -343,19 +360,27 @@ const FragmentGrid = ({fragmentGridHeight, filteredFragments, ...props}) => {
 
                 {
                     fragments.length > 0 &&
-                    <IconButton
-                        onClick={handleCreateFragmentClick}
-                        icon={<MdAddBox />}
+                    <Column
                         style={{
-                            color: 'var(--primary-color)',
-                            fontSize: '8rem',
                             position: 'absolute',
-                            right: props.isMobile ? 10 : 50,
-                            bottom: props.isMobile ? 10 : 50,
+                            bottom: 0,
+                            right: 0,
+                            justifyContent: 'end',
+                            alignItems: 'end',
                         }}
-                    />
+                    >
+                        <IconButton
+                            onClick={handleCreateFragmentClick}
+                            icon={<MdAddBox />}
+                            style={{
+                                color: 'var(--primary-color)',
+                                fontSize: '8rem',
+                            }}
+                        />
+                    </Column>
                 } 
             </Row>
+            </div>
             <FragmentGridSidebar {...props}/>
             <DragOverlay>
                 {getDragOverlay()}

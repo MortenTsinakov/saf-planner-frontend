@@ -1,33 +1,39 @@
 import { useAlerts } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import FragmentGrid from './fragment-grid/FragmentGrid';
 import { Column, Loading, Row } from 'components';
 import Toolbar from './toolbar/Toolbar';
-import ReadAll from './read-all/ReadAll';
+import ReadAllPanel from './read-all-panel/ReadAllPanel';
 import Timeline from './timeline/Timeline';
-import { TIMELINE_HEIGHT } from './timeline/TimelineConstants';
 import { useProjectStore } from 'stores';
-import Presentation from './presentation/Presentation';
+import MainPanel from './main-panel/MainPanel';
 
 const Project = ({...props}) => {
 
-    const views = Object.freeze({
+    const mainPanelViews = Object.freeze({
         FRAGMENT_GRID: 0,
         PRESENTATION: 1,
     });
 
+    // Initialize view
     const location = useLocation();
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const projectId = searchParams.get('projectId');
 
-    const toolBarHeight = 55;
-    const [readAllWidth, setReadAllWidth] = useState(350);
-    const [showReadAllPanel, setShowReadAllPanel] = useState(false);
-    const [currentView, setCurrentView] = useState(views.FRAGMENT_GRID);
+    // Fragment filters
     const [filters, setFilters] = useState([]);
+    const [hideNonTimelineFragments, setHideNonTimelineFragments] = useState(false);
+    const [selectedFragmentIdx, setSelectedFragmentIdx] = useState(0);
 
+    // View in the main panel
+    const [mainPanelView, setMainPanelView] = useState(mainPanelViews.FRAGMENT_GRID);
+
+    // Settings for panels
+    const [readAllPanelSettings, setReadAllPanelSettings] = useState({width: 350, isOpen: true});
+    const [timelinePanelSettings, setTimelinePanelSettings] = useState({isOpen: true});
+
+    // Hooks
     const { fetchProject, loading, error, setError, fragments } = useProjectStore();
     const {addAlert} = useAlerts();
 
@@ -60,12 +66,15 @@ const Project = ({...props}) => {
     const filterFragments = () => {
 
         if (filters.length === 0) {
-            return fragments;
+            return fragments.filter(f => f.onTimeline);
         }
 
         let filteredFragments = [];
 
         for (const fragment of fragments) {
+            if (!fragment.onTimeline) {
+                continue;
+            }
             for (const label of fragment.labels) {
                 if (filters.includes(label.id)) {
                     filteredFragments.push(fragment);
@@ -82,67 +91,59 @@ const Project = ({...props}) => {
     return (
         <Column
             style={{
-                height: 'calc(100vh - var(--navbar-height)',
+                height: 'calc(100vh - var(--navbar-height))',
                 width: '100%',
                 gap: 0,
             }}
         >
             <Toolbar
-                height={toolBarHeight}
-                showReadAllPanel={showReadAllPanel}
-                setShowReadAllPanel={setShowReadAllPanel}
-                views={views}
-                currentView={currentView}
-                setCurrentView={setCurrentView}
+                readAllPanelSettings={readAllPanelSettings}
+                setReadAllPanelSettings={setReadAllPanelSettings}
+                timelinePanelSettings={timelinePanelSettings}
+                setTimelinePanelSettings={setTimelinePanelSettings}
                 filters={filters}
                 setFilters={setFilters}
+                mainPanelViews={mainPanelViews}
+                mainPanelView={mainPanelView}
+                setMainPanelView={setMainPanelView}
+                hideNonTimelineFragments={hideNonTimelineFragments}
+                setHideNonTimelineFragments={setHideNonTimelineFragments}
             />
             <Row
                 style={{
-                    gap: 0,
-                    height: '100%',
+                    overflow: 'hidden',
+                    height: 'inherit',
+                    width: '100%',
+                    gap:0,
                 }}
             >
-                {showReadAllPanel &&                
-                    <ReadAll
-                        readAllWidth={readAllWidth}
-                        setReadAllWidth={setReadAllWidth}
-                        readAllHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px)`}
-                        fragments={filteredFragments}
-                        {...props}
-                    />
-                }
-                {
-                    currentView === views.FRAGMENT_GRID &&
+                <ReadAllPanel
+                    readAllPanelSettings={readAllPanelSettings}
+                    setReadAllPanelSettings={setReadAllPanelSettings}
+                    filteredFragments={filteredFragments}
+                    selectedFragmentIdx={selectedFragmentIdx}
+                />
+                <Row style={{flex: 1, gap: 0}}>
                     <Column
-                        style={{
-                            gap: 0,
-                            flex: 1,
-                            width: '100%',
-                            overflow: 'auto',
-                        }}
+                        style={{width: '100%'}}
                     >
                         <Timeline
+                            timelinePanelSettings={timelinePanelSettings}
+                            setTimelinePanelSettings={setTimelinePanelSettings}
                             filteredFragments={filteredFragments}
-                            {...props}
+                            filters={filters}
+                            selectedFragmentIdx={selectedFragmentIdx}
+                            setSelectedFragmentIdx={setSelectedFragmentIdx}
                         />
-                        <FragmentGrid
-                            fragmentGridHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px - ${TIMELINE_HEIGHT}px)`}
-                            projectId={projectId}
+                        <MainPanel
+                            mainPanelViews={mainPanelViews}
+                            mainPanelView={mainPanelView}
                             filteredFragments={filteredFragments}
-                            {...props}
+                            selectedFragmentIdx={selectedFragmentIdx}
+                            hideNonTimelineFragments={hideNonTimelineFragments}
                         />
                     </Column>
-                }
-                {
-                    currentView === views.PRESENTATION &&
-                    <Presentation
-                        presentationViewHeight={`calc(100vh - var(--navbar-height) - ${toolBarHeight}px`}
-                        filters={filters}
-                        filteredFragments={filteredFragments}
-                        {...props}
-                    />
-                }
+                </Row>
             </Row>
         </Column>
     );

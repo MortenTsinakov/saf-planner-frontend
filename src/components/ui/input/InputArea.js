@@ -21,6 +21,9 @@ const InputArea = ({style,
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
+                style={{
+                    height: '100%',
+                }}
             />
         </div>
     );

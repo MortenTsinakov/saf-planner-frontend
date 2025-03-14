@@ -1,112 +1,201 @@
-import { Column, Row } from 'components';
-import TimelineItem from './timeline-data/TimelineItem';
-import { useEffect, useState } from 'react';
-import { DEFAULT_ZOOM, PIXELS_PER_SECOND, TIMELINE_BAR_HEIGHT, TIMELINE_HEIGHT, TIMELINE_ITEM_HEIGHT, TIMELINE_MARKING_HEIGHT, TIMELINE_TOOLBAR_HEIGHT } from './TimelineConstants';
-import TimelineMarkings from './timeline-toolbar/TimelineMarkings';
-import TimelineToolbar from './timeline-toolbar/TimelineToolbar';
-import TimelineInfo from './timeline-toolbar/TimelineInfo';
-import { useProjectStore } from 'stores';
+import { Column, IconButton, Row, Typography } from "components";
+import { useCallback, useEffect, useState } from "react";
+import LabelTimeline from "./LabelTimeline";
+import { MdArrowDropDown, MdArrowDropUp, MdArrowLeft, MdArrowRight, MdClose } from "react-icons/md";
+import BasicTimeline from "./BasicTimeline";
+import { useProjectStore } from "stores";
+import { formatSecondsToHMS } from "utils";
 
-const Timeline = ({filteredFragments, ...props}) => {
+const Timeline = ({
+    timelinePanelSettings,
+    setTimelinePanelSettings,
+    filteredFragments,
+    filters,
+    selectedFragmentIdx,
+    setSelectedFragmentIdx,
+    ...props
+}) => {
 
     const {project, fragments} = useProjectStore();
-    const [zoom, setZoom] = useState(DEFAULT_ZOOM);
-    const [showEstimatedDuration, setShowEstimatedDuration] = useState(false);
+    const [currentDuration, setCurrentDuration] = useState(0);
+    const [displayDetailedTimeline, setDisplayDetailedTimeline] = useState(false);
+    const iconStyle = {
+        fontSize: '3rem',
+    };
 
-    const [windowWidth, setWindowWidth] = useState(document.documentElement.clientWidth);
+    const selectPreviousFragment = useCallback(() => {
+        setSelectedFragmentIdx(Math.max(0, selectedFragmentIdx - 1));
+    }, [selectedFragmentIdx, setSelectedFragmentIdx]);
 
-    const currentDuration = fragments.reduce((partialSum, a) => a.onTimeline ? partialSum + a.durationInSeconds : partialSum, 0);
-    const estimatedDuration = project && project.estimatedLengthInSeconds ? project.estimatedLengthInSeconds : 0;
-    const maxTimelineWidth = Math.max(estimatedDuration + 30, currentDuration + 30, windowWidth / (PIXELS_PER_SECOND * zoom)) * PIXELS_PER_SECOND * zoom;
+    const selectNextFragment = useCallback(() => {
+        setSelectedFragmentIdx(Math.min(filteredFragments.length - 1, selectedFragmentIdx + 1));
+    }, [filteredFragments, selectedFragmentIdx, setSelectedFragmentIdx]);
 
     useEffect(() => {
-        const handleResize = () => {
-            setWindowWidth(document.documentElement.clientWidth);
+        const handleKeyDown = (event) => {
+            switch (event.key) {
+                case "ArrowLeft":
+                    selectPreviousFragment();
+                    break;
+                case "ArrowRight":
+                    selectNextFragment();
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [selectPreviousFragment, selectNextFragment]);
+
+    useEffect(() => {
+        const calculateCurrentDuration = () => {
+            let duration = 0;
+
+            for (const fragment of fragments) {
+                duration += fragment.durationInSeconds;
+            }
+
+            setCurrentDuration(duration);
         }
 
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
+        calculateCurrentDuration();
+    }, [fragments]);
+
+    useEffect(() => {
+        const findFirstFragmentOnFilterChange = () => {
+            setSelectedFragmentIdx(0);
         }
-    }, []);
-    
+
+        findFirstFragmentOnFilterChange();
+    }, [filteredFragments.length, setSelectedFragmentIdx]);
+
+    if (!timelinePanelSettings.isOpen || filteredFragments.length === 0) {
+        return;
+    }
+
+    const expandTimeline = () => {
+        setDisplayDetailedTimeline(true);
+    }
+
+    const compressTimeline = () => {
+        setDisplayDetailedTimeline(false);
+    }
+
+    const handleClosePanel = () => {
+        setTimelinePanelSettings({
+            ...timelinePanelSettings,
+            isOpen: false,
+        });
+    }
+
     return (
         <Column
             style={{
+                width: '100%',
+                backgroundColor: 'var(--background-color-medium)',
                 gap: 0,
-                height: TIMELINE_HEIGHT,
             }}
         >
-
-            {/* Timeline */}
-
-            <Column
+            <Row 
                 style={{
-                    height: TIMELINE_BAR_HEIGHT,
-                    padding: '2rem 0 0 2rem',
-                    backgroundColor: 'var(--background-color-medium)',
-                    justifyContent: 'start',
-                    overflowX: 'auto',
-                    overflowY: 'hidden',
-                }}
-                data-testid='timeline-component'
-            >
-                <Row
-                    style={{
-                        height: TIMELINE_ITEM_HEIGHT,
-                        minWidth: '100%',
-                        width: maxTimelineWidth,
-                        gap: 0,
-                        backgroundColor: 'var(--background-color-low)',
-                    }}
-                >
-                    {fragments.map(f => (
-                        f.onTimeline &&
-                        <TimelineItem
-                            key={f.id}
-                            fragment={f}
-                            isFiltered={filteredFragments.includes(f)}
-                            zoom={zoom}
-                        />
-                    ))}
-                </Row>
-                <Row
-                    style={{
-                        backgroundColor: 'var(--background-color-medium)',
-                        height: TIMELINE_MARKING_HEIGHT
-                    }}
-                >
-                    <TimelineMarkings
-                        maxTimelineWidth={maxTimelineWidth}
-                        showEstimatedDuration={showEstimatedDuration}
-                        zoom={zoom}
-                    />
-                </Row>
-            </Column>
+                    width: '100%',
+                    justifyContent: 'space-between',
 
-            {/* Timeline toolbar */}
-            
+                }}
+            >
+                <Row>
+                    <Column style={{gap: 0, paddingLeft: '2rem', alignItems: 'center'}}>
+                        <Typography fontSize='extrasmall' color='label'>
+                            Current duration:
+                        </Typography>
+                        <Typography
+                            fontSize='extrasmall'
+                            style={{
+                                color: project.estimatedLengthInSeconds && project.estimatedLengthInSeconds < currentDuration && 'var(--color-error)'
+                            }}
+                        >
+                            {formatSecondsToHMS(currentDuration)}
+                        </Typography>
+                    </Column>
+                    {
+                        project.estimatedLengthInSeconds &&
+                        <Column style={{gap: 0, paddingLeft: '2rem', alignItems: 'center'}}>
+                        <Typography fontSize='extrasmall' color='label'>
+                            Estimated duration:
+                        </Typography>
+                        <Typography fontSize='extrasmall'>
+                            {formatSecondsToHMS(project.estimatedLengthInSeconds)}
+                        </Typography>
+                    </Column>
+                    }
+                </Row>
+                <IconButton
+                    icon={<MdClose />}
+                    style={iconStyle}
+                    onClick={handleClosePanel}
+                />
+            </Row>
+            {
+                displayDetailedTimeline
+                ?
+                <LabelTimeline
+                    filteredFragments={filteredFragments}
+                    filters={filters}
+                    selectedFragmentIdx={selectedFragmentIdx}
+                    {...props}
+                />
+                :
+                <BasicTimeline
+                    filteredFragments={filteredFragments}
+                    selectedFragmentIdx={selectedFragmentIdx}
+                />
+            }
+            <Row
+                style={{justifyContent: 'center', alignItems: 'center'}}
+            >
+                <IconButton
+                    style={{visibility: selectedFragmentIdx > 0 ? 'visible' : 'hidden'}}
+                    icon={<MdArrowLeft />}
+                    onClick={selectPreviousFragment}
+                    title='Previous fragment (left arrow)'
+                />
+                <Typography
+                    style={{minWidth: '9ch', textAlign: 'center'}}
+                >
+                    {selectedFragmentIdx + 1} / {filteredFragments.length}
+                </Typography>
+                <IconButton
+                    style={{visibility: selectedFragmentIdx + 1 < filteredFragments.length ? 'visible' : 'hidden'}}
+                    icon={<MdArrowRight />}
+                    onClick={selectNextFragment}
+                    title='Next fragment (right arrow)'
+                />
+            </Row>
             <Row
                 style={{
-                    backgroundColor: 'var(--background-color-medium)',
-                    height: TIMELINE_TOOLBAR_HEIGHT, 
-                    padding: '2rem', 
+                    justifyContent: 'center',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
+                    height: 25,
                     borderTop: '1px solid var(--main-gray)',
-                    borderBottom: '1px solid var(--main-gray)',
                 }}
-                data-testid='timeline-toolbar-component'
             >
-                <TimelineToolbar
-                    zoom={zoom}
-                    setZoom={setZoom}
-                    showEstimatedDuration={showEstimatedDuration}
-                    setShowEstimatedDuration={setShowEstimatedDuration}
-                />
-                {!props.isMobile &&                
-                    <TimelineInfo
-                        currentDuration={currentDuration}
+                {
+                    displayDetailedTimeline ?
+                    <IconButton
+                        title='Close timeline'
+                        icon={<MdArrowDropUp />}
+                        onClick={compressTimeline}
+                    />
+                    :
+                    <IconButton
+                        title='Close timeline'
+                        icon={<MdArrowDropDown />}
+                        onClick={expandTimeline}
                     />
                 }
             </Row>
