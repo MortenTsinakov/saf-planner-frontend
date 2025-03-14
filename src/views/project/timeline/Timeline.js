@@ -1,7 +1,7 @@
 import { Column, IconButton, Row, Typography } from "components";
 import { useCallback, useEffect, useState } from "react";
 import LabelTimeline from "./LabelTimeline";
-import { MdArrowDropDown, MdArrowDropUp, MdClose } from "react-icons/md";
+import { MdArrowDropDown, MdArrowDropUp, MdArrowLeft, MdArrowRight, MdClose } from "react-icons/md";
 import BasicTimeline from "./BasicTimeline";
 import { useProjectStore } from "stores";
 import { formatSecondsToHMS } from "utils";
@@ -156,10 +156,32 @@ const Timeline = ({
                 />
             }
             <Row
+                style={{justifyContent: 'center', alignItems: 'center'}}
+            >
+                <IconButton
+                    style={{visibility: selectedFragmentIdx > 0 ? 'visible' : 'hidden'}}
+                    icon={<MdArrowLeft />}
+                    onClick={selectPreviousFragment}
+                    title='Previous fragment (left arrow)'
+                />
+                <Typography
+                    style={{minWidth: '9ch', textAlign: 'center'}}
+                >
+                    {selectedFragmentIdx + 1} / {filteredFragments.length}
+                </Typography>
+                <IconButton
+                    style={{visibility: selectedFragmentIdx + 1 < filteredFragments.length ? 'visible' : 'hidden'}}
+                    icon={<MdArrowRight />}
+                    onClick={selectNextFragment}
+                    title='Next fragment (right arrow)'
+                />
+            </Row>
+            <Row
                 style={{
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: 25,
+                    borderTop: '1px solid var(--main-gray)',
                 }}
             >
                 {

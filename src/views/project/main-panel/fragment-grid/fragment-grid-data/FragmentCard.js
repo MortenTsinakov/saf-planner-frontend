@@ -1,6 +1,6 @@
 import { Card, Column, IconButton, Row, SortableItem, Typography } from 'components';
 import { useRef, useState } from 'react';
-import { MdAccessTime, MdDragIndicator} from 'react-icons/md';
+import { MdDragIndicator, MdOutlineLinearScale } from 'react-icons/md';
 import useProjectStore from 'stores/useProjectStore';
 import { possibleSidebarStates } from './SidebarStates';
 import FragmentCardMenu from './FragmentCardMenu';
@@ -98,7 +98,7 @@ const FragmentCard = (
                                 alignItems: 'center',
                                 color: fragment.onTimeline ? 'var(--text-color)' : 'var(--main-gray)'
                             }}
-                            icon={<MdAccessTime />}
+                            icon={<MdOutlineLinearScale />}
                             title={fragment.onTimeline ? 'Remove from timeline' : 'Add to timeline'}
                             onClick={() => updateFragmentOnTimelineStatus(fragment, !fragment.onTimeline)}
                             data-testid='on-timeline-button'

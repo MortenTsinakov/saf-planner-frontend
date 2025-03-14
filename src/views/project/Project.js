@@ -23,6 +23,7 @@ const Project = ({...props}) => {
 
     // Fragment filters
     const [filters, setFilters] = useState([]);
+    const [hideNonTimelineFragments, setHideNonTimelineFragments] = useState(false);
     const [selectedFragmentIdx, setSelectedFragmentIdx] = useState(0);
 
     // View in the main panel
@@ -65,12 +66,15 @@ const Project = ({...props}) => {
     const filterFragments = () => {
 
         if (filters.length === 0) {
-            return fragments;
+            return fragments.filter(f => f.onTimeline);
         }
 
         let filteredFragments = [];
 
         for (const fragment of fragments) {
+            if (!fragment.onTimeline) {
+                continue;
+            }
             for (const label of fragment.labels) {
                 if (filters.includes(label.id)) {
                     filteredFragments.push(fragment);
@@ -102,6 +106,8 @@ const Project = ({...props}) => {
                 mainPanelViews={mainPanelViews}
                 mainPanelView={mainPanelView}
                 setMainPanelView={setMainPanelView}
+                hideNonTimelineFragments={hideNonTimelineFragments}
+                setHideNonTimelineFragments={setHideNonTimelineFragments}
             />
             <Row
                 style={{
@@ -134,6 +140,7 @@ const Project = ({...props}) => {
                             mainPanelView={mainPanelView}
                             filteredFragments={filteredFragments}
                             selectedFragmentIdx={selectedFragmentIdx}
+                            hideNonTimelineFragments={hideNonTimelineFragments}
                         />
                     </Column>
                 </Row>

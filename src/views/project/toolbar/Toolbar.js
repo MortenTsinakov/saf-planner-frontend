@@ -1,5 +1,5 @@
 import { Divider, IconButton, Row } from "components";
-import { MdAutoStories, MdGridView, MdTv, MdViewTimeline } from "react-icons/md";
+import { MdAutoStories, MdGridView, MdLinearScale, MdTv, MdViewTimeline } from "react-icons/md";
 import { useProjectStore } from "stores";
 import ApplyFilters from "./ApplyFilters";
 
@@ -13,6 +13,8 @@ const Toolbar = ({
     mainPanelViews,
     mainPanelView,
     setMainPanelView,
+    hideNonTimelineFragments,
+    setHideNonTimelineFragments,
 }) => {
 
     const {project, sidebarState, setSidebarState} = useProjectStore();
@@ -45,6 +47,10 @@ const Toolbar = ({
 
     const changeViewToFragmentGrid = () => {
         setMainPanelView(mainPanelViews.FRAGMENT_GRID);
+    }
+
+    const toggleNonTimelineFragments = () => {
+        setHideNonTimelineFragments(!hideNonTimelineFragments);
     }
 
     return (
@@ -83,6 +89,15 @@ const Toolbar = ({
                 />
             }
             <Divider horizontal={false} />
+            <IconButton
+                style={{
+                    ...iconStyle,
+                    color: hideNonTimelineFragments && 'var(--color-error)'
+                }}
+                icon={<MdLinearScale />}
+                title={hideNonTimelineFragments ? 'Show fragments that are not on timeline' : 'Hide fragments that are not on timeline'}
+                onClick={toggleNonTimelineFragments}
+            />
             {
                 project.labels.length > 0 &&
                 <ApplyFilters

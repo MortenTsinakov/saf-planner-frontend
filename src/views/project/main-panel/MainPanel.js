@@ -6,6 +6,7 @@ const MainPanel = ({
     mainPanelView,
     filteredFragments,
     selectedFragmentIdx,
+    hideNonTimelineFragments,
 }) => {
 
     if (mainPanelView === mainPanelViews.FRAGMENT_GRID) {
@@ -13,6 +14,7 @@ const MainPanel = ({
             <FragmentGrid
                 filteredFragments={filteredFragments}
                 selectedFragmentIdx={selectedFragmentIdx}
+                hideNonTimelineFragments={hideNonTimelineFragments}
             />
         );
     }

@@ -16,8 +16,12 @@ import { possibleSidebarStates } from './fragment-grid-data/SidebarStates';
  * Grid that displays project fragments.
  * It's also possible to add new fragments on the grid.
  */
-const FragmentGrid = ({filteredFragments, selectedFragmentIdx, ...props}) => {
-
+const FragmentGrid = ({
+    filteredFragments, 
+    selectedFragmentIdx, 
+    hideNonTimelineFragments, 
+    ...props
+}) => {
     const sidebarStates = possibleSidebarStates;
     const {
         fragments,
@@ -335,15 +339,16 @@ const FragmentGrid = ({filteredFragments, selectedFragmentIdx, ...props}) => {
                                     alignContent: 'flex-start',
                                     overflow: 'auto',
                                     flex: '1 1 0',
-                                    height: 'inherit',
+                                    height: '100%',
                                 }}
                             >
                                 {fragments.map(f => (
+                                    (f.onTimeline || !hideNonTimelineFragments) &&
                                     <FragmentCard
                                         key={f.id}
                                         fragment={f}
                                         isFiltered={filteredFragments.includes(f)}
-                                        isSelected={f.id === filteredFragments[selectedFragmentIdx].id}
+                                        isSelected={filteredFragments.length > 0 && f.id === filteredFragments[selectedFragmentIdx].id}
                                         {...props}
                                     />
                                 ))}

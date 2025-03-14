@@ -4,6 +4,17 @@ import { MdAlarm} from "react-icons/md";
 import FragmentImages from "./presentation-data/FragmentImages";
 
 const Presentation = ({fragment, ...props}) => {
+
+    if (!fragment) {
+        return (
+            <Column style={{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+                <Typography color='label'>
+                    There are no fragments to display...
+                </Typography>
+            </Column>
+        );
+    }
+
     return (
         <Row 
             style={{
