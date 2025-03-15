@@ -1,7 +1,7 @@
 import { Column, FilledButton, IconButton, Loading, Modal, Row, Typography } from 'components';
 import Image from './Image';
 import { useCallback, useEffect, useState } from 'react';
-import { MdAddPhotoAlternate, MdArrowLeft, MdArrowRight, MdDelete, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { MdAddPhotoAlternate, MdArrowLeft, MdArrowRight, MdDelete } from 'react-icons/md';
 import { useProjectStore } from 'stores';
 import AttachImage from 'views/project/attach_image/AttachImage';
 import { useAlerts } from 'hooks';
