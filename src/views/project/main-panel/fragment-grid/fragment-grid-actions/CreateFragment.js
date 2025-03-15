@@ -111,7 +111,11 @@ const CreateFragment = ({...props}) => {
 
     const createNewLabelPage = () => {
         return (
-            <CreateLabel exitFn={() => setCreateNewLabel(false)}/>
+            <CreateLabel
+                exitFn={() => setCreateNewLabel(false)}
+                currentLabels={selectedLabels}
+                setCurrentLabels={setSelectedLabels}
+            />
         );
     }
 

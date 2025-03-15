@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useProjectStore } from 'stores';
 import { generateRandomColor } from 'utils';
 
-const CreateLabel = ({exitFn}) => {
+const CreateLabel = ({exitFn, currentLabels=null, setCurrentLabels=null}) => {
     const [description, setDescription] = useState("");
     const [color, setColor] = useState(generateRandomColor());
 
@@ -20,9 +20,12 @@ const CreateLabel = ({exitFn}) => {
     }
 
     const handleSaveClick = async () => {
-        const creationWasSuccessful = await createLabel(project, description, color);
-        if (creationWasSuccessful) {
-            addAlert("Label created - you can attach it to the fragment now", "success");
+        const createdLabel = await createLabel(project, description, color);
+        if (createdLabel !== null) {
+            addAlert("Label created", "success");
+            if (currentLabels !== null && setCurrentLabels !== null) {
+                setCurrentLabels([...currentLabels, createdLabel]);
+            }
             exitFn();
         }
     }
