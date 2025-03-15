@@ -41,26 +41,26 @@ export const useProjects = () => {
 
     /**
      * Create a new project.
-     * Return true if the project was successfully saved to database,
-     * else false.
+     * Return the created project on success,
+     * else null.
      */
     const createProject = useCallback(async (title, description, estimatedLengthInSeconds) => {
         if (!validateProjectTitle(title)) {
             setError('Project title cannot be blank');
-            return false;
+            return null;
         }
         if (!validateProjectEstimatedLength(estimatedLengthInSeconds)) {
             setError("Project's estimated length cannot be a negative value");
-            return false;
+            return null;
         }
         try {
             setError(null);
             const response = await createProjectService(title, description, estimatedLengthInSeconds);
             setUserProjects((prev) => [response, ...prev]);
-            return true;
+            return response;
         } catch (err) {
             setError(err.response?.data?.message || "Creating project failed");
-            return false;
+            return null;
         };
     }, [validateProjectTitle, validateProjectEstimatedLength]);
 
