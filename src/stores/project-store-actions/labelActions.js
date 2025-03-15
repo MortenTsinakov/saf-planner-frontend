@@ -1,15 +1,20 @@
 import { attachLabeltoFragmentService, createLabelService, removeLabelFromFragmentService } from 'services';
 
+/**
+ * Request for creating a new label.
+ * If label was created, return the label,
+ * else null
+ */
 export const createLabel = (get, set) => async (project, description, color) => {
     try {
         set({error:null});
         const response = await createLabelService(project.id, description, color);
         const updatedProject = {...get().project, labels: [...get().project.labels, response]};
         set({project: updatedProject});
-        return true;
+        return response;
     } catch (err) {
         set({error: err});
-        return false;
+        return null;
     }
 };
 
