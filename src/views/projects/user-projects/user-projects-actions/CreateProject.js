@@ -1,13 +1,16 @@
 import { Card, Column, FilledButton, InputArea, InputField, OutlineButton, Row, Typography } from 'components';
 import { useAlerts } from 'hooks';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { clampNumber, timeInMinsSecsToTimeInSeconds } from 'utils';
 
 /**
  * Renders an input form for creating a new project.
  * Call the necessary hook when a project is created.
  */
-const CreateProject = ({createProject, setCreatingProject, props}) => {
+const CreateProject = ({createProject, setCreatingProject, ...props}) => {
+
+    const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -51,19 +54,24 @@ const CreateProject = ({createProject, setCreatingProject, props}) => {
         const formattedTitle = title.trim();
         const formattedDescription = description.trim();
         const estimatedLengthInSeconds = timeInMinsSecsToTimeInSeconds(estLenMin, estLenSec);
-        const saveWasSuccessful = await createProject(
+        const createdProject = await createProject(
             formattedTitle,
             formattedDescription,
             estimatedLengthInSeconds
         );
-        if (saveWasSuccessful) {
-            handleCancelClick();
+        if (createdProject !== null) {
+            setCreatingProject(false);
             addAlert('Project created', 'success');
+            openProject(createdProject.id);
         }
     }
 
     const handleCancelClick = () => {
         setCreatingProject(false);
+    }
+
+    const openProject = (projectId) => {
+        navigate(`/project?projectId=${projectId}`);
     }
 
     return (
