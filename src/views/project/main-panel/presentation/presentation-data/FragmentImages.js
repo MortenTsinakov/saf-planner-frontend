@@ -195,6 +195,8 @@ const FragmentImages = ({fragment, ...props}) => {
                                 borderRadius: '10px 0 0 10px',
                                 zIndex: 1,
                             }}
+                            onClick={handlePreviousImageClick}
+                            title='Previous image (PageUp)'
                         />
                         <IconButton
                             icon={<MdArrowRight />}
@@ -204,6 +206,8 @@ const FragmentImages = ({fragment, ...props}) => {
                                 borderRadius: '0 10px 10px 0',
                                 zIndex: 1,
                             }}
+                            onClick={handleNextImageClick}
+                            title='Next image (PageDown)'
                         />
                     </Row>
                     <Row
