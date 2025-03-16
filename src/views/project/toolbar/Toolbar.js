@@ -1,7 +1,9 @@
 import { Divider, IconButton, Row } from "components";
-import { MdAutoStories, MdGridView, MdLinearScale, MdTv, MdViewTimeline } from "react-icons/md";
+import { MdAutoStories, MdGridView, MdLinearScale, MdOutlineModeComment, MdShare, MdTv, MdViewTimeline } from "react-icons/md";
 import { useProjectStore } from "stores";
 import ApplyFilters from "./ApplyFilters";
+import { useState } from "react";
+import ShareProject from "../share_project/ShareProject";
 
 const Toolbar = ({
     readAllPanelSettings,
@@ -18,6 +20,7 @@ const Toolbar = ({
 }) => {
 
     const {project, sidebarState, setSidebarState} = useProjectStore();
+    const [shareProject, setShareProject] = useState(false);
 
     const iconStyle = {
         fontSize: '3rem',
@@ -53,59 +56,87 @@ const Toolbar = ({
         setHideNonTimelineFragments(!hideNonTimelineFragments);
     }
 
+    const handleShareProjectClick = () => {
+        setShareProject(true);
+    }
+
     return (
         <Row
             style={{
                 height: 55,
                 alignItems: 'center',
                 paddingLeft: '1rem',
+                paddingRight: '1rem',
                 borderBottom: '1px solid var(--main-gray)',
+                justifyContent: 'space-between',
             }}
         >
-            <IconButton
-                icon={<MdAutoStories />}
-                style={iconStyle}
-                onClick={toggleReadAllPanel}
-            />
-            <IconButton
-                icon={<MdViewTimeline />}
-                style={iconStyle}
-                onClick={toggleTimelinePanel}
-            />
-            {
-                mainPanelView === mainPanelViews.FRAGMENT_GRID &&
-                <IconButton
-                    icon={<MdTv />}
-                    style={iconStyle}
-                    onClick={changeViewToPresentation}
-                />
-            }
-            {
-                mainPanelView === mainPanelViews.PRESENTATION &&
-                <IconButton
-                    icon={<MdGridView />}
-                    style={iconStyle}
-                    onClick={changeViewToFragmentGrid}
-                />
-            }
-            <Divider horizontal={false} />
-            <IconButton
+            <Row
                 style={{
-                    ...iconStyle,
-                    color: hideNonTimelineFragments && 'var(--color-error)'
+                    height: '100%',
+                    alignItems: 'center'
                 }}
-                icon={<MdLinearScale />}
-                title={hideNonTimelineFragments ? 'Show fragments that are not on timeline' : 'Hide fragments that are not on timeline'}
-                onClick={toggleNonTimelineFragments}
-            />
-            {
-                project.labels.length > 0 &&
-                <ApplyFilters
-                    filters={filters}
-                    setFilters={setFilters}
+            >
+                <IconButton
+                    icon={<MdAutoStories />}
                     style={iconStyle}
+                    onClick={toggleReadAllPanel}
                 />
-            }
+                <IconButton
+                    icon={<MdViewTimeline />}
+                    style={iconStyle}
+                    onClick={toggleTimelinePanel}
+                />
+                {
+                    mainPanelView === mainPanelViews.FRAGMENT_GRID &&
+                    <IconButton
+                        icon={<MdTv />}
+                        style={iconStyle}
+                        onClick={changeViewToPresentation}
+                    />
+                }
+                {
+                    mainPanelView === mainPanelViews.PRESENTATION &&
+                    <IconButton
+                        icon={<MdGridView />}
+                        style={iconStyle}
+                        onClick={changeViewToFragmentGrid}
+                    />
+                }
+                <Divider horizontal={false} />
+                <IconButton
+                    style={{
+                        ...iconStyle,
+                        color: hideNonTimelineFragments && 'var(--color-error)'
+                    }}
+                    icon={<MdLinearScale />}
+                    title={hideNonTimelineFragments ? 'Show fragments that are not on timeline' : 'Hide fragments that are not on timeline'}
+                    onClick={toggleNonTimelineFragments}
+                />
+                {
+                    project.labels.length > 0 &&
+                    <ApplyFilters
+                        filters={filters}
+                        setFilters={setFilters}
+                        style={iconStyle}
+                    />
+                }
+            </Row>
+            <Row>
+                <IconButton
+                    style={iconStyle}
+                    icon={<MdShare />}
+                    title='Share project'
+                    onClick={handleShareProjectClick}
+                />
+                <IconButton
+                    style={iconStyle}
+                    icon={<MdOutlineModeComment />}
+                    title='Read comments'
+                />
+            </Row>
+
+            {shareProject && <ShareProject setModalIsOpen={setShareProject}/>}
         </Row>
     );
 }
