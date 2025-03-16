@@ -48,3 +48,8 @@ export {
     uploadImageService,
     deleteImageService,
 } from 'services/image/ImageService';
+
+// User service
+export {
+    searchUsersService,
+} from 'services/user/UserService';

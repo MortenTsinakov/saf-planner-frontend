@@ -1,4 +1,5 @@
 import { Column, DropdownMenu, FilledButton, IconButton, InputField, Modal, OutlineButton, Row, TextButton, Typography } from "components";
+import { useUser } from "hooks";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
 
@@ -6,27 +7,20 @@ const ShareProject = ({
     setModalIsOpen
 }) => {
 
+    const {searchUsers, searchResults, setSearchResults} = useUser();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
 
 
     const handleInputChange = (e) => {
         setSearchTerm(e.target.value);
+        searchUsers(e.target.value);
     }
 
-    const results = [
-        "George Bush", 
-        "George Washington", 
-        "Veryveryveryveryveryveryveryveryvervyveryevr Longname", 
-        "Tin Man",
-        "Mahatma Gandhi",
-        "Napoleon Bonaparte",
-        "Paul McCartney",
-        "Brad Pitt",
-        "Winston Churchill",
-        "Usain Bolt",
-        "Garry Gasparov",
-    ]
+    const handleClearInput = () => {
+        setSearchTerm("");
+        setSearchResults([]);
+    }
 
     const renderSearchBar = () => {
         return (
@@ -61,7 +55,7 @@ const ShareProject = ({
                                     top: 'calc(50% - 1.5rem)'
                                 }}
                                 title='Clear search'
-                                onClick={() => setSearchTerm("")}
+                                onClick={handleClearInput}
                             />
                         }
                     {
@@ -74,9 +68,11 @@ const ShareProject = ({
                                 }}
                             >
                                 {
-                                    results.map((result, index) => 
+                                    searchResults.length > 0
+                                    ?
+                                    searchResults.map(result => 
                                         <TextButton
-                                            key={index}
+                                            key={result.id}
                                             style={{
                                                 maxWidth: '100%',
                                                 overflow: 'hidden',
@@ -89,10 +85,14 @@ const ShareProject = ({
                                                     textWrap: 'nowrap',
                                                 }}
                                                 >
-                                                {result}
+                                                {result.firstName} {result.lastName}
                                             </Typography>
                                         </TextButton>
                                     )
+                                    :
+                                    <Typography color='label' fontSize='extrasmall'>
+                                        No results...
+                                    </Typography>
                                 }
                             </Column>
                         </DropdownMenu>
@@ -146,7 +146,7 @@ const ShareProject = ({
                                     textOverflow: 'ellipsis',
                                 }}
                             >
-                                {selectedUser}
+                                {selectedUser.firstName} {selectedUser.lastName}
                             </Typography>
                             <IconButton
                                 icon={<MdClose />}
