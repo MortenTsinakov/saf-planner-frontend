@@ -24,6 +24,7 @@ const Project = ({...props}) => {
     // Fragment filters
     const [filters, setFilters] = useState([]);
     const [hideNonTimelineFragments, setHideNonTimelineFragments] = useState(false);
+    const [filteredFragments, setFilteredFragments] = useState([]);
     const [selectedFragmentIdx, setSelectedFragmentIdx] = useState(0);
 
     // View in the main panel
@@ -45,6 +46,7 @@ const Project = ({...props}) => {
 
     useEffect(() => {
         fetchProject(projectId);
+        
     }, [fetchProject, projectId]);
 
     useEffect(() => {
@@ -57,36 +59,41 @@ const Project = ({...props}) => {
         }
     }, [setError, error, addAlert, navigate]);
 
+    
+    useEffect(() => {
+        const filterFragments = () => {
+            if (filters.length === 0) {
+                return fragments.filter(f => f.onTimeline);
+            }
+            
+            let filteredFragments = [];
+            
+            for (const fragment of fragments) {
+                if (!fragment.onTimeline) {
+                    continue;
+                }
+                for (const label of fragment.labels) {
+                    if (filters.includes(label.id)) {
+                        filteredFragments.push(fragment);
+                        break;
+                    }
+                }
+            }
+
+            return filteredFragments;
+        }
+        
+        setFilteredFragments(filterFragments());
+        setSelectedFragmentIdx(0);
+    }, [filters, fragments])
+
+
     if (loading) {
         return (
             <Loading />
         );
     }
-
-    const filterFragments = () => {
-
-        if (filters.length === 0) {
-            return fragments.filter(f => f.onTimeline);
-        }
-
-        let filteredFragments = [];
-
-        for (const fragment of fragments) {
-            if (!fragment.onTimeline) {
-                continue;
-            }
-            for (const label of fragment.labels) {
-                if (filters.includes(label.id)) {
-                    filteredFragments.push(fragment);
-                    break;
-                }
-            }
-        }
-
-        return filteredFragments;
-    }
-
-    const filteredFragments = filterFragments();
+    
 
     return (
         <Column

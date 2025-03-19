@@ -1,5 +1,4 @@
 import { Column,
-         Container,
          Divider,
          DropdownMenu,
          Row,
@@ -34,7 +33,7 @@ const DesktopNavbar = () => {
     return (
         <Row
             style={{
-                justifyContent: 'space-between',
+                justifyContent: 'end',
                 padding: '0 2rem 0 2rem',
                 height: 'var(--navbar-height)',
                 backgroundColor: 'var(--background-color-lowest)',
@@ -45,9 +44,6 @@ const DesktopNavbar = () => {
                 zIndex: '10',
             }}
         >
-            <Container>
-                Future logo perhaps?
-            </Container>
             <Row
                 style={{
                     gap: '10' 
