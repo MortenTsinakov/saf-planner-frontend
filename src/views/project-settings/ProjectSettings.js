@@ -10,6 +10,7 @@ import EditProjectEstimatedLength from './project-settings-actions/EditProjectEs
 import DeleteLabel from './project-settings-actions/DeleteLabel';
 import CreateLabel from './project-settings-actions/CreateLabel';
 import EditLabel from './project-settings-actions/EditLabel';
+import StopSharingProject from './project-settings-actions/StopSharingProject';
 
 const ProjectSettings = ({...props}) => {
 
@@ -27,6 +28,7 @@ const ProjectSettings = ({...props}) => {
         createLabel,
         updateLabel,
         deleteLabel,
+        stopSharingProject,
         loading,
         error,
         setError
@@ -37,6 +39,7 @@ const ProjectSettings = ({...props}) => {
     const [editPanelIsOpen, setEditPanelIsOpen] = useState(false);
     const [labelToEdit, setLabelToEdit] = useState(null);
     const [labelToDelete, setLabelToDelete] = useState(null);
+    const [userToStopSharingWith, setUserToStopSharingWith] = useState(null);
 
     const Fields = Object.freeze({
         TITLE: 0,
@@ -84,6 +87,7 @@ const ProjectSettings = ({...props}) => {
                 setEditPanelIsOpen={setEditPanelIsOpen}
                 setLabelToDelete={setLabelToDelete}
                 setLabelToEdit={setLabelToEdit}
+                setUserToStopSharingWith={setUserToStopSharingWith}
                 fields={Fields}
                 {...props}
             />
@@ -105,6 +109,7 @@ const ProjectSettings = ({...props}) => {
                 </Column>
             </Sidebar>
             {labelToDelete !== null && <DeleteLabel deleteLabel={deleteLabel} labelToDelete={labelToDelete} setLabelToDelete={setLabelToDelete} />}
+            {userToStopSharingWith !== null && <StopSharingProject project={project} user={userToStopSharingWith} stopSharingProject={stopSharingProject} setUserToStopSharingWith={setUserToStopSharingWith}/>}
         </Column>
     );
 }

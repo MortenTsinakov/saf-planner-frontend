@@ -13,11 +13,13 @@ export {
 export {
     fetchProjectByIdService,
     fetchUserProjectsService,
+    fetchSharedProjectsService,
     createProjectService,
     updateProjectTitleService,
     updateProjectDescriptionService,
     updateProjectEstimatedLengthService,
     deleteProjectService,
+    shareProjectService,
 } from 'services/project/ProjectService';
 
 // Fragment services
@@ -53,3 +55,10 @@ export {
 export {
     searchUsersService,
 } from 'services/user/UserService';
+
+// Shared project
+export {
+    fetchSharedProjectService,
+    fetchSharedProjectFragmentsService,
+    stopSharingProjectService,
+} from 'services/shared-project/SharedProjectService';

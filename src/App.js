@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnonymousRoutes, ProtectedRoutes } from 'routes';
 import { AxiosErrorHandler } from 'services';
-import { SignIn, Page404, SignUp, Project, Projects, ProjectSettings } from 'views';
+import { SignIn, Page404, SignUp, Project, Projects, ProjectSettings, SharedProject } from 'views';
 
 
 function App() {
@@ -44,6 +44,7 @@ function App() {
                 <Route element={<ProtectedRoutes />}>
                   <Route path='/projects' element={<Projects {...props} />} />
                   <Route path='/project' element={<Project {...props} />} />
+                  <Route path='/shared-project' element={<SharedProject {...props} />} />
                   <Route path='/project-settings' element={<ProjectSettings {...props} />} />
                 </Route>
                 {/* Redirect to 404 if page is not found */}
