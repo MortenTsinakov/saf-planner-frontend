@@ -21,7 +21,8 @@ const Projects = (props) => {
     const [selectedTab, setSelectedTab] = useState(Tabs.USER_PROJECTS);
     const {
         userProjects,
-        fetchUserProjects,
+        sharedProjects,
+        fetchAllProjects,
         createProject,
         updateProjectTitle,
         updateProjectDescription,
@@ -34,8 +35,8 @@ const Projects = (props) => {
     const { addAlert } = useAlerts();
 
     useEffect(() => {
-        fetchUserProjects();
-    }, [fetchUserProjects]);
+        fetchAllProjects();
+    }, [fetchAllProjects]);
 
     useEffect(() => {
         if (error) {
@@ -119,6 +120,7 @@ const Projects = (props) => {
             {selectedTab === Tabs.SHARED_PROJECTS &&
                 <SharedProjects
                     data-testid='shared-projects'
+                    sharedProjects={sharedProjects}
                     {...props}
                 />}
         </Column>

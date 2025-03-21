@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { createLabelService, deleteLabelService, fetchProjectByIdService, updateLabelService, updateProjectDescriptionService, updateProjectEstimatedLengthService, updateProjectTitleService } from 'services';
+import { createLabelService, deleteLabelService, fetchProjectByIdService, stopSharingProjectService, updateLabelService, updateProjectDescriptionService, updateProjectEstimatedLengthService, updateProjectTitleService } from 'services';
 
 export const useProjectSettings = () => {
 
@@ -135,6 +135,19 @@ export const useProjectSettings = () => {
         }
     }, [project]);
 
+    const stopSharingProject = useCallback(async (projectId, userId) => {
+        try {
+            setError(null);
+            const response = await stopSharingProjectService(projectId, userId);
+            setProject({
+                ...project,
+                sharedWith: project.sharedWith.filter(s => s.id !== response.userId)
+            });
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to stop sharing the project");
+        }
+    }, [project]);
+
     return {
         fetchProject,
         project,
@@ -144,6 +157,7 @@ export const useProjectSettings = () => {
         createLabel,
         updateLabel,
         deleteLabel,
+        stopSharingProject,
         loading,
         error,
         setError,

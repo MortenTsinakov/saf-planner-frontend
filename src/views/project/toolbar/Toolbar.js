@@ -1,9 +1,10 @@
 import { Divider, IconButton, Row } from "components";
-import { MdAutoStories, MdGridView, MdLinearScale, MdOutlineModeComment, MdShare, MdTv, MdViewTimeline } from "react-icons/md";
+import { MdAutoStories, MdGridView, MdLinearScale, MdOutlineModeComment, MdSettings, MdShare, MdTv, MdViewTimeline } from "react-icons/md";
 import { useProjectStore } from "stores";
 import ApplyFilters from "./ApplyFilters";
 import { useState } from "react";
 import ShareProject from "../share_project/ShareProject";
+import { useNavigate } from "react-router-dom";
 
 const Toolbar = ({
     readAllPanelSettings,
@@ -21,6 +22,7 @@ const Toolbar = ({
 
     const {project, sidebarState, setSidebarState} = useProjectStore();
     const [shareProject, setShareProject] = useState(false);
+    const navigate = useNavigate();
 
     const iconStyle = {
         fontSize: '3rem',
@@ -58,6 +60,10 @@ const Toolbar = ({
 
     const handleShareProjectClick = () => {
         setShareProject(true);
+    }
+
+    const handleSettingsClick = () => {
+        navigate(`/project-settings?projectId=${project.id}`);
     }
 
     return (
@@ -134,9 +140,21 @@ const Toolbar = ({
                     icon={<MdOutlineModeComment />}
                     title='Read comments'
                 />
+                <IconButton
+                    style={iconStyle}
+                    icon={<MdSettings />}
+                    title="Project settings"
+                    onClick={handleSettingsClick}
+                />
             </Row>
 
-            {shareProject && <ShareProject setModalIsOpen={setShareProject}/>}
+            {
+                shareProject
+                &&
+                <ShareProject
+                    setModalIsOpen={setShareProject}
+                />
+            }
         </Row>
     );
 }

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { createProjectService, deleteProjectService, fetchUserProjectsService, updateProjectDescriptionService, updateProjectEstimatedLengthService, updateProjectTitleService } from 'services';
+import { createProjectService, deleteProjectService, fetchSharedProjectsService, fetchUserProjectsService, shareProjectService, updateProjectDescriptionService, updateProjectEstimatedLengthService, updateProjectTitleService } from 'services';
 import { updateLabelService } from 'services/label/LabelService';
 
 /**
@@ -8,21 +8,26 @@ import { updateLabelService } from 'services/label/LabelService';
 export const useProjects = () => {
 
     const [userProjects, setUserProjects] = useState([]);
+    const [sharedProjects, setSharedProjects] = useState([]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     /**
-     * Fetch all user projects from the server
+     * Fetch all user projects and shared projects from the server.
      */
-    const fetchUserProjects = useCallback(async () => {
+    const fetchAllProjects = useCallback(async () => {
         try {
-            setLoading(true);
             setError(null);
-            const response = await fetchUserProjectsService();
-            setUserProjects(response);
+            setLoading(true);
+            const [userProjectsResponse, sharedProjectsResponse] = await Promise.all([
+                        fetchUserProjectsService(),
+                        fetchSharedProjectsService(),
+                    ]);
+            setUserProjects(userProjectsResponse);
+            setSharedProjects(sharedProjectsResponse);
         } catch (err) {
-            setError(err.response?.data?.message || "Fetching user projects failed");
+            setError(err.response?.data?.message || "Fetching projects failed");
         } finally {
             setLoading(false);
         }
@@ -159,15 +164,31 @@ export const useProjects = () => {
         }
     }, []);
 
+    /**
+     * Share project with another user.
+     * Return true if the project was successfully shared, else false
+     */
+    const shareProject = useCallback(async (project, user) => {
+        try {
+            await shareProjectService(project.id, user.id);
+            return true;
+        } catch (err) {
+            setError(err.response?.data?.message || "Sharing project failed");
+            return false;
+        }
+    }, []);
+
     return {
-        fetchUserProjects,
+        fetchAllProjects,
         createProject,
         updateProjectTitle,
         updateProjectDescription,
         updateProjectEstimatedLength,
         updateLabel,
         deleteProject,
+        shareProject,
         userProjects,
+        sharedProjects,
         loading,
         error,
         setError,

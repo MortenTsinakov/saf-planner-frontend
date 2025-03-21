@@ -9,6 +9,7 @@ const ProjectSettingsInfoPanel = ({
     setEditPanelIsOpen,
     setLabelToEdit,
     setLabelToDelete,
+    setUserToStopSharingWith,
     fields,
     ...props }) => {
 
@@ -22,6 +23,10 @@ const ProjectSettingsInfoPanel = ({
         setFieldToUpdate(fields.EDIT_LABEL);
         setEditPanelIsOpen(true);
     }
+
+    const handleStopSharingClick = (user) => {
+        setUserToStopSharingWith(user);
+    } 
 
     const getTextField = (category, content, fieldToUpdate) => {
         return (
@@ -74,6 +79,58 @@ const ProjectSettingsInfoPanel = ({
         );
     }
 
+    const getSharedWithField = () => {
+        return (
+            <Column
+                style={{
+                    backgroundColor: 'var(--background-color-medium)', 
+                    width: '100%', 
+                    padding: '2rem',
+                    borderRadius: '10px',
+                    gap: '2rem',
+                }}
+            >
+                <Typography color='label'>
+                    Shared with
+                </Typography>
+                <Row
+                    style={{
+                        flexWrap: 'wrap',
+                    }}
+                >
+                {
+                    project.sharedWith.length > 0 ?
+                    project.sharedWith.map(u => (
+                        <Row
+                            key={u.id}
+                            style={{
+                                width: 'fit-content',
+                                padding: '0 1rem',
+                                borderRadius: 10,
+                                border: '1px solid gray',
+                            }}
+                        >
+                            <Typography style={{textWrap: 'nowrap'}}>
+                                {u.name}
+                            </Typography>
+                            <IconButton
+                                style={{
+                                    fontSize: '2rem',
+                                    padding: 0
+                                }}
+                                icon={<MdClose />}
+                                title='Stop sharing'
+                                onClick={() => handleStopSharingClick(u)}/>
+                        </Row>
+                    ))
+                    :
+                    <Typography fontSize='extrasmall'>You haven't shared the project with anybody yet...</Typography>
+                }
+                </Row>
+            </Column>
+        );
+    }
+
     return (
         <Column
             style={{
@@ -91,7 +148,7 @@ const ProjectSettingsInfoPanel = ({
                 {getTextField("Description", project.description, fields.DESCRIPTION)}
                 {getTextField("Estimated length", formatSecondsToHMS(project.estimatedLengthInSeconds), fields.ESTIMATED_LENGTH)}
                 {getLabelsField()}
-                {getTextField("Shared with", "TODO: Display users with whom the project has been shared with")}
+                {getSharedWithField()}
             </Column>
         </Column>
     );

@@ -18,6 +18,14 @@ export const fetchUserProjectsService = async () => {
 }
 
 /**
+ * GET request for fetching all projects shared with the user.
+ */
+export const fetchSharedProjectsService = async () => {
+    const response = await apiClient.get('/projects/shared');
+    return response.data;
+}
+
+/**
  * POST request for creating a new project.
  */
 export const createProjectService = async (title, description, estimatedLengthInSeconds) => {
@@ -72,5 +80,17 @@ export const updateProjectEstimatedLengthService = async (projectId, estimatedLe
  */
 export const deleteProjectService = async (projectId) => {
     const response = await apiClient.delete(`/projects?id=${projectId}`);
+    return response.data;
+}
+
+/**
+ * Share project with another user
+ */
+export const shareProjectService = async (projectId, shareWithId) => {
+    const postData = {
+        projectId: projectId,
+        shareWithId: shareWithId,
+    }
+    const response = await apiClient.post('/projects/shared', postData);
     return response.data;
 }

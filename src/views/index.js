@@ -1,5 +1,6 @@
 export { default as Page404} from 'views/page-404/Page404';
 export { default as Project} from 'views/project/Project';
+export { default as SharedProject } from 'views/shared-project/SharedProject';
 export { default as Projects } from 'views/projects/Projects';
 export { default as ProjectSettings } from 'views/project-settings/ProjectSettings';
 export { default as SignIn } from 'views/sign-in/SignIn';
