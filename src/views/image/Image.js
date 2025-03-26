@@ -15,7 +15,8 @@ const Image = ({
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
             style={{
-                position: 'relative', 
+                position: 'relative',
+                width: '100%',
             }}
         >    
             <img
@@ -27,7 +28,6 @@ const Image = ({
                     width: '100%',
                     minWidth: 256,
                     maxWidth: 1024,
-                    height: 576,
                     minHeight: 144,
                     maxHeight: 576,
                     objectFit: 'contain',

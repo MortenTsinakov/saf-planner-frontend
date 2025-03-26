@@ -1,10 +1,10 @@
 import { Column, FilledButton, IconButton, Loading, Modal, Row, Typography } from 'components';
-import Image from './Image';
 import { useCallback, useEffect, useState } from 'react';
 import { MdAddPhotoAlternate, MdArrowLeft, MdArrowRight, MdDelete } from 'react-icons/md';
 import { useProjectStore } from 'stores';
 import AttachImage from 'views/project/attach_image/AttachImage';
 import { useAlerts } from 'hooks';
+import Image from 'views/image/Image';
 
 const FragmentImages = ({fragment, ...props}) => {
 
@@ -152,6 +152,7 @@ const FragmentImages = ({fragment, ...props}) => {
                 style={{
                     borderRadius: '10px',
                     maxWidth: 1024, // Same as Image
+                    width: '100%',
                 }}
             >
                 <Row>
@@ -164,7 +165,7 @@ const FragmentImages = ({fragment, ...props}) => {
                         onClick={handleDeleteImageClick}
                     />
                 </Row>
-                <Row>
+                <Row style={{width: '100%'}}>
                     <Image
                         imageBlob={images[currentImageIdx].imageBlob}
                         description={images[currentImageIdx].description}

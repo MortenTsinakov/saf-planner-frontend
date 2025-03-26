@@ -47,6 +47,7 @@ export {
 // Image service
 export {
     fetchImageService,
+    fetchSharedProjectImageService,
     uploadImageService,
     deleteImageService,
 } from 'services/image/ImageService';

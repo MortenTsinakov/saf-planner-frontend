@@ -7,6 +7,13 @@ export const fetchImageService = async (imageId) => {
     return response.data;
 }
 
+export const fetchSharedProjectImageService = async (projectId, imageId) => {
+    const response = await apiClient.get(`/images/shared?projectId=${projectId}&image=${imageId}`, {
+        responseType: 'blob'
+    });
+    return response.data;
+}
+
 export const uploadImageService = async (fragmentId, file, description) => {
     const formData = new FormData();
     formData.append("fragmentId", fragmentId);
