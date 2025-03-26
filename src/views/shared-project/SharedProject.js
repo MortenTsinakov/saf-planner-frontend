@@ -1,10 +1,11 @@
-import { Column, Loading, Row } from "components";
-import { useAlerts } from "hooks";
-import { useSharedProject } from "hooks/useSharedProject";
+import { Loading, Row } from "components";
+import { useAlerts, useSharedProject } from "hooks";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SharedProjectLongDescriptions from "./shared-project-data/SharedProjectLongDescriptions";
 import SharedProjectShortDescriptions from "./shared-project-data/SharedProjectShortDescriptions";
+import SharedProjectImages from "./shared-project-data/SharedProjectImages";
+import SharedProjectComments from "./shared-project-actions/SharedProjectComments";
 
 const SharedProject = () => {
 
@@ -14,7 +15,7 @@ const SharedProject = () => {
     const searchParams = new URLSearchParams(location.search);
     const projectId = searchParams.get('projectId');
 
-    const {fetchSharedProject, project, fragments, error, setError, loading} = useSharedProject();
+    const {fetchSharedProject, fragments, error, setError, loading} = useSharedProject();
     const {addAlert} = useAlerts();
 
     const [activeFragmentIdx, setActiveFragmentIdx] = useState(0);
@@ -73,40 +74,23 @@ const SharedProject = () => {
 
     return (
         <Row
-            style={{
-                maxHeight: 'calc(100vh - var(--navbar-height))',
-                overflow: 'hidden',
-            }}
-        >
-            <SharedProjectShortDescriptions
-                fragments={fragments}
-                activeFragmentIdx={activeFragmentIdx}
-                setActiveFragmentIdx={setActiveFragmentIdx}
-            />
-            <SharedProjectLongDescriptions
-                project={project}
-                fragments={fragments}
-                activeFragmentIdx={activeFragmentIdx}
-                setActiveFragmentIdx={setActiveFragmentIdx}
-            />
-            <Column
                 style={{
-                    flex: 0.25,
-                    border: '1px dashed gray',
-                    alignItems: 'center',
+                    maxHeight: 'calc(100vh - var(--navbar-height))',
+                    overflow: 'hidden',
                 }}
             >
-                Images
-            </Column>
-            <Column
-                style={{
-                    flex: 0.25,
-                    border: '1px dashed gray',
-                    alignItems: 'center',
-                }}
-            >
-                Comments
-            </Column>
+                <SharedProjectShortDescriptions
+                    activeFragmentIdx={activeFragmentIdx}
+                    setActiveFragmentIdx={setActiveFragmentIdx}
+                />
+                <SharedProjectLongDescriptions
+                    activeFragmentIdx={activeFragmentIdx}
+                    setActiveFragmentIdx={setActiveFragmentIdx}
+                />
+                <SharedProjectImages
+                    activeFragmentIdx={activeFragmentIdx}
+                />
+                <SharedProjectComments />
         </Row>
     );
 }

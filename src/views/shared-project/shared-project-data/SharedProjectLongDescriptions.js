@@ -1,10 +1,12 @@
 import { Column, Typography } from "components";
+import { useSharedProject } from "hooks";
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { formatSecondsToHMS } from "utils";
 
-const SharedProjectLongDescriptions = ({project, fragments, activeFragmentIdx, setActiveFragmentIdx}) => {
+const SharedProjectLongDescriptions = ({activeFragmentIdx, setActiveFragmentIdx}) => {
 
+    const {project, fragments} = useSharedProject();
     const containerRef = useRef(null);
     const [duration, setDuration] = useState(0);
 

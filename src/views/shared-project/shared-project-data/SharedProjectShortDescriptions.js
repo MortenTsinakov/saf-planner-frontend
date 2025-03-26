@@ -1,6 +1,9 @@
 import { Column, TextButton, Typography } from "components";
+import { useSharedProject } from "hooks";
 
-const SharedProjectShortDescriptions = ({fragments, activeFragmentIdx, setActiveFragmentIdx}) => {
+const SharedProjectShortDescriptions = ({activeFragmentIdx, setActiveFragmentIdx}) => {
+
+    const {fragments} = useSharedProject();
 
     const handleChangeActiveFragment = (index) => {
         setActiveFragmentIdx(index);
