@@ -1,4 +1,4 @@
-import { Loading, Row } from "components";
+import { ErrorFallback, Loading, Row } from "components";
 import { useAlerts, useSharedProject } from "hooks";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import SharedProjectImages from "./shared-project-data/SharedProjectImages";
 import SharedProjectComments from "./shared-project-actions/SharedProjectComments";
 import EditComment from "./shared-project-actions/EditComment";
 import DeleteComment from "./shared-project-actions/DeleteComment";
+import { ErrorBoundary } from "react-error-boundary";
 
 const SharedProject = () => {
 
@@ -82,47 +83,49 @@ const SharedProject = () => {
     }
 
     return (
-        <Row
-                style={{
-                    maxHeight: 'calc(100vh - var(--navbar-height))',
-                    overflow: 'hidden',
-                }}
-            >
-                <SharedProjectShortDescriptions
-                    activeFragmentIdx={activeFragmentIdx}
-                    setActiveFragmentIdx={setActiveFragmentIdx}
-                />
-                <SharedProjectLongDescriptions
-                    activeFragmentIdx={activeFragmentIdx}
-                    setActiveFragmentIdx={setActiveFragmentIdx}
-                />
-                <SharedProjectImages
-                    activeFragmentIdx={activeFragmentIdx}
-                />
-                <SharedProjectComments
-                    activeFragmentIdx={activeFragmentIdx}
-                    setCommentToEdit={setCommentToEdit}
-                    setCommentToDelete={setCommentToDelete}
-                />
-                {
-                    commentToEdit !== null
-                    &&
-                    <EditComment
-                        comment={commentToEdit}
+        <ErrorBoundary fallback={<ErrorFallback />}>
+            <Row
+                    style={{
+                        maxHeight: 'calc(100vh - var(--navbar-height))',
+                        overflow: 'hidden',
+                    }}
+                >
+                    <SharedProjectShortDescriptions
+                        activeFragmentIdx={activeFragmentIdx}
+                        setActiveFragmentIdx={setActiveFragmentIdx}
+                    />
+                    <SharedProjectLongDescriptions
+                        activeFragmentIdx={activeFragmentIdx}
+                        setActiveFragmentIdx={setActiveFragmentIdx}
+                    />
+                    <SharedProjectImages
+                        activeFragmentIdx={activeFragmentIdx}
+                    />
+                    <SharedProjectComments
+                        activeFragmentIdx={activeFragmentIdx}
                         setCommentToEdit={setCommentToEdit}
-                        fragmentId={fragments[activeFragmentIdx].id}
-                    />
-                }
-                {
-                    commentToDelete !== null
-                    &&
-                    <DeleteComment
-                        comment={commentToDelete}
                         setCommentToDelete={setCommentToDelete}
-                        fragmentId={fragments[activeFragmentIdx].id}
                     />
-                }
-        </Row>
+                    {
+                        commentToEdit !== null
+                        &&
+                        <EditComment
+                            comment={commentToEdit}
+                            setCommentToEdit={setCommentToEdit}
+                            fragmentId={fragments[activeFragmentIdx].id}
+                        />
+                    }
+                    {
+                        commentToDelete !== null
+                        &&
+                        <DeleteComment
+                            comment={commentToDelete}
+                            setCommentToDelete={setCommentToDelete}
+                            fragmentId={fragments[activeFragmentIdx].id}
+                        />
+                    }
+            </Row>
+        </ErrorBoundary>
     );
 }
  
