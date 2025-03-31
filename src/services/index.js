@@ -62,4 +62,7 @@ export {
     fetchSharedProjectService,
     fetchSharedProjectFragmentsService,
     stopSharingProjectService,
+    commentFragmentService,
+    editCommentService,
+    deleteCommentService,
 } from 'services/shared-project/SharedProjectService';

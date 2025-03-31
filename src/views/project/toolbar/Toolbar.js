@@ -1,5 +1,5 @@
 import { Divider, IconButton, Row } from "components";
-import { MdAutoStories, MdGridView, MdLinearScale, MdOutlineModeComment, MdSettings, MdShare, MdTv, MdViewTimeline } from "react-icons/md";
+import { MdAutoStories, MdGridView, MdLinearScale, MdSettings, MdShare, MdTv, MdViewTimeline } from "react-icons/md";
 import { useProjectStore } from "stores";
 import ApplyFilters from "./ApplyFilters";
 import { useState } from "react";
@@ -134,11 +134,6 @@ const Toolbar = ({
                     icon={<MdShare />}
                     title='Share project'
                     onClick={handleShareProjectClick}
-                />
-                <IconButton
-                    style={iconStyle}
-                    icon={<MdOutlineModeComment />}
-                    title='Read comments'
                 />
                 <IconButton
                     style={iconStyle}

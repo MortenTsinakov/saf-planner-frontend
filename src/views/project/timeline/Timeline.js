@@ -18,7 +18,7 @@ const Timeline = ({
 
     const {project, fragments} = useProjectStore();
     const [currentDuration, setCurrentDuration] = useState(0);
-    const [displayDetailedTimeline, setDisplayDetailedTimeline] = useState(false);
+    const [displayDetailedTimeline, setDisplayDetailedTimeline] = useState(true);
     const iconStyle = {
         fontSize: '3rem',
     };

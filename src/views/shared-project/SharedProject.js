@@ -6,6 +6,8 @@ import SharedProjectLongDescriptions from "./shared-project-data/SharedProjectLo
 import SharedProjectShortDescriptions from "./shared-project-data/SharedProjectShortDescriptions";
 import SharedProjectImages from "./shared-project-data/SharedProjectImages";
 import SharedProjectComments from "./shared-project-actions/SharedProjectComments";
+import EditComment from "./shared-project-actions/EditComment";
+import DeleteComment from "./shared-project-actions/DeleteComment";
 
 const SharedProject = () => {
 
@@ -19,6 +21,8 @@ const SharedProject = () => {
     const {addAlert} = useAlerts();
 
     const [activeFragmentIdx, setActiveFragmentIdx] = useState(0);
+    const [commentToEdit, setCommentToEdit] = useState(null);
+    const [commentToDelete, setCommentToDelete] = useState(null);
 
     useEffect(() => {
         if (projectId === null) {
@@ -43,7 +47,12 @@ const SharedProject = () => {
 
     useEffect(() => {
         const handleKeyDown = (event) => {
-            event.preventDefault();
+            if (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA") {
+                return;
+            }
+            if (commentToEdit !== null || commentToDelete !== null) {
+                return;
+            }
             let newIndex;
             switch (event.key) {
                 case "ArrowUp":
@@ -64,7 +73,7 @@ const SharedProject = () => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         }
-    }, [fragments.length, setActiveFragmentIdx, activeFragmentIdx]);
+    }, [fragments.length, setActiveFragmentIdx, activeFragmentIdx, commentToEdit, commentToDelete]);
 
     if (loading) {
         return (
@@ -90,7 +99,29 @@ const SharedProject = () => {
                 <SharedProjectImages
                     activeFragmentIdx={activeFragmentIdx}
                 />
-                <SharedProjectComments />
+                <SharedProjectComments
+                    activeFragmentIdx={activeFragmentIdx}
+                    setCommentToEdit={setCommentToEdit}
+                    setCommentToDelete={setCommentToDelete}
+                />
+                {
+                    commentToEdit !== null
+                    &&
+                    <EditComment
+                        comment={commentToEdit}
+                        setCommentToEdit={setCommentToEdit}
+                        fragmentId={fragments[activeFragmentIdx].id}
+                    />
+                }
+                {
+                    commentToDelete !== null
+                    &&
+                    <DeleteComment
+                        comment={commentToDelete}
+                        setCommentToDelete={setCommentToDelete}
+                        fragmentId={fragments[activeFragmentIdx].id}
+                    />
+                }
         </Row>
     );
 }

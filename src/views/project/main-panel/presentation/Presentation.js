@@ -1,9 +1,12 @@
 import { Column, Row, Typography } from "components";
-import Label from "components/ui/labels/Label";
-import { MdAlarm} from "react-icons/md";
 import FragmentImages from "./presentation-data/FragmentImages";
+import FragmentInformation from "./presentation-data/FragmentInformation";
+import FragmentComments from "./presentation-data/FragmentComments";
+import { useState } from "react";
 
 const Presentation = ({fragment, ...props}) => {
+
+    const [showComments, setShowComments] = useState(false);
 
     if (!fragment) {
         return (
@@ -25,43 +28,26 @@ const Presentation = ({fragment, ...props}) => {
                 overflowY: 'auto',
             }}
         >
-            <Column
-                style={{flex: 0.4}}
-            >
-                <Typography
-                    style={{fontWeight: 'bold'}}
-                >
-                    {fragment.shortDescription}
-                </Typography>
-                <Row style={{alignItems: 'center'}}>
-                    <MdAlarm />
-                    <Typography fontSize='extrasmall'>
-                        {fragment.durationInSeconds} seconds
-                    </Typography>
-                </Row>
-                <Typography>
-                    {fragment.longDescription}
-                </Typography>
-                <Row
-                    style={{flewWrap: 'wrap'}}
-                >
-                    {fragment.labels.map(l => (
-                        <Label
-                            key={l.id}
-                            color={l.color}
-                        >
-                            {l.description}
-                        </Label>
-                    ))}
-                </Row>
-            </Column>
+            <FragmentInformation
+                fragment={fragment}
+                setShowComments={setShowComments}
+            />
             <Column
                 style={{
                     flex: 0.6,
                 }}
             >
-                <FragmentImages fragment={fragment} {...props}/>
+                <FragmentImages
+                    fragment={fragment}
+                    {...props}
+                />
             </Column>
+            <FragmentComments
+                fragment={fragment}
+                showComments={showComments}
+                setShowComments={setShowComments}
+                {...props}
+            />
         </Row>
     );
 }
