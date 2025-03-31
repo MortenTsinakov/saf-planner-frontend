@@ -2,6 +2,8 @@
 
 // Page wrapper
 export { default as Page } from 'components/page/Page';
+// Error fallback page
+export { default as ErrorFallback } from 'components/error-fallback/ErrorFallback';
 
 // button
 export { default as FilledButton } from 'components/ui/buttons/FilledButton';

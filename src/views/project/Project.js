@@ -1,12 +1,13 @@
 import { useAlerts } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Column, Loading, Row } from 'components';
+import { Column, ErrorFallback, Loading, Row } from 'components';
 import Toolbar from './toolbar/Toolbar';
 import ReadAllPanel from './read-all-panel/ReadAllPanel';
 import Timeline from './timeline/Timeline';
 import { useProjectStore } from 'stores';
 import MainPanel from './main-panel/MainPanel';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const Project = ({...props}) => {
 
@@ -90,69 +91,77 @@ const Project = ({...props}) => {
 
     if (loading) {
         return (
-            <Loading />
+            <Column
+                style={{
+                    height: 'calc(100vh - var(--navbar-height))',
+                }}
+            >
+                <Loading />
+            </Column>
         );
     }
     
 
     return (
-        <Column
-            style={{
-                height: 'calc(100vh - var(--navbar-height))',
-                width: '100%',
-                gap: 0,
-            }}
-        >
-            <Toolbar
-                readAllPanelSettings={readAllPanelSettings}
-                setReadAllPanelSettings={setReadAllPanelSettings}
-                timelinePanelSettings={timelinePanelSettings}
-                setTimelinePanelSettings={setTimelinePanelSettings}
-                filters={filters}
-                setFilters={setFilters}
-                mainPanelViews={mainPanelViews}
-                mainPanelView={mainPanelView}
-                setMainPanelView={setMainPanelView}
-                hideNonTimelineFragments={hideNonTimelineFragments}
-                setHideNonTimelineFragments={setHideNonTimelineFragments}
-            />
-            <Row
+        <ErrorBoundary fallback={<ErrorFallback />}>
+            <Column
                 style={{
-                    overflow: 'hidden',
-                    height: 'inherit',
+                    height: 'calc(100vh - var(--navbar-height))',
                     width: '100%',
-                    gap:0,
+                    gap: 0,
                 }}
             >
-                <ReadAllPanel
+                <Toolbar
                     readAllPanelSettings={readAllPanelSettings}
                     setReadAllPanelSettings={setReadAllPanelSettings}
-                    filteredFragments={filteredFragments}
-                    selectedFragmentIdx={selectedFragmentIdx}
+                    timelinePanelSettings={timelinePanelSettings}
+                    setTimelinePanelSettings={setTimelinePanelSettings}
+                    filters={filters}
+                    setFilters={setFilters}
+                    mainPanelViews={mainPanelViews}
+                    mainPanelView={mainPanelView}
+                    setMainPanelView={setMainPanelView}
+                    hideNonTimelineFragments={hideNonTimelineFragments}
+                    setHideNonTimelineFragments={setHideNonTimelineFragments}
                 />
-                <Row style={{flex: 1, gap: 0}}>
-                    <Column
-                        style={{width: '100%'}}
-                    >
-                        <Timeline
-                            timelinePanelSettings={timelinePanelSettings}
-                            setTimelinePanelSettings={setTimelinePanelSettings}
-                            filteredFragments={filteredFragments}
-                            filters={filters}
-                            selectedFragmentIdx={selectedFragmentIdx}
-                            setSelectedFragmentIdx={setSelectedFragmentIdx}
-                        />
-                        <MainPanel
-                            mainPanelViews={mainPanelViews}
-                            mainPanelView={mainPanelView}
-                            filteredFragments={filteredFragments}
-                            selectedFragmentIdx={selectedFragmentIdx}
-                            hideNonTimelineFragments={hideNonTimelineFragments}
-                        />
-                    </Column>
+                <Row
+                    style={{
+                        overflow: 'hidden',
+                        height: 'inherit',
+                        width: '100%',
+                        gap:0,
+                    }}
+                >
+                    <ReadAllPanel
+                        readAllPanelSettings={readAllPanelSettings}
+                        setReadAllPanelSettings={setReadAllPanelSettings}
+                        filteredFragments={filteredFragments}
+                        selectedFragmentIdx={selectedFragmentIdx}
+                    />
+                    <Row style={{flex: 1, gap: 0}}>
+                        <Column
+                            style={{width: '100%'}}
+                        >
+                            <Timeline
+                                timelinePanelSettings={timelinePanelSettings}
+                                setTimelinePanelSettings={setTimelinePanelSettings}
+                                filteredFragments={filteredFragments}
+                                filters={filters}
+                                selectedFragmentIdx={selectedFragmentIdx}
+                                setSelectedFragmentIdx={setSelectedFragmentIdx}
+                            />
+                            <MainPanel
+                                mainPanelViews={mainPanelViews}
+                                mainPanelView={mainPanelView}
+                                filteredFragments={filteredFragments}
+                                selectedFragmentIdx={selectedFragmentIdx}
+                                hideNonTimelineFragments={hideNonTimelineFragments}
+                            />
+                        </Column>
+                    </Row>
                 </Row>
-            </Row>
-        </Column>
+            </Column>
+        </ErrorBoundary>
     );
 }
  

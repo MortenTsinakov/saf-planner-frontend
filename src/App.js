@@ -1,7 +1,8 @@
 import './App.css';
-import { Navbar, AlertTray, Page } from 'components';
+import { Navbar, AlertTray, Page, ErrorFallback } from 'components';
 import { AuthProvider, AlertProvider, SharedProjectProvider } from 'contexts';
 import { useEffect, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnonymousRoutes, ProtectedRoutes } from 'routes';
 import { AxiosErrorHandler } from 'services';
@@ -17,45 +18,47 @@ function App() {
   }
 
   return (
-    <Router
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
-      <AlertProvider>
-        <AuthProvider>
-          <AxiosErrorHandler>
-            <Navbar {...props}/>
-            <AlertTray {...props}/>
-            <Page>
-              <Routes>
-                
-                {/* Route not found */}
-                <Route path='/404' element={<Page404 {...props}/>} />
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <Router
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
+        <AlertProvider>
+          <AuthProvider>
+            <AxiosErrorHandler>
+              <Navbar {...props}/>
+              <AlertTray {...props}/>
+              <Page>
+                <Routes>
+                  
+                  {/* Route not found */}
+                  <Route path='/404' element={<Page404 {...props}/>} />
 
-                {/* Anonymous routes */}
-                <Route element={<AnonymousRoutes />}>
-                  <Route path='/sign-in' element={<SignIn {...props} />} />
-                  <Route path='/sign-up' element={<SignUp {...props} />} />
-                  <Route path='/' element={<SignIn {...props} />} />
-                </Route>
-                {/* Protected routes */}
-                <Route element={<ProtectedRoutes />}>
-                  <Route path='/projects' element={<Projects {...props} />} />
-                  <Route path='/project' element={<Project {...props} />} />
-                  <Route path='/shared-project' element={<SharedProjectProvider><SharedProject {...props} /></SharedProjectProvider>} />
-                  <Route path='/project-settings' element={<ProjectSettings {...props} />} />
-                </Route>
-                {/* Redirect to 404 if page is not found */}
-                <Route path="*" element={<Navigate to="/404" replace />} />
+                  {/* Anonymous routes */}
+                  <Route element={<AnonymousRoutes />}>
+                    <Route path='/sign-in' element={<SignIn {...props} />} />
+                    <Route path='/sign-up' element={<SignUp {...props} />} />
+                    <Route path='/' element={<SignIn {...props} />} />
+                  </Route>
+                  {/* Protected routes */}
+                  <Route element={<ProtectedRoutes />}>
+                    <Route path='/projects' element={<Projects {...props} />} />
+                    <Route path='/project' element={<Project {...props} />} />
+                    <Route path='/shared-project' element={<SharedProjectProvider><SharedProject {...props} /></SharedProjectProvider>} />
+                    <Route path='/project-settings' element={<ProjectSettings {...props} />} />
+                  </Route>
+                  {/* Redirect to 404 if page is not found */}
+                  <Route path="*" element={<Navigate to="/404" replace />} />
 
-              </Routes>
-            </Page>
-          </AxiosErrorHandler>
-        </AuthProvider>
-      </AlertProvider>
-    </Router>
+                </Routes>
+              </Page>
+            </AxiosErrorHandler>
+          </AuthProvider>
+        </AlertProvider>
+      </Router>
+    </ErrorBoundary>
   );
 }
 

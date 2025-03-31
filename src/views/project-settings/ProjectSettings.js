@@ -1,4 +1,4 @@
-import { Column, Container, IconButton, Loading, Sidebar } from 'components';
+import { Column, Container, ErrorFallback, IconButton, Loading, Sidebar } from 'components';
 import { useAlerts, useProjectSettings } from 'hooks';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ import DeleteLabel from './project-settings-actions/DeleteLabel';
 import CreateLabel from './project-settings-actions/CreateLabel';
 import EditLabel from './project-settings-actions/EditLabel';
 import StopSharingProject from './project-settings-actions/StopSharingProject';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const ProjectSettings = ({...props}) => {
 
@@ -69,48 +70,56 @@ const ProjectSettings = ({...props}) => {
 
     if (loading) {
         return (
-            <Loading />
+            <Column
+                style={{
+                    height: 'calc(100vh - var(--navbar-height))',
+                }}
+            >
+                <Loading />
+            </Column>
         );
     }
 
     return (
-        <Column
-            style={{
-                padding:'5rem 2rem',
-                width: '100%',
-                alignItems: 'center',
-            }}
-        >
-            <ProjectSettingsInfoPanel
-                project={project}
-                setFieldToUpdate={setFieldToUpdate}
-                setEditPanelIsOpen={setEditPanelIsOpen}
-                setLabelToDelete={setLabelToDelete}
-                setLabelToEdit={setLabelToEdit}
-                setUserToStopSharingWith={setUserToStopSharingWith}
-                fields={Fields}
-                {...props}
-            />
-            <Sidebar
-                isOpen={editPanelIsOpen}
-                isMobile={props.isMobile}
-                fromRight={true}
-                style={{justifyContent: 'start'}}
+        <ErrorBoundary fallback={<ErrorFallback />}>
+            <Column
+                style={{
+                    padding:'5rem 2rem',
+                    width: '100%',
+                    alignItems: 'center',
+                }}
             >
-                <Column style={{width: '80%', alignItems: 'start', padding: '2rem'}}>
-                    <IconButton icon={<MdClose />} onClick={() => setEditPanelIsOpen(false)}/>
-                    <Container style={{width: '100%'}}>
-                        {fieldToUpdate === Fields.TITLE && <EditProjectTitle project={project} updateProjectTitle={updateProjectTitle} setEditPanelIsOpen={setEditPanelIsOpen}/>}
-                        {fieldToUpdate === Fields.DESCRIPTION && <EditProjectDescription project={project} updateProjectDescription={updateProjectDescription} setEditPanelIsOpen={setEditPanelIsOpen}/>}
-                        {fieldToUpdate === Fields.ESTIMATED_LENGTH && <EditProjectEstimatedLength project={project} updateEstimatedLength={updateProjectEstimatedLength} setEditPanelIsOpen={setEditPanelIsOpen} />} 
-                        {fieldToUpdate === Fields.CREATE_LABEL && <CreateLabel createLabel={createLabel} project={project} setEditPanelIsOpen={setEditPanelIsOpen}/>}
-                        {fieldToUpdate === Fields.EDIT_LABEL && <EditLabel updateLabel={updateLabel} labelToEdit={labelToEdit} setEditPanelIsOpen={setEditPanelIsOpen} /> }
-                    </Container>
-                </Column>
-            </Sidebar>
-            {labelToDelete !== null && <DeleteLabel deleteLabel={deleteLabel} labelToDelete={labelToDelete} setLabelToDelete={setLabelToDelete} />}
-            {userToStopSharingWith !== null && <StopSharingProject project={project} user={userToStopSharingWith} stopSharingProject={stopSharingProject} setUserToStopSharingWith={setUserToStopSharingWith}/>}
-        </Column>
+                <ProjectSettingsInfoPanel
+                    project={project}
+                    setFieldToUpdate={setFieldToUpdate}
+                    setEditPanelIsOpen={setEditPanelIsOpen}
+                    setLabelToDelete={setLabelToDelete}
+                    setLabelToEdit={setLabelToEdit}
+                    setUserToStopSharingWith={setUserToStopSharingWith}
+                    fields={Fields}
+                    {...props}
+                />
+                <Sidebar
+                    isOpen={editPanelIsOpen}
+                    isMobile={props.isMobile}
+                    fromRight={true}
+                    style={{justifyContent: 'start'}}
+                >
+                    <Column style={{width: '80%', alignItems: 'start', padding: '2rem'}}>
+                        <IconButton icon={<MdClose />} onClick={() => setEditPanelIsOpen(false)}/>
+                        <Container style={{width: '100%'}}>
+                            {fieldToUpdate === Fields.TITLE && <EditProjectTitle project={project} updateProjectTitle={updateProjectTitle} setEditPanelIsOpen={setEditPanelIsOpen}/>}
+                            {fieldToUpdate === Fields.DESCRIPTION && <EditProjectDescription project={project} updateProjectDescription={updateProjectDescription} setEditPanelIsOpen={setEditPanelIsOpen}/>}
+                            {fieldToUpdate === Fields.ESTIMATED_LENGTH && <EditProjectEstimatedLength project={project} updateEstimatedLength={updateProjectEstimatedLength} setEditPanelIsOpen={setEditPanelIsOpen} />} 
+                            {fieldToUpdate === Fields.CREATE_LABEL && <CreateLabel createLabel={createLabel} project={project} setEditPanelIsOpen={setEditPanelIsOpen}/>}
+                            {fieldToUpdate === Fields.EDIT_LABEL && <EditLabel updateLabel={updateLabel} labelToEdit={labelToEdit} setEditPanelIsOpen={setEditPanelIsOpen} /> }
+                        </Container>
+                    </Column>
+                </Sidebar>
+                {labelToDelete !== null && <DeleteLabel deleteLabel={deleteLabel} labelToDelete={labelToDelete} setLabelToDelete={setLabelToDelete} />}
+                {userToStopSharingWith !== null && <StopSharingProject project={project} user={userToStopSharingWith} stopSharingProject={stopSharingProject} setUserToStopSharingWith={setUserToStopSharingWith}/>}
+            </Column>
+        </ErrorBoundary>
     );
 }
  

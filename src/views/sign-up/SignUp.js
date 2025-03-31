@@ -1,6 +1,7 @@
-import { Column, Container, FilledButton, Form, InputField, TextButton, Typography } from "components";
+import { Column, Container, ErrorFallback, FilledButton, Form, InputField, TextButton, Typography } from "components";
 import { useAlerts, useAuth } from "hooks";
 import { useEffect, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = ({...props}) => {
@@ -47,91 +48,93 @@ const SignUp = ({...props}) => {
     }
 
     return (
-        <Container
-            style={{
-                minHeight:'calc(100vh - var(--navbar-height))',
-                backgroundColor: !props.isMobile && 'var(--secondary-color)',
-                overflow: 'auto',
-            }}
-        > 
-            <Form
-                ariaLabel={'sign up form'}
+        <ErrorBoundary fallback={<ErrorFallback />}>
+            <Container
                 style={{
-                    height: '100%',
-                    width: props.isMobile ? '100%' : '60rem',
-                    paddingTop: '100px',
+                    minHeight:'calc(100vh - var(--navbar-height))',
+                    backgroundColor: !props.isMobile && 'var(--secondary-color)',
                     overflow: 'auto',
                 }}
-            >
-                <Column>
-                    <Typography fontSize='large'>Welcome</Typography>
-                    <Typography color='secondary' style={{marginBottom:props.isMobile ? '0' : '7rem'}}>Create an account</Typography>
-                </Column>
-                <InputField
-                    aria-label='email'
-                    type={'email'}
-                    label={!props.isMobile && 'Email'}
-                    placeholder={props.isMobile ? 'Email' : ''}
-                    color='secondary'
-                    value={email}
-                    onChange={handleEmailChange}
-                    autoComplete={'off'}
-                />
-                <InputField
-                    aria-label='first name'
-                    type={'text'}
-                    label={!props.isMobile && 'First name'}
-                    placeholder={props.isMobile ? 'First name' : ''}
-                    color='secondary'
-                    value={firstName}
-                    onChange={handleFirstNameChange}
-                    autoComplete={'off'}
-                />
-                <InputField
-                    aria-label='last name'
-                    type={'text'}
-                    label={!props.isMobile && 'Last name'}
-                    placeholder={props.isMobile ? 'Last name' : ''}
-                    color='secondary'
-                    value={lastName}
-                    onChange={handleLastNameChange}
-                    autoComplete={'off'}
-                />
-                <InputField
-                    aria-label='password'
-                    type={'password'}
-                    label={!props.isMobile && 'Password'}
-                    placeholder={props.isMobile ? 'Password' : ''}
-                    color='secondary'
-                    value={password}
-                    onChange={handlePasswordChange}
-                    autoComplete={'off'}
-                />
-                <Column
-                    style={{marginTop: props.isMobile ? '2rem' : '7rem', gap:'2rem'}}
+            > 
+                <Form
+                    ariaLabel={'sign up form'}
+                    style={{
+                        height: '100%',
+                        width: props.isMobile ? '100%' : '60rem',
+                        paddingTop: '100px',
+                        overflow: 'auto',
+                    }}
                 >
-                    <FilledButton
-                        aria-label='submit'
+                    <Column>
+                        <Typography fontSize='large'>Welcome</Typography>
+                        <Typography color='secondary' style={{marginBottom:props.isMobile ? '0' : '7rem'}}>Create an account</Typography>
+                    </Column>
+                    <InputField
+                        aria-label='email'
+                        type={'email'}
+                        label={!props.isMobile && 'Email'}
+                        placeholder={props.isMobile ? 'Email' : ''}
                         color='secondary'
-                        onClick={(e) => handleSignUp(e)}
+                        value={email}
+                        onChange={handleEmailChange}
+                        autoComplete={'off'}
+                    />
+                    <InputField
+                        aria-label='first name'
+                        type={'text'}
+                        label={!props.isMobile && 'First name'}
+                        placeholder={props.isMobile ? 'First name' : ''}
+                        color='secondary'
+                        value={firstName}
+                        onChange={handleFirstNameChange}
+                        autoComplete={'off'}
+                    />
+                    <InputField
+                        aria-label='last name'
+                        type={'text'}
+                        label={!props.isMobile && 'Last name'}
+                        placeholder={props.isMobile ? 'Last name' : ''}
+                        color='secondary'
+                        value={lastName}
+                        onChange={handleLastNameChange}
+                        autoComplete={'off'}
+                    />
+                    <InputField
+                        aria-label='password'
+                        type={'password'}
+                        label={!props.isMobile && 'Password'}
+                        placeholder={props.isMobile ? 'Password' : ''}
+                        color='secondary'
+                        value={password}
+                        onChange={handlePasswordChange}
+                        autoComplete={'off'}
+                    />
+                    <Column
+                        style={{marginTop: props.isMobile ? '2rem' : '7rem', gap:'2rem'}}
                     >
-                        <Typography
-                            color='dark'
-                            fontSize='small'
+                        <FilledButton
+                            aria-label='submit'
+                            color='secondary'
+                            onClick={(e) => handleSignUp(e)}
                         >
-                            Sign up
-                        </Typography>
-                    </FilledButton>
-                    <TextButton
-                        aria-label='navigate to sign in'
-                        onClick={(e) => handleNavigate(e, '/sign-in')}
-                        color='secondary'
-                    >
-                        Already have an account? Sign in here
-                    </TextButton>
-                </Column>
-            </Form>
-        </Container>
+                            <Typography
+                                color='dark'
+                                fontSize='small'
+                            >
+                                Sign up
+                            </Typography>
+                        </FilledButton>
+                        <TextButton
+                            aria-label='navigate to sign in'
+                            onClick={(e) => handleNavigate(e, '/sign-in')}
+                            color='secondary'
+                        >
+                            Already have an account? Sign in here
+                        </TextButton>
+                    </Column>
+                </Form>
+            </Container>
+        </ErrorBoundary>
     );
 }
  
