@@ -20,6 +20,9 @@ const SharedProjectShortDescriptions = ({activeFragmentIdx, setActiveFragmentIdx
                 height: 'calc(100vh - var(--navbar-height))',
             }}
         >
+            <Typography fontSize='medium'>
+                Fragments
+            </Typography>
             {
                 fragments.map((f, index) => (
                     <Column

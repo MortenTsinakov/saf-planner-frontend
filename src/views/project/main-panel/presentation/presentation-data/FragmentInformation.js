@@ -1,34 +1,56 @@
-import { Column, Row, Typography } from 'components';
+import { Column, Row, TextButton, Typography } from 'components';
 import Label from 'components/ui/labels/Label';
-import { MdAccessTime } from 'react-icons/md';
+import { MdAccessTime, MdOutlineModeComment } from 'react-icons/md';
 
-const FragmentInformation = ({fragment}) => {
+const FragmentInformation = ({fragment, setShowComments}) => {
     return (
         <Column
-            style={{
-                width: '30%',
-                minWidth: '350px',
-                paddingBottom: '2rem',
-            }}
+            style={{flex: 0.4}}
         >
             <Typography
                 style={{fontWeight: 'bold'}}
             >
                 {fragment.shortDescription}
             </Typography>
-            <Row style={{gap: '0.5rem', alignItems: 'center'}}>
-                <MdAccessTime />
-                <Typography fontSize='extrasmall' color='label'>
-                    {fragment.durationInSeconds} seconds
-                </Typography>
+            <Row>
+                <Row
+                    style={{
+                        alignItems: 'center',
+                        gap: 5
+                    }}
+                >
+                    <MdAccessTime />
+                    <Typography fontSize='extrasmall'>
+                        {fragment.durationInSeconds} seconds
+                    </Typography>
+                </Row>
+                <TextButton
+                    style={{
+                        width: 'fit-content',
+                        alignItems: 'center',
+                        display: 'flex',
+                        gap: 5
+                    }}
+                    onClick={() => setShowComments(true)}
+                >
+                    <MdOutlineModeComment />
+                    <Typography fontSize='extrasmall'>
+                        {fragment.comments.length} comments
+                    </Typography>
+                </TextButton>
             </Row>
             <Typography>
                 {fragment.longDescription}
             </Typography>
-            <Row>
-                {fragment.labels.map(label => (
-                    <Label key={label.id} color={label.color}>
-                        {label.description}
+            <Row
+                style={{flewWrap: 'wrap'}}
+            >
+                {fragment.labels.map(l => (
+                    <Label
+                        key={l.id}
+                        color={l.color}
+                    >
+                        {l.description}
                     </Label>
                 ))}
             </Row>

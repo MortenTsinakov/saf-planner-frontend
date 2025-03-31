@@ -7,7 +7,11 @@ const Typography = ({fontSize,
                      ...props}) => {
 
     return (
-        <span className={`typography font-size-${fontSize} color-${color}`} style={style} {...props}>
+        <span
+            className={`typography font-size-${fontSize} color-${color}`}
+            style={style}
+            {...props}
+        >
             {children}
         </span>
     );
