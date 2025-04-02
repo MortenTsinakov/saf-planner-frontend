@@ -1,10 +1,12 @@
 import { Divider, IconButton, Row } from "components";
-import { MdAutoStories, MdGridView, MdLinearScale, MdSettings, MdShare, MdTv, MdViewTimeline } from "react-icons/md";
+import { MdKeyboard, MdLightbulb, MdLinearScale, MdSettings, MdShare } from "react-icons/md";
 import { useProjectStore } from "stores";
 import ApplyFilters from "./ApplyFilters";
 import { useState } from "react";
 import ShareProject from "../share_project/ShareProject";
 import { useNavigate } from "react-router-dom";
+import PlanModeToolbar from "./mode-toolbars/PlanModeToolbar";
+import ScriptwriterModeToolbar from "./mode-toolbars/ScriptwriterModeToolbar";
 
 const Toolbar = ({
     readAllPanelSettings,
@@ -18,6 +20,9 @@ const Toolbar = ({
     setMainPanelView,
     hideNonTimelineFragments,
     setHideNonTimelineFragments,
+    projectModes,
+    projectMode,
+    setProjectMode,
 }) => {
 
     const {project, sidebarState, setSidebarState} = useProjectStore();
@@ -83,30 +88,22 @@ const Toolbar = ({
                     alignItems: 'center'
                 }}
             >
-                <IconButton
-                    icon={<MdAutoStories />}
-                    style={iconStyle}
-                    onClick={toggleReadAllPanel}
-                />
-                <IconButton
-                    icon={<MdViewTimeline />}
-                    style={iconStyle}
-                    onClick={toggleTimelinePanel}
-                />
                 {
-                    mainPanelView === mainPanelViews.FRAGMENT_GRID &&
+                    projectMode === projectModes.SCRIPTWRITER_MODE &&
                     <IconButton
-                        icon={<MdTv />}
                         style={iconStyle}
-                        onClick={changeViewToPresentation}
+                        icon={<MdLightbulb />}
+                        title="Switch to planning mode"
+                        onClick={() => setProjectMode(projectModes.PLAN_MODE)}
                     />
                 }
                 {
-                    mainPanelView === mainPanelViews.PRESENTATION &&
+                    projectMode === projectModes.PLAN_MODE &&
                     <IconButton
-                        icon={<MdGridView />}
                         style={iconStyle}
-                        onClick={changeViewToFragmentGrid}
+                        icon={<MdKeyboard />}
+                        title="Switch to scriptwriter mode"
+                        onClick={() => setProjectMode(projectModes.SCRIPTWRITER_MODE)}
                     />
                 }
                 <Divider horizontal={false} />
@@ -126,6 +123,23 @@ const Toolbar = ({
                         setFilters={setFilters}
                         style={iconStyle}
                     />
+                }
+                <Divider horizontal={false} />
+                {
+                    projectMode === projectModes.PLAN_MODE &&
+                    <PlanModeToolbar
+                        mainPanelView={mainPanelView}
+                        mainPanelViews={mainPanelViews}
+                        iconStyle={iconStyle}
+                        toggleReadAllPanel={toggleReadAllPanel}
+                        toggleTimelinePanel={toggleTimelinePanel}
+                        changeViewToPresentation={changeViewToPresentation}
+                        changeViewToFragmentGrid={changeViewToFragmentGrid}
+                    />
+                }
+                {
+                    projectMode === projectModes.SCRIPTWRITER_MODE &&
+                    <ScriptwriterModeToolbar />
                 }
             </Row>
             <Row>

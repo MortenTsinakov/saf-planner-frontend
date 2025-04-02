@@ -2,9 +2,9 @@ import { Column, Row, Typography } from 'components';
 import { useProjectStore } from 'stores';
 import Markings from 'views/project/timeline/Markings';
 
-const LabelTimeline = ({filters, filteredFragments, selectedFragmentIdx}) => {
+const LabelTimeline = ({selectedFragmentIdx}) => {
 
-    const {project} = useProjectStore();
+    const {project, filters, filteredFragments} = useProjectStore();
 
     const getFragmentInTimeline = (fragment) => {
         return (

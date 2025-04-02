@@ -4,23 +4,23 @@ import { useState } from 'react';
 import { MdOutlineFilterAlt } from 'react-icons/md';
 import { useProjectStore } from 'stores';
 
-const ApplyFilters = ({filters, setFilters, style}) => {
+const ApplyFilters = ({style}) => {
 
-    const {project} = useProjectStore();
-        const [filterMenuIsOpen, setFilterMenuIsOpen] = useState(false);
-    
-        const handleSelectLabelClick = (labelId) => {
-            if (filters.includes(labelId)) {
-                setFilters(prev => prev.filter(l => l !== labelId));
-            } else {
-                setFilters(prev => [...prev, labelId]);
-            }
+    const {project, filters, setFilters} = useProjectStore();
+    const [filterMenuIsOpen, setFilterMenuIsOpen] = useState(false);
+
+    const handleSelectLabelClick = (labelId) => {
+        if (filters.includes(labelId)) {
+            setFilters(filters.filter(l => l !== labelId));
+        } else {
+            setFilters([...filters, labelId]);
         }
-    
-        const handleResetFilters = () => {
-            setFilters([]);
-            setFilterMenuIsOpen(false);
-        }
+    }
+
+    const handleResetFilters = () => {
+        setFilters([]);
+        setFilterMenuIsOpen(false);
+    }
 
     return (
         <Column

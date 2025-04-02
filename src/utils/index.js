@@ -26,3 +26,9 @@ export {
     getSvgPathFromStroke,
     svgElementToFile,
 } from './image/ImageUtils';
+
+export {
+    addBlock,
+    getElementTypeAtCursor,
+    changeBlockType,
+} from './scriptwriter/ScriptwriterUtils';

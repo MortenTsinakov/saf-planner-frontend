@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import { useProjectStore } from 'stores';
 
-const ReadAllPanel = ({readAllPanelSettings, setReadAllPanelSettings, filteredFragments}) => {
+const ReadAllPanel = ({readAllPanelSettings, setReadAllPanelSettings}) => {
 
-    const {project} = useProjectStore();
+    const {project, filteredFragments} = useProjectStore();
 
     const [isResizing, setIsResizing] = useState(false);
     const [isHovered, setIsHovered] = useState(false);

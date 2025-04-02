@@ -1,0 +1,47 @@
+.script-content {
+    color: black;
+    outline: none;
+    border: none;
+}
+
+.header {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: left;
+    padding-top: 1lh;
+    padding-bottom: 1lh;
+}
+
+.action {
+    text-align: left;
+    padding-bottom: 1lh;
+}
+
+.character {
+    margin-left: 2.2in;
+    text-transform: uppercase;
+}
+
+.parenthetical {
+    margin-left: 1.6in;
+}
+
+.parenthetical::before {
+    content: "(";
+}
+
+.parenthetical::after {
+    content: ")";
+}
+
+.dialogue {
+    text-align: left;
+    margin-left: 1.5in;
+    padding-bottom: 1lh;
+}
+
+.transition {
+    text-align: right;
+    text-transform: uppercase;
+    padding-top: 1lh;
+}
