@@ -13,6 +13,8 @@ const Toolbar = ({
     setReadAllPanelSettings,
     timelinePanelSettings,
     setTimelinePanelSettings,
+    scriptEditorSettings,
+    setScriptEditorSettings,
     filters,
     setFilters,
     mainPanelViews,
@@ -139,7 +141,11 @@ const Toolbar = ({
                 }
                 {
                     projectMode === projectModes.SCRIPTWRITER_MODE &&
-                    <ScriptwriterModeToolbar />
+                    <ScriptwriterModeToolbar
+                        iconStyle={iconStyle}
+                        scriptEditorSettings={scriptEditorSettings}
+                        setScriptEditorSettings={setScriptEditorSettings}
+                    />
                 }
             </Row>
             <Row>

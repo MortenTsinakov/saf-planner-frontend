@@ -1,5 +1,6 @@
 import { Editor, Element, Path, Range, Transforms } from "slate";
 
+
 /**
  * Find the current node and it's path.
  */
@@ -80,5 +81,41 @@ export const changeBlockType = (editor, requestedMode) => {
 
     if (match) {
         Transforms.setNodes(editor, {type: requestedMode});
+    }
+}
+
+/**
+ * Element styles
+ */
+export const getElementStyle = (mode, zoom) => {
+    switch (mode) {
+        case "header":
+            return {
+                paddingTop: `${1 * zoom}lh`,
+                paddingBottom: `${1 * zoom}lh`,
+            };
+        case "action":
+            return {
+                paddingBottom: `${1 * zoom}lh`,
+            };
+        case "character":
+            return {
+                marginLeft: `${2.2 * zoom}in`,
+            };
+        case "parenthetical":
+            return {
+                marginLeft: `${1.6 * zoom}in`,
+            };
+        case "dialogue":
+            return {
+                marginLeft: `${1.5 * zoom}in`,
+                paddingBottom: `${1 * zoom}lh`,
+            };
+        case "transition":
+            return {
+                paddingTop: `${1 * zoom}lh`,
+            };
+        default:
+            return;
     }
 }

@@ -31,4 +31,5 @@ export {
     addBlock,
     getElementTypeAtCursor,
     changeBlockType,
+    getElementStyle,
 } from './scriptwriter/ScriptwriterUtils';

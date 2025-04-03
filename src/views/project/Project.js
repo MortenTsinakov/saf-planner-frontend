@@ -41,6 +41,7 @@ const Project = ({...props}) => {
     // Settings for panels
     const [readAllPanelSettings, setReadAllPanelSettings] = useState({width: 350, isOpen: true});
     const [timelinePanelSettings, setTimelinePanelSettings] = useState({isOpen: true});
+    const [scriptEditorSettings, setScriptEditorSettings] = useState({'mode': 'header', 'theme': 'light', 'zoom': 1});
 
     // Hooks
     const { fetchProject, loading, error, setError, fragments, filters, setFilteredFragments } = useProjectStore();
@@ -123,6 +124,8 @@ const Project = ({...props}) => {
                     setReadAllPanelSettings={setReadAllPanelSettings}
                     timelinePanelSettings={timelinePanelSettings}
                     setTimelinePanelSettings={setTimelinePanelSettings}
+                    scriptEditorSettings={scriptEditorSettings}
+                    setScriptEditorSettings={setScriptEditorSettings}
                     mainPanelViews={mainPanelViews}
                     mainPanelView={mainPanelView}
                     setMainPanelView={setMainPanelView}
@@ -169,7 +172,10 @@ const Project = ({...props}) => {
                 }
                 {
                     projectMode === projectModes.SCRIPTWRITER_MODE &&
-                    <Scriptwriter />
+                    <Scriptwriter
+                        scriptEditorSettings={scriptEditorSettings}
+                        setScriptEditorSettings={setScriptEditorSettings}
+                    />
                 }
             </Column>
         </ErrorBoundary>

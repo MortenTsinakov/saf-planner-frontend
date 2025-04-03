@@ -1,49 +1,56 @@
-import { Column, Typography } from "components";
-import React, { useState } from "react";
+import { Column } from "components";
+import React, { useRef, useState } from "react";
 import { withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor } from 'slate';
 import ScriptElement from "../script-elements/ScriptElement";
 import ScriptContent from "../script-elements/ScriptContent";
 import { addBlock, changeBlockType, getElementTypeAtCursor } from "utils";
+import ScriptModeMenu from "./ScriptModeMenu";
 
-const ScriptwriterPanel = ({fragments}) => {
+const ScriptwriterPanel = ({
+    scriptEditorSettings,
+    setScriptEditorSettings,
+}) => {
 
     const [editor] = useState(() => withHistory(withReact(createEditor())));
+    const editorRef = useRef(null);
+
     const defaultValue = [
         {
             type: 'scene',
             id: 1,
             children: [
                 { type: 'header', children: [{ text: 'fade in:' }] },
-                { type: 'action', children: [{ text: 'action sequence'}]},
             ],
         },
     ];
     const [scenes, setScenes] = useState(defaultValue);
-    const [mode, setMode] = useState('header');
+    const [menuState, setMenuState] = useState({visible: false, x: 0, y: 0});
 
-    const EditableWithRef = React.forwardRef((props, ref) => (
-        <Editable {...props} ref={ref} />
+    const EditableWithRef = React.forwardRef((props, _) => (
+        <Editable {...props} ref={editorRef} />
     ));
 
     const scriptPageStyle = {
+        margin: 'auto',
         height: "100%",
-        width: "210mm",
-        paddingLeft: "1.5in",
-        paddingRight: "1in",
-        paddingTop: "1in",
-        paddingBottom: "1in",
+        width: `${210 * scriptEditorSettings.zoom}mm`,
+        paddingLeft: `${1.5 * scriptEditorSettings.zoom}in`,
+        paddingRight: `${1 * scriptEditorSettings.zoom}in`,
+        paddingTop: `${1 * scriptEditorSettings.zoom}in`,
+        paddingBottom: `${1 * scriptEditorSettings.zoom}in`,
         fontFamily: "'Courier New', Courier, monospace",
-        fontSize: "12pt",
+        fontSize: `${12 * scriptEditorSettings.zoom}pt`,
         backgroundColor: "white",
+        outline: 'none',
         overflow: "auto",
     }
 
     /**
      * Render script blocks.
      */
-    const renderElement = ({element, attributes, children, path}) => {
+    const renderElement = ({element, attributes, children}) => {
         const props = {
             element: element,
             attributes:  attributes,
@@ -55,17 +62,17 @@ const ScriptwriterPanel = ({fragments}) => {
             case 'scene':
                 return <ScriptElement {...props} />
             case 'header':
-                return <ScriptContent {...props} mode={"header"} />
+                return <ScriptContent {...props} mode={"header"} zoom={scriptEditorSettings.zoom}/>
             case 'action':
-                return <ScriptContent {...props} mode={"action"} />
+                return <ScriptContent {...props} mode={"action"} zoom={scriptEditorSettings.zoom}/>
             case 'character':
-                return <ScriptContent {...props} mode={"character"} />
+                return <ScriptContent {...props} mode={"character"} zoom={scriptEditorSettings.zoom}/>
             case 'parenthetical':
-                return <ScriptContent {...props} mode={"parenthetical"} />
+                return <ScriptContent {...props} mode={"parenthetical"} zoom={scriptEditorSettings.zoom}/>
             case 'dialogue':
-                return <ScriptContent {...props} mode={"dialogue"} />
+                return <ScriptContent {...props} mode={"dialogue"} zoom={scriptEditorSettings.zoom}/>
             case 'transition':
-                return <ScriptContent {...props} mode={"transition"} />
+                return <ScriptContent {...props} mode={"transition"} zoom={scriptEditorSettings.zoom}/>
             default:
                 return;
         }
@@ -78,7 +85,7 @@ const ScriptwriterPanel = ({fragments}) => {
     const handleEnterPress = (event) => {
         event.preventDefault();
         let automaticMode;
-        switch (mode) {
+        switch (scriptEditorSettings.mode) {
             case 'header':
                 automaticMode = 'action';
                 break;
@@ -102,8 +109,10 @@ const ScriptwriterPanel = ({fragments}) => {
         }
 
         addBlock(editor, automaticMode);
-        setMode(automaticMode);
-        console.log(scenes);
+        setScriptEditorSettings({
+            ...scriptEditorSettings,
+            mode: automaticMode,
+        });
     }
 
     /**
@@ -116,7 +125,7 @@ const ScriptwriterPanel = ({fragments}) => {
         let requestedMode;
         const key = event.key;
         switch (key) {
-            case 'Enter':
+            case 'h':
                 requestedMode = "header";
                 break
             case 'a':
@@ -138,8 +147,11 @@ const ScriptwriterPanel = ({fragments}) => {
                 return;
         }
         
-        changeBlockType(editor, requestedMode);
-        setMode(requestedMode);
+        changeMode(requestedMode);
+        setScriptEditorSettings({
+            ...scriptEditorSettings,
+            mode: requestedMode,
+        });
     }
 
     /**
@@ -161,33 +173,57 @@ const ScriptwriterPanel = ({fragments}) => {
     }
 
     const handleClick = () => {
+        setMenuState({
+            ...menuState,
+            visible: false,
+        });
         determineMode();
     }
 
     const determineMode = () => {
         const currentMode = getElementTypeAtCursor(editor);
-        setMode(currentMode);
+        setScriptEditorSettings({
+            ...scriptEditorSettings,
+            mode: currentMode,
+        });
     }
 
-    const handleEditorChange = (newValue) => {
-        setScenes(newValue);
+    const handleCloseMenu = () => {
+        setMenuState({
+            ...menuState,
+            visible: false,
+        })
+    }
+
+    const changeMode = (toMode) => {
+        changeBlockType(editor, toMode);
+        editorRef.current?.focus();
+    }
+
+    const handleContextMenu = (event) => {
+        event.preventDefault();
+        const x = event.pageX;
+        const y = event.pageY;
+        setMenuState({
+            visible: true,
+            x: x,
+            y: y,
+        })
     }
 
     return (
-        <Column
-        style={{
-            padding: '3rem',
-            overflowY: 'auto',
-            backgroundColor: 'var(--background-color-medium)',
-            gap: '2rem',
-            alignItems: 'center',
-        }}
+        <Slate
+            editor={editor}
+            initialValue={scenes}
+            onChange={setScenes}
         >
-            <Typography>{mode}</Typography>
-            <Slate
-                editor={editor}
-                initialValue={scenes}
-                onChange={newValue => handleEditorChange(newValue)}
+            <Column
+                style={{
+                    flex: 1,
+                    overflow: 'auto',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
             >
                 <EditableWithRef
                     renderElement={(props) =>  renderElement({...props, path:
@@ -197,9 +233,20 @@ const ScriptwriterPanel = ({fragments}) => {
                     onKeyDown={event => handleKeyDown(event)}
                     onKeyUp={handleKeyUp}
                     onClick={handleClick}
+                    onContextMenu={handleContextMenu}
                 />
-            </Slate>
-        </Column>
+                {menuState.visible &&
+                    <ScriptModeMenu
+                        x={menuState.x}
+                        y={menuState.y}
+                        handleCloseMenu={handleCloseMenu}
+                        scriptEditorSettings={scriptEditorSettings}
+                        setScriptEditorSettings={setScriptEditorSettings}
+                        changeMode={changeMode}
+                    />
+                }
+            </Column>
+        </Slate>
     );
 }
  
