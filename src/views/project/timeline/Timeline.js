@@ -9,14 +9,12 @@ import { formatSecondsToHMS } from "utils";
 const Timeline = ({
     timelinePanelSettings,
     setTimelinePanelSettings,
-    filteredFragments,
-    filters,
     selectedFragmentIdx,
     setSelectedFragmentIdx,
     ...props
 }) => {
 
-    const {project, fragments} = useProjectStore();
+    const {project, fragments, filteredFragments} = useProjectStore();
     const [currentDuration, setCurrentDuration] = useState(0);
     const [displayDetailedTimeline, setDisplayDetailedTimeline] = useState(true);
     const iconStyle = {
@@ -144,14 +142,11 @@ const Timeline = ({
                 displayDetailedTimeline
                 ?
                 <LabelTimeline
-                    filteredFragments={filteredFragments}
-                    filters={filters}
                     selectedFragmentIdx={selectedFragmentIdx}
                     {...props}
                 />
                 :
                 <BasicTimeline
-                    filteredFragments={filteredFragments}
                     selectedFragmentIdx={selectedFragmentIdx}
                 />
             }

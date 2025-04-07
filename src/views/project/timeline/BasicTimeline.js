@@ -1,11 +1,14 @@
 import { Column, Row } from "components";
 import Markings from "./Markings";
+import { useProjectStore } from "stores";
 
 const BasicTimeline = ({
-    filteredFragments,
     selectedFragmentIdx,
     ...props
 }) => {
+
+    const {filteredFragments} = useProjectStore();
+
     return (
         <Column
             style={{

@@ -1,0 +1,36 @@
+.script-content {
+    color: black;
+    outline: none;
+    border: none;
+}
+
+.header {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.action {
+    text-align: left;
+}
+
+.character {
+    text-transform: uppercase;
+}
+
+.parenthetical::before {
+    content: "(";
+}
+
+.parenthetical::after {
+    content: ")";
+}
+
+.dialogue {
+    text-align: left;
+}
+
+.transition {
+    text-align: right;
+    text-transform: uppercase;
+}

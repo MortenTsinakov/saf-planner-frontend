@@ -8,8 +8,14 @@ import Timeline from './timeline/Timeline';
 import { useProjectStore } from 'stores';
 import MainPanel from './main-panel/MainPanel';
 import { ErrorBoundary } from 'react-error-boundary';
+import Scriptwriter from './scriptwriter/Scriptwriter';
 
 const Project = ({...props}) => {
+
+    const projectModes = Object.freeze({
+        PLAN_MODE: 0,
+        SCRIPWRITER_MODE: 1,
+    })
 
     const mainPanelViews = Object.freeze({
         FRAGMENT_GRID: 0,
@@ -23,10 +29,11 @@ const Project = ({...props}) => {
     const projectId = searchParams.get('projectId');
 
     // Fragment filters
-    const [filters, setFilters] = useState([]);
     const [hideNonTimelineFragments, setHideNonTimelineFragments] = useState(false);
-    const [filteredFragments, setFilteredFragments] = useState([]);
     const [selectedFragmentIdx, setSelectedFragmentIdx] = useState(0);
+
+    // Current project mode
+    const [projectMode, setProjectMode] = useState(projectModes.PLAN_MODE);
 
     // View in the main panel
     const [mainPanelView, setMainPanelView] = useState(mainPanelViews.FRAGMENT_GRID);
@@ -34,9 +41,10 @@ const Project = ({...props}) => {
     // Settings for panels
     const [readAllPanelSettings, setReadAllPanelSettings] = useState({width: 350, isOpen: true});
     const [timelinePanelSettings, setTimelinePanelSettings] = useState({isOpen: true});
+    const [scriptEditorSettings, setScriptEditorSettings] = useState({'mode': 'header', 'theme': 'light', 'zoom': 1});
 
     // Hooks
-    const { fetchProject, loading, error, setError, fragments } = useProjectStore();
+    const { fetchProject, loading, error, setError, fragments, filters, setFilteredFragments } = useProjectStore();
     const {addAlert} = useAlerts();
 
     useEffect(() => {
@@ -86,7 +94,7 @@ const Project = ({...props}) => {
         
         setFilteredFragments(filterFragments());
         setSelectedFragmentIdx(0);
-    }, [filters, fragments])
+    }, [filters, fragments, setFilteredFragments])
 
 
     if (loading) {
@@ -116,50 +124,59 @@ const Project = ({...props}) => {
                     setReadAllPanelSettings={setReadAllPanelSettings}
                     timelinePanelSettings={timelinePanelSettings}
                     setTimelinePanelSettings={setTimelinePanelSettings}
-                    filters={filters}
-                    setFilters={setFilters}
+                    scriptEditorSettings={scriptEditorSettings}
+                    setScriptEditorSettings={setScriptEditorSettings}
                     mainPanelViews={mainPanelViews}
                     mainPanelView={mainPanelView}
                     setMainPanelView={setMainPanelView}
                     hideNonTimelineFragments={hideNonTimelineFragments}
                     setHideNonTimelineFragments={setHideNonTimelineFragments}
+                    projectModes={projectModes}
+                    projectMode={projectMode}
+                    setProjectMode={setProjectMode}
                 />
-                <Row
-                    style={{
-                        overflow: 'hidden',
-                        height: 'inherit',
-                        width: '100%',
-                        gap:0,
-                    }}
-                >
-                    <ReadAllPanel
-                        readAllPanelSettings={readAllPanelSettings}
-                        setReadAllPanelSettings={setReadAllPanelSettings}
-                        filteredFragments={filteredFragments}
-                        selectedFragmentIdx={selectedFragmentIdx}
-                    />
-                    <Row style={{flex: 1, gap: 0}}>
-                        <Column
-                            style={{width: '100%'}}
-                        >
-                            <Timeline
-                                timelinePanelSettings={timelinePanelSettings}
-                                setTimelinePanelSettings={setTimelinePanelSettings}
-                                filteredFragments={filteredFragments}
-                                filters={filters}
-                                selectedFragmentIdx={selectedFragmentIdx}
-                                setSelectedFragmentIdx={setSelectedFragmentIdx}
-                            />
-                            <MainPanel
-                                mainPanelViews={mainPanelViews}
-                                mainPanelView={mainPanelView}
-                                filteredFragments={filteredFragments}
-                                selectedFragmentIdx={selectedFragmentIdx}
-                                hideNonTimelineFragments={hideNonTimelineFragments}
-                            />
-                        </Column>
+                {
+                    projectMode === projectModes.PLAN_MODE &&
+                    <Row
+                        style={{
+                            overflow: 'hidden',
+                            height: 'inherit',
+                            width: '100%',
+                            gap:0,
+                        }}
+                    >
+                        <ReadAllPanel
+                            readAllPanelSettings={readAllPanelSettings}
+                            setReadAllPanelSettings={setReadAllPanelSettings}
+                            selectedFragmentIdx={selectedFragmentIdx}
+                        />
+                        <Row style={{flex: 1, gap: 0}}>
+                            <Column
+                                style={{width: '100%'}}
+                            >
+                                <Timeline
+                                    timelinePanelSettings={timelinePanelSettings}
+                                    setTimelinePanelSettings={setTimelinePanelSettings}
+                                    selectedFragmentIdx={selectedFragmentIdx}
+                                    setSelectedFragmentIdx={setSelectedFragmentIdx}
+                                />
+                                <MainPanel
+                                    mainPanelViews={mainPanelViews}
+                                    mainPanelView={mainPanelView}
+                                    selectedFragmentIdx={selectedFragmentIdx}
+                                    hideNonTimelineFragments={hideNonTimelineFragments}
+                                />
+                            </Column>
+                        </Row>
                     </Row>
-                </Row>
+                }
+                {
+                    projectMode === projectModes.SCRIPTWRITER_MODE &&
+                    <Scriptwriter
+                        scriptEditorSettings={scriptEditorSettings}
+                        setScriptEditorSettings={setScriptEditorSettings}
+                    />
+                }
             </Column>
         </ErrorBoundary>
     );

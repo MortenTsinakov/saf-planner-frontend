@@ -17,6 +17,10 @@ const useProjectStore = create((set, get) => ({
     fragmentToEdit: null,
     activeId: null,
 
+    //Filtering options
+    filters: [],
+    filteredFragments: [],
+
     // Basic setters
     setProject: (project) => set({ project }),
     setFragments: (fragments) => set({ fragments }),
@@ -25,6 +29,8 @@ const useProjectStore = create((set, get) => ({
     setError: (error) => set({ error }),
     setNewFragments: (newFragments) => set({ newFragments }),
     setActiveId: (activeId) => set({activeId}),
+    setFilters: (filters) => set({ filters }),
+    setFilteredFragments: (filteredFragments) => set({ filteredFragments }),
     
     // Project actions
     fetchProject: fetchProject(set),

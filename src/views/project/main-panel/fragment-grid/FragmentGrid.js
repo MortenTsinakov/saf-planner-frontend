@@ -17,7 +17,6 @@ import { possibleSidebarStates } from './fragment-grid-data/SidebarStates';
  * It's also possible to add new fragments on the grid.
  */
 const FragmentGrid = ({
-    filteredFragments, 
     selectedFragmentIdx, 
     hideNonTimelineFragments, 
     ...props
@@ -34,6 +33,7 @@ const FragmentGrid = ({
         setActiveId, 
         newFragments, 
         setNewFragments,
+        filteredFragments,
     } = useProjectStore();
 
     const sensors = useSensors(

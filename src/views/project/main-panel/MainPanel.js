@@ -1,18 +1,19 @@
 import FragmentGrid from "./fragment-grid/FragmentGrid";
 import Presentation from "./presentation/Presentation";
+import { useProjectStore } from "stores";
 
 const MainPanel = ({
     mainPanelViews,
     mainPanelView,
-    filteredFragments,
     selectedFragmentIdx,
     hideNonTimelineFragments,
 }) => {
 
+    const {filteredFragments} = useProjectStore();
+
     if (mainPanelView === mainPanelViews.FRAGMENT_GRID) {
         return (
             <FragmentGrid
-                filteredFragments={filteredFragments}
                 selectedFragmentIdx={selectedFragmentIdx}
                 hideNonTimelineFragments={hideNonTimelineFragments}
             />
