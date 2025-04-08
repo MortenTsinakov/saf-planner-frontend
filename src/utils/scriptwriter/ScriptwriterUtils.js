@@ -85,6 +85,28 @@ export const changeBlockType = (editor, requestedMode) => {
 }
 
 /**
+ * Get the text value of the current block.
+ */
+export const getElementTextValue = (editor) => {
+    const [node, ] = getNodeAndPath(editor);
+    return node?.children[0].text || null;
+}
+
+/**
+ * Delete all text from current element.
+ */
+export const deleteTextFromElement = (editor) => {
+    const [node, path] = getNodeAndPath(editor);
+
+    if (!node || !path) {return;}
+
+    const start = Editor.start(editor, path);
+    const end = Editor.end(editor, path);
+
+    Transforms.delete(editor, {at: {anchor: start, focus: end}});
+}
+
+/**
  * Element styles
  */
 export const getElementStyle = (mode, zoom) => {

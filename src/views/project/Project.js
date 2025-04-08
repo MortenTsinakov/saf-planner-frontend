@@ -41,7 +41,7 @@ const Project = ({...props}) => {
     // Settings for panels
     const [readAllPanelSettings, setReadAllPanelSettings] = useState({width: 350, isOpen: true});
     const [timelinePanelSettings, setTimelinePanelSettings] = useState({isOpen: true});
-    const [scriptEditorSettings, setScriptEditorSettings] = useState({'mode': 'header', 'theme': 'light', 'zoom': 1});
+    const [scriptEditorSettings, setScriptEditorSettings] = useState({'mode': 'header', 'theme': 'light', 'zoom': 1, "tipsAreOpen": true});
 
     // Hooks
     const { fetchProject, loading, error, setError, fragments, filters, setFilteredFragments } = useProjectStore();

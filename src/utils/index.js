@@ -32,4 +32,6 @@ export {
     getElementTypeAtCursor,
     changeBlockType,
     getElementStyle,
+    getElementTextValue,
+    deleteTextFromElement,
 } from './scriptwriter/ScriptwriterUtils';

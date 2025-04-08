@@ -1,8 +1,10 @@
 import { Row } from "components";
 import FragmentSelectionPanel from "./panels/FragmentSelectionPanel";
 import ScriptwriterPanel from "./panels/ScriptwriterPanel";
+import TipsPanel from "./panels/TipsPanel";
 
 const Scriptwriter = ({scriptEditorSettings, setScriptEditorSettings}) => {
+
     return (
         <Row
             style={{
@@ -10,6 +12,7 @@ const Scriptwriter = ({scriptEditorSettings, setScriptEditorSettings}) => {
                 overflow: 'hidden',
                 flexWrap: 'wrap',
                 width: '100%',
+                position: 'relative'
             }}
         >
             <Row
@@ -26,6 +29,13 @@ const Scriptwriter = ({scriptEditorSettings, setScriptEditorSettings}) => {
                     setScriptEditorSettings={setScriptEditorSettings}
                 />
             </Row>
+            {
+                scriptEditorSettings.tipsAreOpen && 
+                <TipsPanel
+                    scriptEditorSettings={scriptEditorSettings}
+                    setScriptEditorSettings={setScriptEditorSettings}
+                />
+            }
         </Row>
     );
 }

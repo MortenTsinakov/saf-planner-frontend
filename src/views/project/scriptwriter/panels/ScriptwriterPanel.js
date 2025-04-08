@@ -5,7 +5,7 @@ import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor } from 'slate';
 import ScriptElement from "../script-elements/ScriptElement";
 import ScriptContent from "../script-elements/ScriptContent";
-import { addBlock, changeBlockType, getElementTypeAtCursor } from "utils";
+import { addBlock, changeBlockType, deleteTextFromElement, getElementTextValue, getElementTypeAtCursor } from "utils";
 import ScriptModeMenu from "./ScriptModeMenu";
 import { useProjectStore } from "stores";
 
@@ -106,7 +106,7 @@ const ScriptwriterPanel = ({
                 automaticMode = 'dialogue';
                 break;
             case 'dialogue':
-                automaticMode = 'character';
+                automaticMode = 'action';
                 break;
             case 'transition':
                 automaticMode = 'header';
@@ -170,6 +170,16 @@ const ScriptwriterPanel = ({
             handleModeShortcutPress(event);
         } else if (event.key === "Enter") {
             handleEnterPress(event);
+        } else if (event.key === "Tab") {
+            event.preventDefault();
+            const elementText = getElementTextValue(editor);
+            if (elementText === null) {
+                changeMode("character");
+            }
+        } else if (event.key === "Backspace") {
+            setTimeout(() => {
+                determineMode();
+            }, 10)
         }
     }
 
@@ -199,6 +209,10 @@ const ScriptwriterPanel = ({
     const changeMode = (toMode) => {
         changeBlockType(editor, toMode);
         editorRef.current?.focus();
+        setScriptEditorSettings((prev) => ({
+            ...prev,
+            mode: toMode,
+        }));
     }
 
     const handleContextMenu = (event) => {
@@ -212,11 +226,34 @@ const ScriptwriterPanel = ({
         })
     }
 
+    const isUpperCase = (s) => {
+        return s === s.toUpperCase();
+    }
+
+    const handleAutomaticModeChange = () => {
+        const elementText = getElementTextValue(editor);
+        if (elementText === null) {return;}
+
+        if (elementText.toUpperCase() === "INT." || elementText.toUpperCase() === "EXT.") {
+            changeMode("header");
+        } else if (elementText === "(") {
+            deleteTextFromElement(editor);
+            changeMode("parenthetical");
+        } else if (elementText.length > 1 && isUpperCase(elementText) && elementText[elementText.length - 1] === ":") {
+            changeBlockType(editor, "transition");
+        }
+    }
+
+    const handleChange = (value) => {
+        handleAutomaticModeChange();
+        setCurrentScreenplay(value);
+    }
+
     return (
         <Slate
             editor={editor}
             initialValue={[currentScreenplay]}
-            onChange={(s) => setCurrentScreenplay(s[0])}
+            onChange={(value) => handleChange(value[0])}
             onSelectionChange={handleSelectionChange}
         >
             <Column
