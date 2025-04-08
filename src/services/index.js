@@ -66,3 +66,11 @@ export {
     editCommentService,
     deleteCommentService,
 } from 'services/shared-project/SharedProjectService';
+
+// Screenplays
+export {
+    fetchScreenplayService,
+    createScreenplayService,
+    updateScreenplayService,
+    deleteScreenplayService,
+} from 'services/screenplay/ScreenplayService';

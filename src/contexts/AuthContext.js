@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInService, signOutService, signUpService } from "services";
+import { useProjectStore } from "stores";
 
 const AuthContext = createContext();
 
@@ -72,6 +73,7 @@ export const AuthProvider = ({children}) => {
      * Sign user out
      */
     const signOut = useCallback(async () => {
+        useProjectStore.getState().reset();
         try {
             localStorage.clear();
             setUser(null);

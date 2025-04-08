@@ -64,7 +64,7 @@ export const addBlock = (editor, mode) => {
 export const getElementTypeAtCursor = (editor) => {
     const [node, ] = getNodeAndPath(editor);
     
-    if (!node) return null;
+    if (!node) return "-";
 
     return node.type;
 }

@@ -5,10 +5,19 @@ import { setSidebarState } from './project-store-actions/sidebarActions';
 import { setFragmentToEdit } from './project-store-actions/sidebarActions';
 import { attachLabelToFragment, createLabel, removeLabelFromFragment } from './project-store-actions/labelActions';
 import { deleteImage, fetchImage, uploadImage } from './project-store-actions/imageActions';
+import { createScreenplay, deleteScreenplay, fetchScreenplay, updateScreenplay } from './project-store-actions/screenplayActions';
 
-const useProjectStore = create((set, get) => ({
+const initialState = {
     project: null,
     fragments: [],
+    screenplay: null,
+    currentScreenplay: {
+                type: 'screenplay',
+                id: 1,
+                children: [
+                    { type: 'header', children: [{ text: 'fade in:' }] },
+                ],
+            },
     images: new Map(),
     loading: true,
     error: null,
@@ -20,10 +29,19 @@ const useProjectStore = create((set, get) => ({
     //Filtering options
     filters: [],
     filteredFragments: [],
+}
+
+const useProjectStore = create((set, get) => ({
+    ...initialState,
+
+    // Reset function
+    reset: () => set(initialState),
 
     // Basic setters
     setProject: (project) => set({ project }),
     setFragments: (fragments) => set({ fragments }),
+    setScreenplay: (screenplay) => set ({ screenplay }),
+    setCurrentScreenplay: (currentScreenplay) => set ({ currentScreenplay }),
     setImages: (images) => set({ images }),
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
@@ -41,6 +59,12 @@ const useProjectStore = create((set, get) => ({
     updateFragmentDuration: updateFragmentDuration(get, set),
     moveFragment: moveFragment(get, set),
     deleteFragment: deleteFragment(get, set),
+
+    // Screenplay actions
+    fetchScreenplay: fetchScreenplay(get, set),
+    createScreenplay: createScreenplay(get, set),
+    updateScreenplay: updateScreenplay(get, set),
+    deleteScreenplay: deleteScreenplay(get, set),
     
     // Sidebar actions
     setSidebarState: setSidebarState(set),

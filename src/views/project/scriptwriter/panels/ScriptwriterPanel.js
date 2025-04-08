@@ -1,5 +1,5 @@
-import { Column } from "components";
-import React, { useRef, useState } from "react";
+import { Column, Loading } from "components";
+import React, { useEffect, useRef, useState } from "react";
 import { withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor } from 'slate';
@@ -7,6 +7,7 @@ import ScriptElement from "../script-elements/ScriptElement";
 import ScriptContent from "../script-elements/ScriptContent";
 import { addBlock, changeBlockType, getElementTypeAtCursor } from "utils";
 import ScriptModeMenu from "./ScriptModeMenu";
+import { useProjectStore } from "stores";
 
 const ScriptwriterPanel = ({
     scriptEditorSettings,
@@ -16,17 +17,23 @@ const ScriptwriterPanel = ({
     const [editor] = useState(() => withHistory(withReact(createEditor())));
     const editorRef = useRef(null);
 
-    const defaultValue = [
-        {
-            type: 'scene',
-            id: 1,
-            children: [
-                { type: 'header', children: [{ text: 'fade in:' }] },
-            ],
-        },
-    ];
-    const [scenes, setScenes] = useState(defaultValue);
+    const {fetchScreenplay, currentScreenplay, setCurrentScreenplay, loading} = useProjectStore();
     const [menuState, setMenuState] = useState({visible: false, x: 0, y: 0});
+
+    useEffect(() => {
+        const getScreenplay = async() => {
+            fetchScreenplay();
+        }
+        getScreenplay();
+    }, [fetchScreenplay]);
+
+    if (loading) {
+        return (
+            <Column>
+                <Loading />
+            </Column>
+        );
+    }
 
     const EditableWithRef = React.forwardRef((props, _) => (
         <Editable {...props} ref={editorRef} />
@@ -59,7 +66,7 @@ const ScriptwriterPanel = ({
         }
 
         switch (element.type) {
-            case 'scene':
+            case 'screenplay':
                 return <ScriptElement {...props} />
             case 'header':
                 return <ScriptContent {...props} mode={"header"} zoom={scriptEditorSettings.zoom}/>
@@ -109,10 +116,10 @@ const ScriptwriterPanel = ({
         }
 
         addBlock(editor, automaticMode);
-        setScriptEditorSettings({
-            ...scriptEditorSettings,
+        setScriptEditorSettings((prev) => ({
+            ...prev,
             mode: automaticMode,
-        });
+        }));
     }
 
     /**
@@ -148,10 +155,10 @@ const ScriptwriterPanel = ({
         }
         
         changeMode(requestedMode);
-        setScriptEditorSettings({
-            ...scriptEditorSettings,
+        setScriptEditorSettings((prev) => ({
+            ...prev,
             mode: requestedMode,
-        });
+        }));
     }
 
     /**
@@ -166,33 +173,27 @@ const ScriptwriterPanel = ({
         }
     }
 
-    const handleKeyUp = (event) => {
-        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-            determineMode();
-        }
-    }
-
-    const handleClick = () => {
-        setMenuState({
-            ...menuState,
+    const handleSelectionChange = () => {
+        setMenuState((prev) => ({
+            ...prev,
             visible: false,
-        });
+        }));
         determineMode();
     }
 
     const determineMode = () => {
         const currentMode = getElementTypeAtCursor(editor);
-        setScriptEditorSettings({
-            ...scriptEditorSettings,
+        setScriptEditorSettings((prev) => ({
+            ...prev,
             mode: currentMode,
-        });
+        }));
     }
 
     const handleCloseMenu = () => {
-        setMenuState({
-            ...menuState,
+        setMenuState((prev) => ({
+            ...prev,
             visible: false,
-        })
+        }))
     }
 
     const changeMode = (toMode) => {
@@ -214,8 +215,9 @@ const ScriptwriterPanel = ({
     return (
         <Slate
             editor={editor}
-            initialValue={scenes}
-            onChange={setScenes}
+            initialValue={[currentScreenplay]}
+            onChange={(s) => setCurrentScreenplay(s[0])}
+            onSelectionChange={handleSelectionChange}
         >
             <Column
                 style={{
@@ -230,9 +232,7 @@ const ScriptwriterPanel = ({
                         ReactEditor.findPath(editor, props.element)
                     })}
                     style={scriptPageStyle}
-                    onKeyDown={event => handleKeyDown(event)}
-                    onKeyUp={handleKeyUp}
-                    onClick={handleClick}
+                    onKeyDown={handleKeyDown}
                     onContextMenu={handleContextMenu}
                 />
                 {menuState.visible &&

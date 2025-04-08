@@ -1,6 +1,9 @@
 import { Column, DropdownMenu, IconButton, Row, Typography } from "components";
-import { useState } from "react";
+import { useAlerts } from "hooks";
+import { isEqual } from "lodash";
+import { useCallback, useEffect, useState } from "react";
 import { MdDarkMode, MdDownload, MdSave, MdTipsAndUpdates, MdZoomIn, MdZoomOut } from "react-icons/md";
+import { useProjectStore } from "stores";
 
 const ScriptwriterModeToolbar = ({
     iconStyle,
@@ -9,6 +12,47 @@ const ScriptwriterModeToolbar = ({
 }) => {
 
     const [modeDropdownIsOpen, setModeDropdownIsOpen] = useState(false);
+    const { screenplay, currentScreenplay, createScreenplay, updateScreenplay } = useProjectStore();
+    const [screenplayHasChanged, setScreenplayHasChanged] = useState(false);
+    const { addAlert } = useAlerts();
+
+    useEffect(() => {
+        const checkIfScreenplayHasChanged = () => {
+            if (!screenplay) {return;}
+
+            setScreenplayHasChanged(!isEqual(screenplay.content, currentScreenplay));
+        }
+
+        checkIfScreenplayHasChanged();
+    }, [screenplay, currentScreenplay]);
+
+    const handleSaveClick = useCallback(async () => {
+        let successfulSave;
+        if (screenplay.id === null) {
+            successfulSave = await createScreenplay();
+        } else {
+            successfulSave = await updateScreenplay();
+        }
+
+        if (successfulSave) {
+            addAlert("Screenplay was saved", "success");
+        }
+    }, [addAlert, createScreenplay, screenplay, updateScreenplay]);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.ctrlKey && event.key === "s") {
+                event.preventDefault();
+                handleSaveClick();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleSaveClick]);
 
     const handleZoomIn = () => {
         const zoom = Math.min(2, scriptEditorSettings.zoom + 0.25);
@@ -30,8 +74,12 @@ const ScriptwriterModeToolbar = ({
         <Row>
             <IconButton
                 icon={<MdSave />}
-                style={iconStyle}
+                style={{
+                    ...iconStyle,
+                    color: screenplayHasChanged && 'var(--color-error)',
+                }}
                 title='Save script (Ctrl + S)'
+                onClick={handleSaveClick}
             />
             <IconButton
                 icon={<MdDownload />}
