@@ -1,21 +1,17 @@
 import { Column, Row, TextButton, Typography } from "components";
 
-const ScriptModeMenu = ({x, y, handleCloseMenu, scriptEditorSettings, setScriptEditorSettings, changeMode}) => {
+const ScriptModeMenu = ({changeMode, handleCloseMenu}) => {
 
     const handleModeChange = (mode) => {
         const newMode = mode.toLowerCase()
         changeMode(newMode);
-        setScriptEditorSettings({
-            ...scriptEditorSettings,
-            mode: newMode,
-        })
         handleCloseMenu();
     }
 
     const getButton = (mode, shortcut) => {
         return (
             <TextButton
-                onClick={(event) => handleModeChange(mode)}
+                onClick={(e) => handleModeChange(mode)}
             >
                 <Row
                     style={{
@@ -38,8 +34,8 @@ const ScriptModeMenu = ({x, y, handleCloseMenu, scriptEditorSettings, setScriptE
             onMouseLeave={handleCloseMenu}
             style={{
                 position: 'absolute',
-                left: x,
-                top: y,
+                left: 60,
+                top: 0,
                 backgroundColor: 'var(--background-color-low)',
                 padding: '2rem',
                 borderRadius: '10px',

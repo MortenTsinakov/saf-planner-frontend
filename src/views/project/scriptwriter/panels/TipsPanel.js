@@ -197,7 +197,6 @@ const TipsPanel = ({scriptEditorSettings, setScriptEditorSettings}) => {
     const page8 = () => {
         return (
             <Column>
-                <MdTipsAndUpdates style={{fontSize: '3rem', color: 'var(--primary-color)'}}/>
                 <Typography fontSize='medium'>
                     Happy scripwriting!
                 </Typography>

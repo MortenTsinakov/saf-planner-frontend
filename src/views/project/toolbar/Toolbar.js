@@ -1,20 +1,17 @@
 import { Divider, IconButton, Row } from "components";
-import { MdKeyboard, MdLightbulb, MdLinearScale, MdSettings, MdShare } from "react-icons/md";
+import { MdGridOn, MdKeyboard, MdLinearScale, MdSettings, MdShare } from "react-icons/md";
 import { useProjectStore } from "stores";
 import ApplyFilters from "./ApplyFilters";
 import { useState } from "react";
 import ShareProject from "../share_project/ShareProject";
 import { useNavigate } from "react-router-dom";
 import PlanModeToolbar from "./mode-toolbars/PlanModeToolbar";
-import ScriptwriterModeToolbar from "./mode-toolbars/ScriptwriterModeToolbar";
 
 const Toolbar = ({
     readAllPanelSettings,
     setReadAllPanelSettings,
     timelinePanelSettings,
     setTimelinePanelSettings,
-    scriptEditorSettings,
-    setScriptEditorSettings,
     filters,
     setFilters,
     mainPanelViews,
@@ -94,7 +91,7 @@ const Toolbar = ({
                     projectMode === projectModes.SCRIPTWRITER_MODE &&
                     <IconButton
                         style={iconStyle}
-                        icon={<MdLightbulb />}
+                        icon={<MdGridOn />}
                         title="Switch to planning mode"
                         onClick={() => setProjectMode(projectModes.PLAN_MODE)}
                     />
@@ -137,14 +134,6 @@ const Toolbar = ({
                         toggleTimelinePanel={toggleTimelinePanel}
                         changeViewToPresentation={changeViewToPresentation}
                         changeViewToFragmentGrid={changeViewToFragmentGrid}
-                    />
-                }
-                {
-                    projectMode === projectModes.SCRIPTWRITER_MODE &&
-                    <ScriptwriterModeToolbar
-                        iconStyle={iconStyle}
-                        scriptEditorSettings={scriptEditorSettings}
-                        setScriptEditorSettings={setScriptEditorSettings}
                     />
                 }
             </Row>

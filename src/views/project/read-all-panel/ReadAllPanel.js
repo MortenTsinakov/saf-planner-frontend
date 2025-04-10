@@ -5,7 +5,8 @@ import { useProjectStore } from 'stores';
 
 const ReadAllPanel = ({readAllPanelSettings, setReadAllPanelSettings}) => {
 
-    const {project, filteredFragments} = useProjectStore();
+    const project = useProjectStore((state) => state.project);
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
 
     const [isResizing, setIsResizing] = useState(false);
     const [isHovered, setIsHovered] = useState(false);

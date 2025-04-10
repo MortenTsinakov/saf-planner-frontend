@@ -162,3 +162,32 @@ export const deleteFragment =  (get, set) => async (fragment) => {
         return false;
     }
 };
+
+/**
+ * Filter fragments
+ */
+export const filterFragments = (get, set) => async () => {
+    if (get().project === null || get().fragments.length === 0) {
+        return;
+    }
+    if (get().filters.length === 0 || get().filters.length === get().project.labels.length) {
+        const ff = [...get().fragments.filter(f => f.onTimeline)];
+        set({ filteredFragments: ff});
+    }
+
+    let ff = [];
+            
+    for (const fragment of get().fragments) {
+        if (!fragment.onTimeline) {
+            continue;
+        }
+        for (const label of fragment.labels) {
+            if (get().filters.includes(label.id)) {
+                ff.push(fragment);
+                break;
+            }
+        }
+    }
+
+    set({ filteredFragments: ff});
+}

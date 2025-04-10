@@ -1,9 +1,22 @@
 import { Row } from "components";
 import FragmentSelectionPanel from "./panels/FragmentSelectionPanel";
 import ScriptwriterPanel from "./panels/ScriptwriterPanel";
-import TipsPanel from "./panels/TipsPanel";
+import { useProjectStore } from "stores";
+import { useEffect } from "react";
 
-const Scriptwriter = ({scriptEditorSettings, setScriptEditorSettings}) => {
+const Scriptwriter = () => {
+
+    console.log("Scriptwriter rendered");
+
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
+    const fetchScreenplay = useProjectStore((state) => state.fetchScreenplay);
+
+    useEffect(() => {
+        const getScreenplay = async() => {
+            fetchScreenplay();
+        }
+        getScreenplay();
+    }, [fetchScreenplay]);
 
     return (
         <Row
@@ -23,19 +36,12 @@ const Scriptwriter = ({scriptEditorSettings, setScriptEditorSettings}) => {
 
                 }}
             >
-                <FragmentSelectionPanel />
-                <ScriptwriterPanel
-                    scriptEditorSettings={scriptEditorSettings}
-                    setScriptEditorSettings={setScriptEditorSettings}
-                />
+                {
+                    filteredFragments.length > 0 &&
+                    <FragmentSelectionPanel />
+                }
+                <ScriptwriterPanel />
             </Row>
-            {
-                scriptEditorSettings.tipsAreOpen && 
-                <TipsPanel
-                    scriptEditorSettings={scriptEditorSettings}
-                    setScriptEditorSettings={setScriptEditorSettings}
-                />
-            }
         </Row>
     );
 }

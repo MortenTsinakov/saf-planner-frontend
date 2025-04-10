@@ -7,7 +7,7 @@ export const fetchProject = (set) => async (projectId) => {
             fetchProjectByIdService(projectId),
             fetchFragmentsService(projectId),
         ]);
-        set({ project: projectResponse, fragments: fragmentsResponse, loading: false });
+        set({ project: projectResponse, fragments: fragmentsResponse, filteredFragments: [...fragmentsResponse.filter(f => f.onTimeline)], loading: false });
     } catch (err) {
         set({ error: {message: err.response?.data?.message || "Fetching project failed", status: err.status }});
     } finally {

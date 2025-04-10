@@ -7,10 +7,10 @@ import { MdError, MdInfo, MdWarning, MdCheckCircle } from "react-icons/md";
  * The alert pops up inside the alert tray and displays an icon
  * indicating the type of alert and a message.
  */
-const Alert = ({message, level, ...props}) => {
+const Alert = ({message, level}) => {
     return (
         <div
-            className='alert' {...props}
+            className='alert'
             role='alert'
             aria-live='assertive'
         >

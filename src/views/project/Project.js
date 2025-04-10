@@ -10,7 +10,9 @@ import MainPanel from './main-panel/MainPanel';
 import { ErrorBoundary } from 'react-error-boundary';
 import Scriptwriter from './scriptwriter/Scriptwriter';
 
-const Project = ({...props}) => {
+const Project = () => {
+
+    console.log("Project rendered");
 
     const projectModes = Object.freeze({
         PLAN_MODE: 0,
@@ -41,61 +43,25 @@ const Project = ({...props}) => {
     // Settings for panels
     const [readAllPanelSettings, setReadAllPanelSettings] = useState({width: 350, isOpen: true});
     const [timelinePanelSettings, setTimelinePanelSettings] = useState({isOpen: true});
-    const [scriptEditorSettings, setScriptEditorSettings] = useState({'mode': 'header', 'theme': 'light', 'zoom': 1, "tipsAreOpen": true});
 
     // Hooks
-    const { fetchProject, loading, error, setError, fragments, filters, setFilteredFragments } = useProjectStore();
+    const fetchProject = useProjectStore((state) => state.fetchProject);
+    const loading = useProjectStore((state) => state.loading);
+    const error = useProjectStore((state) => state.error);
     const {addAlert} = useAlerts();
-
-    useEffect(() => {
-        if (projectId === null) {
-            navigate('/404');
-        }
-    }, [projectId, navigate]);
 
     useEffect(() => {
         fetchProject(projectId);
         
     }, [fetchProject, projectId]);
 
-    useEffect(() => {
-        if (error) {
-            if (error.status === 404) {
-                navigate('/404');
-            } 
-            addAlert(error.message, 'error');
-            setError(null);
+    if (error) {
+        if (error.status === 404) {
+            navigate('/404');
         }
-    }, [setError, error, addAlert, navigate]);
 
-    
-    useEffect(() => {
-        const filterFragments = () => {
-            if (filters.length === 0) {
-                return fragments.filter(f => f.onTimeline);
-            }
-            
-            let filteredFragments = [];
-            
-            for (const fragment of fragments) {
-                if (!fragment.onTimeline) {
-                    continue;
-                }
-                for (const label of fragment.labels) {
-                    if (filters.includes(label.id)) {
-                        filteredFragments.push(fragment);
-                        break;
-                    }
-                }
-            }
-
-            return filteredFragments;
-        }
-        
-        setFilteredFragments(filterFragments());
-        setSelectedFragmentIdx(0);
-    }, [filters, fragments, setFilteredFragments])
-
+        addAlert(error.message, 'error');
+    }
 
     if (loading) {
         return (
@@ -124,8 +90,6 @@ const Project = ({...props}) => {
                     setReadAllPanelSettings={setReadAllPanelSettings}
                     timelinePanelSettings={timelinePanelSettings}
                     setTimelinePanelSettings={setTimelinePanelSettings}
-                    scriptEditorSettings={scriptEditorSettings}
-                    setScriptEditorSettings={setScriptEditorSettings}
                     mainPanelViews={mainPanelViews}
                     mainPanelView={mainPanelView}
                     setMainPanelView={setMainPanelView}
@@ -172,10 +136,7 @@ const Project = ({...props}) => {
                 }
                 {
                     projectMode === projectModes.SCRIPTWRITER_MODE &&
-                    <Scriptwriter
-                        scriptEditorSettings={scriptEditorSettings}
-                        setScriptEditorSettings={setScriptEditorSettings}
-                    />
+                    <Scriptwriter />
                 }
             </Column>
         </ErrorBoundary>

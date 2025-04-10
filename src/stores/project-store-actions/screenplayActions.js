@@ -35,20 +35,33 @@ export const fetchScreenplay = (get, set) => async () => {
     }
 }
 
+export const saveScreenplay = (get, set) => async (content) => {
+    if (get().screenplay === null) {
+        set({ error: "Screenplay is null"});
+        return false;
+    }
+
+    if (get().screenplay.id === null) {
+        return createScreenplay(get, set, content);
+    } else {
+        return updateScreenplay(get, set, content);
+    }
+} 
+
 /**
  * Save new screenplay to the database. If saving succeeded, return true,
  * else false.
  */
-export const createScreenplay = (get, set) => async () => {
+const createScreenplay = async (get, set, content) => {
 
-    if (isEqual(get().screenplay.content, get().currentScreenplay)) {
+    if (isEqual(get().screenplay.content, content)) {
         return;
     }
 
     try {
         set({error: null});
 
-        const response = await createScreenplayService(get().project.id, get().currentScreenplay);
+        const response = await createScreenplayService(get().project.id, content);
         set({ screenplay: response });
         return true;
     } catch (err) {
@@ -61,16 +74,16 @@ export const createScreenplay = (get, set) => async () => {
  * Overwrite the screenplay with given id with content provided.
  * If updating the screenplay succeeded return true, else false.
  */
-export const updateScreenplay = (get, set) => async () => {
-    if (isEqual(get().screenplay.content, get().currentScreenplay)) {
+const updateScreenplay = async (get, set, content) => {
+    if (isEqual(get().screenplay.content, content)) {
         return;
     }
 
     try {
         set({error: null});
 
-        await updateScreenplayService(get().screenplay.id, get().currentScreenplay);
-        set({ screenplay: {...get().screenplay, content: get().currentScreenplay}});
+        await updateScreenplayService(get().screenplay.id, content);
+        set({ screenplay: {...get().screenplay, content: content}});
         return true;
     } catch (err) {
         set({error: {message: err.response?.data?.message || "Saving screenplay failed"}, status: err.status});

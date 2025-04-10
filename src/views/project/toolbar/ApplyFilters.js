@@ -6,20 +6,24 @@ import { useProjectStore } from 'stores';
 
 const ApplyFilters = ({style}) => {
 
-    const {project, filters, setFilters} = useProjectStore();
+    // const {project, filters, applyFilter, removeFilter} = useProjectStore();
+    const project = useProjectStore((state) => state.project);
+    const filters = useProjectStore((state) => state.filters);
+    const applyFilter = useProjectStore((state) => state.applyFilter);
+    const removeFilter = useProjectStore((state) => state.removeFilter);
+    const resetFilters = useProjectStore((state) => state.resetFilters);
     const [filterMenuIsOpen, setFilterMenuIsOpen] = useState(false);
 
     const handleSelectLabelClick = (labelId) => {
         if (filters.includes(labelId)) {
-            setFilters(filters.filter(l => l !== labelId));
+            removeFilter(labelId);
         } else {
-            setFilters([...filters, labelId]);
+            applyFilter(labelId);
         }
     }
 
     const handleResetFilters = () => {
-        setFilters([]);
-        setFilterMenuIsOpen(false);
+        resetFilters();
     }
 
     return (

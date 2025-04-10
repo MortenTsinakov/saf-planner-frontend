@@ -1,5 +1,5 @@
 import './App.css';
-import { Navbar, AlertTray, Page, ErrorFallback } from 'components';
+import { Navbar, Page, ErrorFallback } from 'components';
 import { AuthProvider, AlertProvider, SharedProjectProvider } from 'contexts';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -29,7 +29,6 @@ function App() {
           <AuthProvider>
             <AxiosErrorHandler>
               <Navbar {...props}/>
-              <AlertTray {...props}/>
               <Page>
                 <Routes>
                   

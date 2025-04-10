@@ -1,54 +1,50 @@
-import { Column, Loading } from "components";
-import React, { useEffect, useRef, useState } from "react";
+import { Column } from "components";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { createEditor } from 'slate';
 import ScriptElement from "../script-elements/ScriptElement";
 import ScriptContent from "../script-elements/ScriptContent";
 import { addBlock, changeBlockType, deleteTextFromElement, getElementTextValue, getElementTypeAtCursor } from "utils";
-import ScriptModeMenu from "./ScriptModeMenu";
 import { useProjectStore } from "stores";
+import { useAlerts } from "hooks";
+import ScriptwriterToolbar from "./ScriptwriterToolbar";
 
-const ScriptwriterPanel = ({
-    scriptEditorSettings,
-    setScriptEditorSettings,
-}) => {
+const ScriptwriterPanel = () => {
 
-    const [editor] = useState(() => withHistory(withReact(createEditor())));
+    console.log("ScriptwriterPanel rendered");
+
+    const editor = useMemo(() => withHistory(withReact(createEditor())), []);
     const editorRef = useRef(null);
 
-    const {fetchScreenplay, currentScreenplay, setCurrentScreenplay, loading} = useProjectStore();
-    const [menuState, setMenuState] = useState({visible: false, x: 0, y: 0});
+    const [zoom, setZoom] = useState(1);
 
-    useEffect(() => {
-        const getScreenplay = async() => {
-            fetchScreenplay();
-        }
-        getScreenplay();
-    }, [fetchScreenplay]);
-
-    if (loading) {
-        return (
-            <Column>
-                <Loading />
-            </Column>
-        );
-    }
+    // const {currentScreenplay, setCurrentScreenplay, saveScreenplay} = useProjectStore();
+    const currentScreenplay = useProjectStore((state) => state.currentScreenplay);
+    const saveScreenplay = useProjectStore((state) => state.saveScreenplay);
+    const setCurrentScreenplay = useProjectStore((state) => state.setCurrentScreenplay);
+    const {addAlert} = useAlerts();
 
     const EditableWithRef = React.forwardRef((props, _) => (
         <Editable {...props} ref={editorRef} />
     ));
 
+    useEffect(() => {
+        return () => {
+            setCurrentScreenplay(editor.children[0]);
+        }
+    }, [setCurrentScreenplay, editor.children]);
+
     const scriptPageStyle = {
         margin: 'auto',
         height: "100%",
-        width: `${210 * scriptEditorSettings.zoom}mm`,
-        paddingLeft: `${1.5 * scriptEditorSettings.zoom}in`,
-        paddingRight: `${1 * scriptEditorSettings.zoom}in`,
-        paddingTop: `${1 * scriptEditorSettings.zoom}in`,
-        paddingBottom: `${1 * scriptEditorSettings.zoom}in`,
+        width: `${210 * zoom}mm`,
+        paddingLeft: `${1.5 * zoom}in`,
+        paddingRight: `${1 * zoom}in`,
+        paddingTop: `${1 * zoom}in`,
+        paddingBottom: `${1 * zoom}in`,
         fontFamily: "'Courier New', Courier, monospace",
-        fontSize: `${12 * scriptEditorSettings.zoom}pt`,
+        fontSize: `${12 * zoom}pt`,
         backgroundColor: "white",
         outline: 'none',
         overflow: "auto",
@@ -69,17 +65,17 @@ const ScriptwriterPanel = ({
             case 'screenplay':
                 return <ScriptElement {...props} />
             case 'header':
-                return <ScriptContent {...props} mode={"header"} zoom={scriptEditorSettings.zoom}/>
+                return <ScriptContent {...props} mode={"header"} zoom={zoom}/>
             case 'action':
-                return <ScriptContent {...props} mode={"action"} zoom={scriptEditorSettings.zoom}/>
+                return <ScriptContent {...props} mode={"action"} zoom={zoom}/>
             case 'character':
-                return <ScriptContent {...props} mode={"character"} zoom={scriptEditorSettings.zoom}/>
+                return <ScriptContent {...props} mode={"character"} zoom={zoom}/>
             case 'parenthetical':
-                return <ScriptContent {...props} mode={"parenthetical"} zoom={scriptEditorSettings.zoom}/>
+                return <ScriptContent {...props} mode={"parenthetical"} zoom={zoom}/>
             case 'dialogue':
-                return <ScriptContent {...props} mode={"dialogue"} zoom={scriptEditorSettings.zoom}/>
+                return <ScriptContent {...props} mode={"dialogue"} zoom={zoom}/>
             case 'transition':
-                return <ScriptContent {...props} mode={"transition"} zoom={scriptEditorSettings.zoom}/>
+                return <ScriptContent {...props} mode={"transition"} zoom={zoom}/>
             default:
                 return;
         }
@@ -91,8 +87,9 @@ const ScriptwriterPanel = ({
      */
     const handleEnterPress = (event) => {
         event.preventDefault();
+        const currentMode = getElementTypeAtCursor(editor);
         let automaticMode;
-        switch (scriptEditorSettings.mode) {
+        switch (currentMode) {
             case 'header':
                 automaticMode = 'action';
                 break;
@@ -116,10 +113,6 @@ const ScriptwriterPanel = ({
         }
 
         addBlock(editor, automaticMode);
-        setScriptEditorSettings((prev) => ({
-            ...prev,
-            mode: automaticMode,
-        }));
     }
 
     /**
@@ -155,10 +148,29 @@ const ScriptwriterPanel = ({
         }
         
         changeMode(requestedMode);
-        setScriptEditorSettings((prev) => ({
-            ...prev,
-            mode: requestedMode,
-        }));
+    }
+
+    const handleSave = async () => {
+        editorRef.current?.focus();
+
+        const content = editor.children[0]
+        const successfulSave = await saveScreenplay(content);
+
+        if (successfulSave) {
+            addAlert("Screenplay saved", "success");
+        }
+    }
+
+    const handleZoomIn = () => {
+        editorRef.current?.focus();
+        const newZoom = Math.min(zoom + 0.25, 2);
+        setZoom(newZoom);
+    }
+
+    const handleZoomOut = () => {
+        editorRef.current?.focus();
+        const newZoom = Math.max(zoom - 0.25, 0.5);
+        setZoom(newZoom);
     }
 
     /**
@@ -170,60 +182,22 @@ const ScriptwriterPanel = ({
             handleModeShortcutPress(event);
         } else if (event.key === "Enter") {
             handleEnterPress(event);
+        } else if (event.ctrlKey && event.key === "s") {
+            event.preventDefault();
+            handleSave();
         } else if (event.key === "Tab") {
             event.preventDefault();
             const elementText = getElementTextValue(editor);
             if (elementText === null) {
                 changeMode("character");
             }
-        } else if (event.key === "Backspace") {
-            setTimeout(() => {
-                determineMode();
-            }, 10)
         }
     }
 
-    const handleSelectionChange = () => {
-        setMenuState((prev) => ({
-            ...prev,
-            visible: false,
-        }));
-        determineMode();
-    }
-
-    const determineMode = () => {
-        const currentMode = getElementTypeAtCursor(editor);
-        setScriptEditorSettings((prev) => ({
-            ...prev,
-            mode: currentMode,
-        }));
-    }
-
-    const handleCloseMenu = () => {
-        setMenuState((prev) => ({
-            ...prev,
-            visible: false,
-        }))
-    }
-
     const changeMode = (toMode) => {
+        editorRef.current?.focus();
         changeBlockType(editor, toMode);
         editorRef.current?.focus();
-        setScriptEditorSettings((prev) => ({
-            ...prev,
-            mode: toMode,
-        }));
-    }
-
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        const x = event.pageX;
-        const y = event.pageY;
-        setMenuState({
-            visible: true,
-            x: x,
-            y: y,
-        })
     }
 
     const isUpperCase = (s) => {
@@ -244,18 +218,17 @@ const ScriptwriterPanel = ({
         }
     }
 
-    const handleChange = (value) => {
-        handleAutomaticModeChange();
-        setCurrentScreenplay(value);
-    }
-
     return (
         <Slate
             editor={editor}
             initialValue={[currentScreenplay]}
-            onChange={(value) => handleChange(value[0])}
-            onSelectionChange={handleSelectionChange}
         >
+            <ScriptwriterToolbar
+                handleZoomIn={handleZoomIn}
+                handleZoomOut={handleZoomOut}
+                handleSave={handleSave}
+                changeMode={changeMode}
+            />
             <Column
                 style={{
                     flex: 1,
@@ -264,24 +237,14 @@ const ScriptwriterPanel = ({
                     justifyContent: 'center',
                 }}
             >
-                <EditableWithRef
-                    renderElement={(props) =>  renderElement({...props, path:
+            <EditableWithRef
+                style={scriptPageStyle}
+                renderElement={(props) =>  renderElement({...props, path:
                         ReactEditor.findPath(editor, props.element)
                     })}
-                    style={scriptPageStyle}
-                    onKeyDown={handleKeyDown}
-                    onContextMenu={handleContextMenu}
-                />
-                {menuState.visible &&
-                    <ScriptModeMenu
-                        x={menuState.x}
-                        y={menuState.y}
-                        handleCloseMenu={handleCloseMenu}
-                        scriptEditorSettings={scriptEditorSettings}
-                        setScriptEditorSettings={setScriptEditorSettings}
-                        changeMode={changeMode}
-                    />
-                }
+                onKeyDown={handleKeyDown}
+                onKeyUp={handleAutomaticModeChange}
+            />
             </Column>
         </Slate>
     );
