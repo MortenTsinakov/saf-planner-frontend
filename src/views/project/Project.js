@@ -48,12 +48,42 @@ const Project = () => {
     const fetchProject = useProjectStore((state) => state.fetchProject);
     const loading = useProjectStore((state) => state.loading);
     const error = useProjectStore((state) => state.error);
+    const filters = useProjectStore((state) => state.filters);
+    const fragments = useProjectStore((state) => state.fragments);
+    const setFilteredFragments = useProjectStore((state) => state.setFilteredFragments);
     const {addAlert} = useAlerts();
 
     useEffect(() => {
         fetchProject(projectId);
         
     }, [fetchProject, projectId]);
+
+    useEffect(() => {
+        const filterFragments = () => {
+            if (filters.length === 0) {
+                return fragments.filter(f => f.onTimeline);
+            }
+            
+            let filteredFragments = [];
+            
+            for (const fragment of fragments) {
+                if (!fragment.onTimeline) {
+                    continue;
+                }
+                for (const label of fragment.labels) {
+                    if (filters.includes(label.id)) {
+                        filteredFragments.push(fragment);
+                        break;
+                    }
+                }
+            }
+
+            return filteredFragments;
+        }
+        
+        setFilteredFragments(filterFragments());
+        setSelectedFragmentIdx(0);
+    }, [filters, fragments, setFilteredFragments])
 
     if (error) {
         if (error.status === 404) {

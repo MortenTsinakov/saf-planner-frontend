@@ -24,7 +24,9 @@ const Toolbar = ({
     setProjectMode,
 }) => {
 
-    const {project, sidebarState, setSidebarState} = useProjectStore();
+    const project = useProjectStore((state) => state.project);
+    const sidebarState = useProjectStore((state) =>  state.sidebarState);
+    const setSidebarState = useProjectStore((state) => state.setSidebarState);
     const [shareProject, setShareProject] = useState(false);
     const navigate = useNavigate();
 

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { fetchProject } from './project-store-actions/projectActions';
-import { createFragment, deleteFragment, filterFragments, moveFragment, updateFragmentDuration, updateFragmentLongDescription, updateFragmentOnTimelineStatus, updateFragmentShortDescription } from './project-store-actions/fragmentActions';
+import { createFragment, deleteFragment, moveFragment, updateFragmentDuration, updateFragmentLongDescription, updateFragmentOnTimelineStatus, updateFragmentShortDescription } from './project-store-actions/fragmentActions';
 import { setSidebarState } from './project-store-actions/sidebarActions';
 import { setFragmentToEdit } from './project-store-actions/sidebarActions';
 import { attachLabelToFragment, createLabel, removeLabelFromFragment } from './project-store-actions/labelActions';
@@ -60,7 +60,6 @@ const useProjectStore = create((set, get) => ({
     updateFragmentDuration: updateFragmentDuration(get, set),
     moveFragment: moveFragment(get, set),
     deleteFragment: deleteFragment(get, set),
-    filterFragments: filterFragments(get, set),
 
     // Screenplay actions
     fetchScreenplay: fetchScreenplay(get, set),
@@ -77,7 +76,7 @@ const useProjectStore = create((set, get) => ({
     removeLabelFromFragment: removeLabelFromFragment(get, set),
     applyFilter: applyFilter(get, set),
     removeFilter: removeFilter(get, set),
-    resetFilters: resetFilters(get, set),
+    resetFilters: resetFilters(set),
 
     // Image actions
     fetchImage: fetchImage(get, set),

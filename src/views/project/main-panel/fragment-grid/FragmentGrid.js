@@ -22,19 +22,18 @@ const FragmentGrid = ({
     ...props
 }) => {
     const sidebarStates = possibleSidebarStates;
-    const {
-        fragments,
-        setFragments, 
-        createFragment,
-        moveFragment,
-        sidebarState,
-        setSidebarState, 
-        activeId, 
-        setActiveId, 
-        newFragments, 
-        setNewFragments,
-        filteredFragments,
-    } = useProjectStore();
+
+    const fragments = useProjectStore((state) => state.fragments);
+    const setFragments = useProjectStore((state) => state.setFragments);
+    const createFragment = useProjectStore((state) => state.createFragment);
+    const moveFragment = useProjectStore((state) => state.moveFragment);
+    const sidebarState = useProjectStore((state) => state.sidebarState);
+    const setSidebarState = useProjectStore((state) => state.setSidebarState);
+    const activeId = useProjectStore((state) => state.activeId);
+    const setActiveId = useProjectStore((state) => state.setActiveId);
+    const newFragments = useProjectStore((state) => state.newFragments);
+    const setNewFragments = useProjectStore((state) => state.setNewFragments);
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
 
     const sensors = useSensors(
         useSensor(PointerSensor),

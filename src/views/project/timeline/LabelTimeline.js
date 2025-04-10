@@ -4,7 +4,9 @@ import Markings from 'views/project/timeline/Markings';
 
 const LabelTimeline = ({selectedFragmentIdx}) => {
 
-    const {project, filters, filteredFragments} = useProjectStore();
+    const project = useProjectStore((state) => state.project);
+    const filters = useProjectStore((state) => state.filters);
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
 
     const getFragmentInTimeline = (fragment) => {
         return (

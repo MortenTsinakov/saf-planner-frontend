@@ -7,7 +7,7 @@ const BasicTimeline = ({
     ...props
 }) => {
 
-    const {filteredFragments} = useProjectStore();
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
 
     return (
         <Column
