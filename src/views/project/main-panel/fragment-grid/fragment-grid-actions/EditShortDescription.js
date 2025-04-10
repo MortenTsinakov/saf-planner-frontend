@@ -7,7 +7,9 @@ import { possibleSidebarStates } from '../fragment-grid-data/SidebarStates';
 const EditShortDescription = () => {
 
     const sidebarStates = possibleSidebarStates;
-    const {fragmentToEdit, updateFragmentShortDescription, setSidebarState} = useProjectStore();
+    const fragmentToEdit = useProjectStore((state) => state.fragmentToEdit);
+    const updateFragmentShortDescription = useProjectStore((state) => state.updateFragmentShortDescription);
+    const setSidebarState = useProjectStore((state) => state.fragmentToEdit);
     const [shortDescription, setShortDescription] = useState(fragmentToEdit.shortDescription);
     const {addAlert} = useAlerts();
 

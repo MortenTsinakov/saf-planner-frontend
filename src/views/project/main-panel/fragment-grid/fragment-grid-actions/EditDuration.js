@@ -6,7 +6,10 @@ import { possibleSidebarStates } from '../fragment-grid-data/SidebarStates';
 
 const EditDuration = () => {
     const sidebarStates = possibleSidebarStates;
-    const {fragmentToEdit, updateFragmentDuration, setSidebarState} = useProjectStore();
+
+    const fragmentToEdit = useProjectStore((state) => state.fragmentToEdit);
+    const updateFragmentDuration = useProjectStore((state) => state.updateFragmentDuration);
+    const setSidebarState = useProjectStore((state) => state.setSidebarState);
     const [duration, setDuration] = useState(fragmentToEdit.durationInSeconds);
     const {addAlert} = useAlerts();
 

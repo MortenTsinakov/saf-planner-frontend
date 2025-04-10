@@ -10,7 +10,9 @@ import CreateLabel from './CreateLabel';
 
 const CreateFragment = ({...props}) => {
 
-    const {project, newFragments, setNewFragments} = useProjectStore();
+    const project = useProjectStore((state) => state.project);
+    const newFragments = useProjectStore((state) => state.newFragments);
+    const setNewFragments = useProjectStore((state) => state.setNewFragments);
 
     const panelWidth = 420;
 

@@ -9,7 +9,12 @@ import CreateLabel from './CreateLabel';
 const EditFragment = () => {
 
     const sidebarStates = possibleSidebarStates;
-    const {project, fragmentToEdit, attachLabelToFragment, removeLabelFromFragment, setSidebarState} = useProjectStore();
+
+    const project = useProjectStore((state) => state.project);
+    const fragmentToEdit = useProjectStore((state) => state.fragmentToEdit);
+    const attachLabelToFragment = useProjectStore((state) => state.attachLabelToFragment);
+    const removeLabelFromFragment = useProjectStore((state) => state.removeLabelFromFragment);
+    const setSidebarState = useProjectStore((state) => state.setSidebarState);
     const [labelSelectionIsOpen, setLabelSelectionIsOpen] = useState(false);
     const [labels, setLabels] = useState([]);
     const [createNewLabel, setCreateNewLabel] = useState(false);

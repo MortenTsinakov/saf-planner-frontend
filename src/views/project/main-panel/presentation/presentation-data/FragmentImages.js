@@ -8,7 +8,9 @@ import Image from 'views/image/Image';
 
 const FragmentImages = ({fragment, ...props}) => {
 
-    const {fetchImage, deleteImage, error} = useProjectStore();
+    const fetchImage = useProjectStore((state) =>  state.fetchImage);
+    const deleteImage = useProjectStore((state) =>  state.deleteImage);
+    const error = useProjectStore((state) =>  state.error);
     const {addAlert} = useAlerts();
 
     const [images, setImages] = useState(null);
@@ -166,10 +168,13 @@ const FragmentImages = ({fragment, ...props}) => {
                     />
                 </Row>
                 <Row style={{width: '100%'}}>
-                    <Image
-                        imageBlob={images[currentImageIdx].imageBlob}
-                        description={images[currentImageIdx].description}
-                    />
+                    {
+                        currentImageIdx < images.length &&
+                        <Image
+                            imageBlob={images[currentImageIdx].imageBlob}
+                            description={images[currentImageIdx].description}
+                        />
+                    }
                 </Row>
                 <Row
                     style={{

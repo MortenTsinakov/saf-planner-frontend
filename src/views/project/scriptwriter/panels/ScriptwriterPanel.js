@@ -9,17 +9,16 @@ import { addBlock, changeBlockType, deleteTextFromElement, getElementTextValue, 
 import { useProjectStore } from "stores";
 import { useAlerts } from "hooks";
 import ScriptwriterToolbar from "./ScriptwriterToolbar";
+import TipsPanel from "./TipsPanel";
 
 const ScriptwriterPanel = () => {
-
-    console.log("ScriptwriterPanel rendered");
 
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
     const editorRef = useRef(null);
 
     const [zoom, setZoom] = useState(1);
+    const [showTips, setShowTips] = useState(false);
 
-    // const {currentScreenplay, setCurrentScreenplay, saveScreenplay} = useProjectStore();
     const currentScreenplay = useProjectStore((state) => state.currentScreenplay);
     const saveScreenplay = useProjectStore((state) => state.saveScreenplay);
     const setCurrentScreenplay = useProjectStore((state) => state.setCurrentScreenplay);
@@ -218,6 +217,14 @@ const ScriptwriterPanel = () => {
         }
     }
 
+    const handleCloseTips = () => {
+        setShowTips(false);
+    }
+
+    const handleOpenTips = () => {
+        setShowTips(true)
+    }
+
     return (
         <Slate
             editor={editor}
@@ -228,6 +235,7 @@ const ScriptwriterPanel = () => {
                 handleZoomOut={handleZoomOut}
                 handleSave={handleSave}
                 changeMode={changeMode}
+                handleShowTips={handleOpenTips}
             />
             <Column
                 style={{
@@ -246,6 +254,7 @@ const ScriptwriterPanel = () => {
                 onKeyUp={handleAutomaticModeChange}
             />
             </Column>
+            {showTips && <TipsPanel handleCloseTips={handleCloseTips} />}
         </Slate>
     );
 }

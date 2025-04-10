@@ -3,7 +3,7 @@ import { useState } from "react";
 import { MdArrowRight, MdDelete, MdDownload, MdLightbulb, MdSave, MdZoomIn, MdZoomOut } from "react-icons/md";
 import ScriptModeMenu from "./ScriptModeMenu";
 
-const ScriptwriterToolbar = ({handleZoomIn, handleZoomOut, handleSave, changeMode}) => {
+const ScriptwriterToolbar = ({handleZoomIn, handleZoomOut, handleSave, changeMode, handleShowTips}) => {
 
     const [showModeOptions, setShowModeOptions] = useState(false);
     
@@ -68,6 +68,7 @@ const ScriptwriterToolbar = ({handleZoomIn, handleZoomOut, handleSave, changeMod
                 <IconButton
                     icon={<MdLightbulb />}
                     title="Display instruction panel"
+                    onClick={handleShowTips}
                 />
             </Column>
         </Column>

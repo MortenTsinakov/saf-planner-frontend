@@ -6,8 +6,6 @@ import { useEffect } from "react";
 
 const Scriptwriter = () => {
 
-    console.log("Scriptwriter rendered");
-
     const filteredFragments = useProjectStore((state) => state.filteredFragments);
     const fetchScreenplay = useProjectStore((state) => state.fetchScreenplay);
 

@@ -1,8 +1,8 @@
 import { Card, Column, IconButton, Row, Typography } from "components";
 import { useState } from "react";
-import { MdArrowBack, MdArrowForward, MdClose, MdTipsAndUpdates } from "react-icons/md";
+import { MdArrowBack, MdArrowForward, MdClose, MdLightbulb } from "react-icons/md";
 
-const TipsPanel = ({scriptEditorSettings, setScriptEditorSettings}) => {
+const TipsPanel = ({handleCloseTips}) => {
 
     const [page, setPage] = useState(1);
 
@@ -12,13 +12,6 @@ const TipsPanel = ({scriptEditorSettings, setScriptEditorSettings}) => {
 
     const incrementPage = () => {
         setPage(Math.min(8, page + 1));
-    }
-
-    const handleCloseTips = () => {
-        setScriptEditorSettings({
-            ...scriptEditorSettings,
-            tipsAreOpen: false,
-        })
     }
 
     const page1 = () => {
@@ -223,7 +216,7 @@ const TipsPanel = ({scriptEditorSettings, setScriptEditorSettings}) => {
             <Row
                 style={{justifyContent: 'space-between'}}
             >
-                <MdTipsAndUpdates style={{fontSize: '3rem', color: 'var(--primary-color)'}}/>
+                <MdLightbulb style={{fontSize: '3rem', color: 'var(--primary-color)'}}/>
                 <IconButton
                     style={{
                         fontSize: '3rem'

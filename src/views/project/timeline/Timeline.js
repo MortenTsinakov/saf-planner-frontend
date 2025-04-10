@@ -123,7 +123,7 @@ const Timeline = ({
                         </Typography>
                     </Column>
                     {
-                        project.estimatedLengthInSeconds &&
+                        project.estimatedLengthInSeconds > 0 &&
                         <Column style={{gap: 0, paddingLeft: '2rem', alignItems: 'center'}}>
                         <Typography fontSize='extrasmall' color='label'>
                             Estimated duration:

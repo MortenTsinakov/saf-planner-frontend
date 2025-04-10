@@ -12,8 +12,6 @@ import Scriptwriter from './scriptwriter/Scriptwriter';
 
 const Project = () => {
 
-    console.log("Project rendered");
-
     const projectModes = Object.freeze({
         PLAN_MODE: 0,
         SCRIPWRITER_MODE: 1,
