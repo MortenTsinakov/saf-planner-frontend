@@ -70,7 +70,7 @@ const TipsPanel = ({handleCloseTips}) => {
                     <ul>
                         <li>Automatic switching</li>
                         <li>Special character sequences on a new line</li>
-                        <li>Choosing from the right click menu</li>
+                        <li>Choosing from the menu</li>
                         <li>Using Alt key shortcuts</li>
                     </ul>
                 </Typography>
@@ -132,10 +132,10 @@ const TipsPanel = ({handleCloseTips}) => {
         return (
             <Column>
                 <Typography fontSize='medium'>
-                    Right click menu
+                    Menu
                 </Typography>
                 <Typography fontSize='extrasmall' color='label'>
-                    Any block can be changed to another type by just right clicking on the editor and choosing the
+                    Any block can be changed to another type by just clicking on the first icon on the menu and choosing the
                     desired block type.
                 </Typography>
                 <Typography fontSize='extrasmall' color='label'>
@@ -152,7 +152,7 @@ const TipsPanel = ({handleCloseTips}) => {
                     Alt key shortcuts
                 </Typography>
                 <Typography fontSize='extrasmall' color='label'>
-                    Instead of right clicking on the editor and choosing block types from there you can use
+                    Instead of clicking the menu icon and choosing block types from there you can use
                     Alt key shortcuts:
                 </Typography>
                 <Column style={{alignItems: 'center'}}>
