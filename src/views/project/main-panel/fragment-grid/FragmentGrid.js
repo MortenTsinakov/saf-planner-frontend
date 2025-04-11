@@ -207,11 +207,11 @@ const FragmentGrid = ({
     const handleDragCancel = (e) => {
         const {active} = e;
         setActiveId(null);
-        setSidebarState({...sidebarState, open: true});
-
+        
         if (active.id === NEW_FRAGMENT_ID) {
             setNewFragments([...fragments.filter(f => f.id === NEW_FRAGMENT_ID)]);
             setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
+            setSidebarState({...sidebarState, open: true});
             return;
         }
     }
