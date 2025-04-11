@@ -8,7 +8,8 @@ import { isCorrectSize, isValidImageFile, scaleImage } from "utils";
 const UploadImageFromDevice = ({fragment, setShowAttachImageModal, ...props}) => {
 
     const {addAlert} = useAlerts();
-    const {uploadImage, error} = useProjectStore();
+    const uploadImage = useProjectStore((state) => state.uploadImage);
+    const error = useProjectStore((state) => state.error);
 
     const fileInputRef = useRef(null);
     const [image, setImage] = useState(null);

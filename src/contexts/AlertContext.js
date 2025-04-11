@@ -1,4 +1,5 @@
-import  { createContext, useCallback, useState } from 'react';
+import { AlertTray } from 'components';
+import  { createContext, useCallback, useMemo, useState } from 'react';
 
 const AlertContext = createContext();
 
@@ -20,14 +21,12 @@ export const AlertProvider = ({children}) => {
         }, alertDuration);
     }, []);
     
-    const value = {
-        alerts,
-        addAlert,
-    }
+    const contextValue = useMemo(() => ({ addAlert }), [addAlert]);
 
     return (
-        <AlertContext.Provider value={value}>
+        <AlertContext.Provider value={contextValue}>
             {children}
+            <AlertTray alerts={alerts} />
         </AlertContext.Provider>
     );
 }

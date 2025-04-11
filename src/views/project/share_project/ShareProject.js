@@ -8,7 +8,7 @@ const ShareProject = ({
     setModalIsOpen
 }) => {
 
-    const {project} = useProjectStore();
+    const project = useProjectStore((state) => state.project);
     const {addAlert} = useAlerts();
     const {shareProject} = useProjects();
     const {searchUsers, searchResults, setSearchResults} = useUser();

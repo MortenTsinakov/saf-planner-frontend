@@ -12,7 +12,9 @@ import { useProjectStore } from 'stores';
 const FragmentGridSidebar = ({...props}) => {
 
     const sidebarStates = possibleSidebarStates;
-    const {sidebarState, setSidebarState} = useProjectStore();
+
+    const sidebarState = useProjectStore((state) => state.sidebarState);
+    const setSidebarState = useProjectStore((state) => state.setSidebarState);
 
     return (
         <Sidebar

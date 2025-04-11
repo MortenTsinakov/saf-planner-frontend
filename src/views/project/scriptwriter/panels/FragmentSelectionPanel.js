@@ -5,11 +5,12 @@ import { useProjectStore } from "stores";
 
 const FragmentSelectionPanel = () => {
 
-    const {filteredFragments} = useProjectStore();
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
     const [selectedFragmentIdx, setSelectedFragmentIdx] = useState(0);
     const [shortDescriptionPanelIsOpen, setShortDescriptionPanelIsOpen] = useState(true);
 
     useEffect(() => {
+        if (filteredFragments.length === 0) {return;}
         const activeFragment = document.getElementById(`long-description-${filteredFragments[selectedFragmentIdx].id}`);
         if (activeFragment) {
             activeFragment.scrollIntoView({behavior: 'smooth', block: 'center'});

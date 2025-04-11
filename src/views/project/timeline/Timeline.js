@@ -14,7 +14,9 @@ const Timeline = ({
     ...props
 }) => {
 
-    const {project, fragments, filteredFragments} = useProjectStore();
+    const project = useProjectStore((state) => state.project);
+    const fragments = useProjectStore((state) => state.fragments);
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
     const [currentDuration, setCurrentDuration] = useState(0);
     const [displayDetailedTimeline, setDisplayDetailedTimeline] = useState(true);
     const iconStyle = {
@@ -121,7 +123,7 @@ const Timeline = ({
                         </Typography>
                     </Column>
                     {
-                        project.estimatedLengthInSeconds &&
+                        project.estimatedLengthInSeconds > 0 &&
                         <Column style={{gap: 0, paddingLeft: '2rem', alignItems: 'center'}}>
                         <Typography fontSize='extrasmall' color='label'>
                             Estimated duration:

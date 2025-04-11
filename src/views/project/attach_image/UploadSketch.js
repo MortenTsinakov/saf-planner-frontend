@@ -7,7 +7,8 @@ import { useProjectStore } from "stores";
 
 const UploadSketch = ({fragment, setShowAttachImageModal, ...props}) => {
 
-    const {uploadImage, error} = useProjectStore();
+    const uploadImage = useProjectStore((state) => state.uploadImage);
+    const error = useProjectStore((state) => state.error);
     const {addAlert} = useAlerts();
     const svgRef = useRef(null);
 

@@ -1,5 +1,5 @@
 import { Card, Column, IconButton, Row, Typography } from 'components';
-import { MdAccessTime, MdDragIndicator } from 'react-icons/md';
+import { MdDragIndicator, MdOutlineLinearScale } from 'react-icons/md';
 
 const FragmentDragOverlay = ({fragment}) => {
     return (
@@ -30,7 +30,7 @@ const FragmentDragOverlay = ({fragment}) => {
                         alignItems: 'center',
                         color: fragment.onTimeline ? 'var(--text-color)' : 'var(--main-gray)'
                     }}
-                    icon={<MdAccessTime />}
+                    icon={<MdOutlineLinearScale />}
                 />
             </Row>
             <Column

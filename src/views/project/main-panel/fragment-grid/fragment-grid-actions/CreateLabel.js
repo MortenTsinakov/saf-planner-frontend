@@ -9,7 +9,8 @@ const CreateLabel = ({exitFn, currentLabels=null, setCurrentLabels=null}) => {
     const [description, setDescription] = useState("");
     const [color, setColor] = useState(generateRandomColor());
 
-    const {project, createLabel} = useProjectStore();
+    const project = useProjectStore((state) => state.project);
+    const createLabel = useProjectStore((state) => state.createLabel);
     const {addAlert} = useAlerts();
 
     const handleDescriptionChange = (e) => {

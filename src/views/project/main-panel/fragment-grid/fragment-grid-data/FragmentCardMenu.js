@@ -4,7 +4,9 @@ import { useProjectStore } from "stores";
 import { possibleSidebarStates } from "./SidebarStates";
 const FragmentCardMenu = ({fragment, x, y, handleCloseMenu, setShowDeleteFragmentModal, setShowAttachImageModal, ...props}) => {
 
-    const {setFragmentToEdit, setSidebarState} = useProjectStore();
+    // const {setFragmentToEdit, setSidebarState} = useProjectStore();
+    const setFragmentToEdit = useProjectStore((state) => state.setFragmentToEdit);
+    const setSidebarState = useProjectStore((state) => state.setSidebarState);
     const sidebarStates = possibleSidebarStates;
 
     const handleEditFragmentClick = () => {

@@ -4,7 +4,7 @@ import { useProjectStore } from 'stores';
 
 const NewCard = ({fragment}) => {
 
-    const {activeId} = useProjectStore();
+    const activeId = useProjectStore((state) => state.activeId);
 
     return (
         <SortableItem

@@ -8,7 +8,7 @@ const DeleteFragment = (
         setShowDeleteFragmentModal}) => 
     {
 
-    const {deleteFragment} = useProjectStore();
+    const deleteFragment = useProjectStore((state) => state.deleteFragment);
     const { addAlert } = useAlerts();
 
     const handleDeleteClick = async () => {

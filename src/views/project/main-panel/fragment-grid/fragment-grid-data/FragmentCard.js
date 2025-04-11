@@ -16,12 +16,11 @@ const FragmentCard = (
     {
 
     const sidebarStates = possibleSidebarStates;
-    const {
-        updateFragmentOnTimelineStatus,
-        setSidebarState,
-        activeId,
-        setFragmentToEdit,
-    } = useProjectStore();
+
+    const updateFragmentOnTimelineStatus = useProjectStore((state) => state.updateFragmentOnTimelineStatus);
+    const setSidebarState = useProjectStore((state) => state.setSidebarState);
+    const activeId = useProjectStore((state) => state.activeId);
+    const setFragmentToEdit = useProjectStore((state) => state.setFragmentToEdit);
 
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
     const [showAttachImageModal, setShowAttachImageModal] = useState(false);

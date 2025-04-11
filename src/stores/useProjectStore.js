@@ -5,10 +5,20 @@ import { setSidebarState } from './project-store-actions/sidebarActions';
 import { setFragmentToEdit } from './project-store-actions/sidebarActions';
 import { attachLabelToFragment, createLabel, removeLabelFromFragment } from './project-store-actions/labelActions';
 import { deleteImage, fetchImage, uploadImage } from './project-store-actions/imageActions';
+import { deleteScreenplay, fetchScreenplay, saveScreenplay } from './project-store-actions/screenplayActions';
+import { applyFilter, removeFilter, resetFilters } from './project-store-actions/filteringActions';
 
-const useProjectStore = create((set, get) => ({
+const initialState = {
     project: null,
     fragments: [],
+    screenplay: null,
+    currentScreenplay: {
+                type: 'screenplay',
+                id: 1,
+                children: [
+                    { type: 'header', children: [{ text: 'fade in:' }] },
+                ],
+            },
     images: new Map(),
     loading: true,
     error: null,
@@ -20,10 +30,19 @@ const useProjectStore = create((set, get) => ({
     //Filtering options
     filters: [],
     filteredFragments: [],
+}
+
+const useProjectStore = create((set, get) => ({
+    ...initialState,
+
+    // Reset function
+    reset: () => set(initialState),
 
     // Basic setters
     setProject: (project) => set({ project }),
     setFragments: (fragments) => set({ fragments }),
+    setScreenplay: (screenplay) => set ({ screenplay }),
+    setCurrentScreenplay: (currentScreenplay) => set ({ currentScreenplay }),
     setImages: (images) => set({ images }),
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
@@ -41,6 +60,11 @@ const useProjectStore = create((set, get) => ({
     updateFragmentDuration: updateFragmentDuration(get, set),
     moveFragment: moveFragment(get, set),
     deleteFragment: deleteFragment(get, set),
+
+    // Screenplay actions
+    fetchScreenplay: fetchScreenplay(get, set),
+    saveScreenplay: saveScreenplay(get, set),
+    deleteScreenplay: deleteScreenplay(get, set),
     
     // Sidebar actions
     setSidebarState: setSidebarState(set),
@@ -50,6 +74,9 @@ const useProjectStore = create((set, get) => ({
     createLabel: createLabel(get, set),
     attachLabelToFragment: attachLabelToFragment(get, set),
     removeLabelFromFragment: removeLabelFromFragment(get, set),
+    applyFilter: applyFilter(get, set),
+    removeFilter: removeFilter(get, set),
+    resetFilters: resetFilters(set),
 
     // Image actions
     fetchImage: fetchImage(get, set),

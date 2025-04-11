@@ -9,7 +9,7 @@ const MainPanel = ({
     hideNonTimelineFragments,
 }) => {
 
-    const {filteredFragments} = useProjectStore();
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
 
     if (mainPanelView === mainPanelViews.FRAGMENT_GRID) {
         return (

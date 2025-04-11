@@ -85,35 +85,61 @@ export const changeBlockType = (editor, requestedMode) => {
 }
 
 /**
+ * Get the text value of the current block.
+ */
+export const getElementTextValue = (editor) => {
+    const [node, ] = getNodeAndPath(editor);
+    return node?.children[0].text || null;
+}
+
+/**
+ * Delete all text from current element.
+ */
+export const deleteTextFromElement = (editor) => {
+    const [node, path] = getNodeAndPath(editor);
+
+    if (!node || !path) {return;}
+
+    const start = Editor.start(editor, path);
+    const end = Editor.end(editor, path);
+
+    Transforms.delete(editor, {at: {anchor: start, focus: end}});
+}
+
+/**
  * Element styles
+ * 
+ * Source: https://www.filmmaker.tools/how-to-format-a-screenplay-everything-you-need-to-know
  */
 export const getElementStyle = (mode, zoom) => {
     switch (mode) {
         case "header":
             return {
-                paddingTop: `${1 * zoom}lh`,
-                paddingBottom: `${1 * zoom}lh`,
+                paddingBottom: `${zoom}lh`,
             };
         case "action":
             return {
-                paddingBottom: `${1 * zoom}lh`,
+                paddingBottom: `${zoom}lh`,
             };
         case "character":
             return {
-                marginLeft: `${2.2 * zoom}in`,
+                paddingLeft: `${2.2 * zoom}in`,
             };
         case "parenthetical":
             return {
-                marginLeft: `${1.6 * zoom}in`,
+                paddingLeft: `${1.6 * zoom}in`,
+                paddingRight: `${1.5 * zoom}in`,
             };
         case "dialogue":
             return {
-                marginLeft: `${1.5 * zoom}in`,
-                paddingBottom: `${1 * zoom}lh`,
+                paddingLeft: `${1 * zoom}in`,
+                paddingRight: `${1.5 * zoom}in`,
+                paddingBottom: `${zoom}lh`,
             };
         case "transition":
             return {
-                paddingTop: `${1 * zoom}lh`,
+                paddingLeft: `${4.5 * zoom}in`,
+                paddingTop: `${zoom}lh`,
             };
         default:
             return;
