@@ -1,11 +1,13 @@
 import { Card, Column, IconButton, Row, SortableItem, Typography } from 'components';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { MdDragIndicator, MdOutlineLinearScale } from 'react-icons/md';
 import useProjectStore from 'stores/useProjectStore';
 import { possibleSidebarStates } from './SidebarStates';
 import FragmentCardMenu from './FragmentCardMenu';
 import DeleteFragment from '../fragment-grid-actions/DeleteFragment';
 import AttachImage from '../../../attach_image/AttachImage';
+import { useDroppable } from '@dnd-kit/core';
+import { NEW_FRAGMENT_ID } from '../FragmentGridConstants';
 
 const FragmentCard = (
     {
@@ -24,17 +26,20 @@ const FragmentCard = (
 
     const [showDeleteFragmentModal, setShowDeleteFragmentModal] = useState(false);
     const [showAttachImageModal, setShowAttachImageModal] = useState(false);
-    const cardRef = useRef(null);
+    const id = fragment.id;
+    const { isOver, setNodeRef } = useDroppable({ id });
+    const cardRef = setNodeRef;
+    const refForMenu = useRef();
     const [menuState, setMenuState] = useState({visible: false, x: 0, y: 0});
 
     const handleContextMenu = (e) => {
         e.preventDefault();
-        if (cardRef.current) {
-            const cardRect = cardRef.current.getBoundingClientRect();
+        if (refForMenu.current) {
+            const cr = refForMenu.current.getBoundingClientRect();
             setMenuState({
                 visible: true,
-                x: e.clientX - cardRect.left,
-                y: e.clientY - cardRect.top,
+                x: e.clientX - cr.left,
+                y: e.clientY - cr.top,
             })
         }
     }
@@ -53,6 +58,8 @@ const FragmentCard = (
     }
 
     return (
+        <React.Fragment>
+        {isOver && activeId === NEW_FRAGMENT_ID && <div style={{ height: 200, width: 400 }}/>}
         <SortableItem
             id={fragment.id}
             activeId={activeId}
@@ -76,6 +83,10 @@ const FragmentCard = (
                     onMouseLeave={handleCloseMenu}
                     data-testid={'fragment-card'}
                 >
+                    <Column
+                        ref={refForMenu}
+                        style={{height: '100%'}}
+                    >
                     <Row
                         style={{height: '2rem', gap: '1rem', justifyContent: 'space-between'}}
                         data-testid='button-row'
@@ -147,6 +158,7 @@ const FragmentCard = (
                             ))}
                         </Row>
                     </Column>
+                    </Column>
                     {menuState.visible &&
                         <FragmentCardMenu
                             fragment={fragment}
@@ -177,6 +189,7 @@ const FragmentCard = (
 
 
         </SortableItem>
+        </React.Fragment>
     );
 }
  

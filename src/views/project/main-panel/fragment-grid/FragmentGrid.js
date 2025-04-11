@@ -21,10 +21,10 @@ const FragmentGrid = ({
     hideNonTimelineFragments, 
     ...props
 }) => {
+
     const sidebarStates = possibleSidebarStates;
 
     const fragments = useProjectStore((state) => state.fragments);
-    const setFragments = useProjectStore((state) => state.setFragments);
     const createFragment = useProjectStore((state) => state.createFragment);
     const moveFragment = useProjectStore((state) => state.moveFragment);
     const sidebarState = useProjectStore((state) => state.sidebarState);
@@ -52,7 +52,6 @@ const FragmentGrid = ({
      * Handle moving a fragment inside the fragment grid.
      */
     const handleMovementInFragmentGrid = async(active, over) => {
-
         if (active.id !== over.id) {
             const movedFragment = fragments.find(f => f.id === active.id);
             const overFragment = fragments.find(f => f.id === over.id);
@@ -73,53 +72,39 @@ const FragmentGrid = ({
      * to the database. Otherwise it will be returned to it's initial position.
      */
     const handleFragmentCreationDrop = async (over) => {
-        // New fragment is dragged over fragment grid but not over an existing fragment
-        if (over.id === FRAGMENT_GRID_ID) {
-            const newFragment = newFragments.find(f => f.id === NEW_FRAGMENT_ID) || fragments.find(f => f.id === NEW_FRAGMENT_ID);
-            const fragment = {
-                shortDescription: newFragment.shortDescription.trim(),
-                longDescription: newFragment.longDescription.trim(),
-                durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
-                onTimeline: newFragment.onTimeline,
-                position: fragments.length + 1,
-                projectId: newFragment.projectId,
-            }
-            const labels = newFragment.labels
-            setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
-            const fragmentCreatedSuccessfully = await createFragment(fragment, labels);
-            if (fragmentCreatedSuccessfully) {
-                addAlert("Fragment created", "success");
-                setSidebarState({content: null, open: false});
-            }
+        if (newFragments.length === 0 || activeId === null) {
             return;
         }
 
-        // Fragment is dragged over an existing fragment
-        if (over.data.current.sortable.containerId === FRAGMENT_GRID_ID) {
-            const newFragment = fragments.find(f => f.id === NEW_FRAGMENT_ID);
-            const overCard = fragments.find(f => f.id === over.id);
-            const fragment = {
-                shortDescription: newFragment.shortDescription.trim(),
-                longDescription: newFragment.longDescription.trim(),
-                durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
-                onTimeline: newFragment.onTimeline,
-                position: overCard.position || fragments.length,
-                projectId: newFragment.projectId,
-            }
-            const labels = newFragment.labels;
-            setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
-            const fragmentCreatedSuccessfully = await createFragment(fragment, labels);
-            if (fragmentCreatedSuccessfully) {
-                addAlert("Fragment created", "success");
-                setSidebarState({content: null, open: false});
-            }
+        if (!over) {
+            setActiveId(null);
+            setSidebarState({ ...sidebarState, open: true});
             return;
         }
 
-        // Fragment is not over a fragment grid at all - reset
-        // setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
-        // setNewFragments([...fragments.filter(f => f.id === NEW_FRAGMENT_ID, ...newFragments.filter(f => f.id === NEW_FRAGMENT_ID))]);
-        setSidebarState({...sidebarState, open: true});
+        const overCard = fragments.find(f => f.id === over.id);
+        const newFragment = newFragments[0];
+        const fragment = {
+            shortDescription: newFragment.shortDescription.trim(),
+            longDescription: newFragment.longDescription.trim(),
+            durationInSeconds: newFragment.durationInSeconds <= 0 ? 5 : newFragment.durationInSeconds,
+            onTimeline: newFragment.onTimeline,
+            position: overCard ? overCard.position : fragments.length + 1,
+            projectId: newFragment.projectId,
+        }
+        const labels = newFragment.labels;
+
+        setSidebarState({ content: null, open: false});
+        const successfulCreation = await createFragment(fragment, labels);
+        if (successfulCreation) {
+            addAlert("Fragment created", "success");
+            setNewFragments([]);
+        } else {
+            setNewFragments([newFragment]);
+            setSidebarState({ content: sidebarStates.CREATE_FRAGMENT, open: true});
+        }
+
+        setActiveId(null);
     }
 
     /**
@@ -131,73 +116,36 @@ const FragmentGrid = ({
      * where it's dropped.
      */
     const handleDragEnd = async ({active, over}) => {
-        setActiveId(null);
-
-        if (!active) {return;};
-
-        // Fragment is not over any container
-        if (!over) {
-            // If dragged fragment is from the fragment grid
-            if (active.id !== NEW_FRAGMENT_ID) {
-                return;
-            }
-
-            // If dragged fragment is a newly created fragment - reset
-            setFragments([...fragments.filter(f => f.id !== active.id)]);
-            const initialState = [...fragments.filter(f => f.id === activeId), ...newFragments.filter(f => f.id === activeId)];
-            setNewFragments(initialState);
-            setSidebarState({...sidebarState, open: true});
-
+        if (!active || !over) {
+            setSidebarState({ ...sidebarState, open: true});
+            setActiveId(null);
             return;
-        }
-
-        const activeContainer = active.data.current?.sortable.containerId;
-        const overContainer = active.data.current?.sortable.containerId;
-
-        if (!activeContainer || !overContainer) {
-            return;
-        }
-
-        if (active.id !== NEW_FRAGMENT_ID && activeContainer === FRAGMENT_GRID_ID && overContainer === FRAGMENT_GRID_ID) {
-            handleMovementInFragmentGrid(active, over);
         }
 
         if (active.id === NEW_FRAGMENT_ID) {
-            handleFragmentCreationDrop(over);
-        }
-    }
-
-    /**
-     * Handle the situation when a newly created fragment is dargged
-     * around. If it's hanging over the fragment grid, it's added to the fragments
-     * to display the correct transforms on drag.
-     */
-    const handleDragOver = (e) => {
-        const {active, over} = e;
-
-        if (!active || !over) {return;}
-
-        const activeContainer = active.data.current?.sortable.containerId;
-        const overContainer = over.data.current?.sortable.containerId;
-
-        if (!activeContainer || !overContainer) {return;}
-
-        if (active.id === NEW_FRAGMENT_ID && over.id === FRAGMENT_GRID_ID) {
-            setFirstFragmentHovering(true);
+            /**
+             * Handle newly created fragment drop.
+             * If it's hovering over itself or the panel (somehow?) then just
+             * open the panel again. ActiveId is set to null in the end of this
+             * function. Everything should be set to their original positions.
+             */
+            if (over.id === NEW_FRAGMENT_ID || over.id === NEW_FRAGMENT_PANEL_ID) {
+                setSidebarState({ ...sidebarState, open: true});
+            } else {
+                handleFragmentCreationDrop(over);
+            }
         } else {
-            setFirstFragmentHovering(false);
-        }
-
-        if (activeContainer === NEW_FRAGMENT_PANEL_ID && overContainer === FRAGMENT_GRID_ID) {
-            if (fragments.filter(f => f.id === NEW_FRAGMENT_ID).length === 0) {
-                setFragments([...fragments, ...newFragments.filter(f => f.id === NEW_FRAGMENT_ID)]);
-                setNewFragments([]);
+            /**
+             * Handle existing fragment drop.
+             * If it's not hovering over another existing fragment then
+             * do nothing.
+             */
+            if (over.id !== FRAGMENT_GRID_ID && active.id !== over.id) {
+                handleMovementInFragmentGrid(active, over);
             }
         }
 
-        if (overContainer === NEW_FRAGMENT_PANEL_ID && active.id === NEW_FRAGMENT_ID) {
-            setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
-        }
+        setActiveId(null);
     }
 
     /**
@@ -209,8 +157,6 @@ const FragmentGrid = ({
         setActiveId(null);
         
         if (active.id === NEW_FRAGMENT_ID) {
-            setNewFragments([...fragments.filter(f => f.id === NEW_FRAGMENT_ID)]);
-            setFragments([...fragments.filter(f => f.id !== NEW_FRAGMENT_ID)]);
             setSidebarState({...sidebarState, open: true});
             return;
         }
@@ -223,6 +169,22 @@ const FragmentGrid = ({
     const handleDragStart = (e) => {
         setSidebarState({...sidebarState, open: false});
         setActiveId(e.active.id);
+    }
+
+    /**
+     * Change the style of the empty fragment grid when the
+     * first fragment created is hovered above the grid.
+     */
+    const handleDragOver = (e) => {
+        const {active, over} = e;
+
+        if (!active || !over) {return;}
+
+        if (active.id === NEW_FRAGMENT_ID && over.id === FRAGMENT_GRID_ID) {
+            setFirstFragmentHovering(true);
+        } else {
+            setFirstFragmentHovering(false);
+        }
     }
 
     /**
@@ -251,8 +213,8 @@ const FragmentGrid = ({
             modifiers={[restrictOnlyFragments]}
             sensors={sensors}
             onDragEnd={handleDragEnd}
-            onDragOver={handleDragOver}
             onDragCancel={handleDragCancel}
+            onDragOver={handleDragOver}
             onDragStart={handleDragStart}
         >
             <div
