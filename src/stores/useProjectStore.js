@@ -5,7 +5,7 @@ import { setSidebarState } from './project-store-actions/sidebarActions';
 import { setFragmentToEdit } from './project-store-actions/sidebarActions';
 import { attachLabelToFragment, createLabel, removeLabelFromFragment } from './project-store-actions/labelActions';
 import { deleteImage, fetchImage, uploadImage } from './project-store-actions/imageActions';
-import { deleteScreenplay, fetchScreenplay, saveScreenplay } from './project-store-actions/screenplayActions';
+import { deleteScreenplay, downloadScreenplayAsPDF, fetchScreenplay, saveScreenplay } from './project-store-actions/screenplayActions';
 import { applyFilter, removeFilter, resetFilters } from './project-store-actions/filteringActions';
 
 const initialState = {
@@ -14,7 +14,7 @@ const initialState = {
     screenplay: null,
     currentScreenplay: {
                 type: 'screenplay',
-                id: 1,
+                id: null,
                 children: [
                     { type: 'header', children: [{ text: 'fade in:' }] },
                 ],
@@ -65,6 +65,7 @@ const useProjectStore = create((set, get) => ({
     fetchScreenplay: fetchScreenplay(get, set),
     saveScreenplay: saveScreenplay(get, set),
     deleteScreenplay: deleteScreenplay(get, set),
+    downloadScreenplayAsPDF: downloadScreenplayAsPDF(set),
     
     // Sidebar actions
     setSidebarState: setSidebarState(set),

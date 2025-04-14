@@ -81,15 +81,17 @@ const Project = () => {
         
         setFilteredFragments(filterFragments());
         setSelectedFragmentIdx(0);
-    }, [filters, fragments, setFilteredFragments])
+    }, [filters, fragments, setFilteredFragments]);
 
-    if (error) {
-        if (error.status === 404) {
-            navigate('/404');
+    useEffect(() => {
+        if (error) {
+            if (error.status === 404) {
+                navigate('/404');
+            }
+    
+            addAlert(error.message, 'error');
         }
-
-        addAlert(error.message, 'error');
-    }
+    }, [error, addAlert, navigate]);
 
     if (loading) {
         return (

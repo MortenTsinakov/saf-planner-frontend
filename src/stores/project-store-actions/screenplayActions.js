@@ -1,6 +1,6 @@
 import { isEqual } from "lodash";
 
-const { fetchScreenplayService, createScreenplayService, updateScreenplayService, deleteScreenplayService } = require("services");
+const { fetchScreenplayService, createScreenplayService, updateScreenplayService, deleteScreenplayService, downloadScreenplayAsPDFService } = require("services");
 
 const screenplayDefaultValue =
         {
@@ -105,5 +105,20 @@ export const deleteScreenplay = (get, set) => async () => {
     } catch (err) {
         set({error: {message: err.response?.data?.message || "Deleting screenplay failed"}, status: err.status});
         return false;
+    }
+}
+
+/**
+ * Download the blob of the screenplay and then deal with downloading
+ * it inside the component.
+ */
+export const downloadScreenplayAsPDF = (set) => async (id)  => {
+    try {
+        set({ error: null });
+
+        const blob = await downloadScreenplayAsPDFService(id);
+        return blob;
+    } catch (err) {
+        set({error: {message: err.response?.data?.message || "Downloading screenplay failed"}, status: err.status});
     }
 }
