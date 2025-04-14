@@ -73,4 +73,5 @@ export {
     createScreenplayService,
     updateScreenplayService,
     deleteScreenplayService,
+    downloadScreenplayAsPDFService,
 } from 'services/screenplay/ScreenplayService';

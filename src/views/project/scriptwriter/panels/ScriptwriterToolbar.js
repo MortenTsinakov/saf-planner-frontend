@@ -2,13 +2,58 @@ import { Column, IconButton } from "components";
 import { useState } from "react";
 import { MdArrowRight, MdDelete, MdDownload, MdLightbulb, MdSave, MdZoomIn, MdZoomOut } from "react-icons/md";
 import ScriptModeMenu from "./ScriptModeMenu";
+import { useProjectStore } from "stores";
+import { useAlerts } from "hooks";
 
 const ScriptwriterToolbar = ({handleZoomIn, handleZoomOut, handleSave, changeMode, handleShowTips}) => {
 
+    const project = useProjectStore((state) => state.project);
+    const screenplay = useProjectStore((state) => state.screenplay);
+    const downloadScreenplayAsPDF = useProjectStore((state) => state.downloadScreenplayAsPDF);
+    const {addAlert} = useAlerts();
     const [showModeOptions, setShowModeOptions] = useState(false);
     
     const handleCloseModeOptions = () => {
         setShowModeOptions(false);
+    }
+
+    const getNormalizedFilename = () => {
+        let filename = "";
+        const title = project.title.toLowerCase();
+
+        for (let i = 0; i < title.length; i++) {
+            const code = title.charCodeAt(i);
+            // If character is not alphanumeric then replace it with a -
+            if (!(code > 47 && code < 58) &&
+                !(code > 96 && code < 123)) {
+                    filename += "-"
+            } else {
+                filename += title.charAt(i);
+            }
+        }
+
+        return filename;
+    }
+
+    const handleDownloadScreenplayClick = async () => {
+        if (!screenplay || !screenplay.id) {
+            addAlert("Screenplay hasn't been saved and can't be downloaded", "error");
+            return;
+        }
+
+        try {
+            const blob = await downloadScreenplayAsPDF(screenplay.id);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `${getNormalizedFilename()}.pdf`;
+            link.click();
+    
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.log(err);
+            addAlert("Download failed", "error");
+        }
     }
 
     return (
@@ -60,6 +105,7 @@ const ScriptwriterToolbar = ({handleZoomIn, handleZoomOut, handleSave, changeMod
                 <IconButton
                     icon={<MdDownload />}
                     title="Export PDF"
+                    onClick={handleDownloadScreenplayClick}
                 />
                 <IconButton
                     icon={<MdDelete />}
