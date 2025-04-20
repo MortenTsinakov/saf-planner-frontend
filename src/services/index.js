@@ -75,3 +75,10 @@ export {
     deleteScreenplayService,
     downloadScreenplayAsPDFService,
 } from 'services/screenplay/ScreenplayService';
+
+// Notifications
+export {
+    fetchUnreadNotificationsService,
+    markNotificationAsReadService,
+    markAllNotificationsAsReadService,
+} from 'services/notifications/NotificationService';
