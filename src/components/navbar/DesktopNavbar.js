@@ -1,11 +1,16 @@
 import { Column,
          Divider,
          DropdownMenu,
+         IconButton,
          Row,
          TextButton} from "components";
 import { useAuth } from "hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { MdNotifications } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { useSseStore } from "stores";
+import NotificationTray from "./components/NotificationTray";
+import NotificationDetails from "./components/NotificationDetails";
 
 /**
  * Navbar for desktop devices.
@@ -13,9 +18,26 @@ import { useNavigate } from "react-router-dom";
 const DesktopNavbar = () => {
 
     const { user, signOut, error } = useAuth();
+    const connect = useSseStore((state) => state.connect);
+    const disconnect = useSseStore((state) => state.disconnect);
+    const fetchUnreadNotifications = useSseStore((state) => state.fetchUnreadNotifications);
+    const hasUnread = useSseStore((state) => state.hasUnread);
+    const setHasUnread = useSseStore((state) => state.setHasUnread);
     const navigate = useNavigate();
-
     const [accountDropdownIsOpen, setAccountDropdownIsOpen] = useState(false);
+    const [notificationDropdownIsOpen, setNotificationDropdownIsOpen] = useState(false);
+    const [notificationDetails, setNotificationDetails] = useState(null);
+
+    useEffect(() => {
+        connect();
+        return () => {
+            disconnect();
+        }
+    }, [connect, disconnect]);
+
+    useEffect(() => {
+        fetchUnreadNotifications();
+    }, [fetchUnreadNotifications]);
 
     const handleNavigate = (link) => {
         setAccountDropdownIsOpen(false);
@@ -28,6 +50,15 @@ const DesktopNavbar = () => {
         if (error) {
             console.log(error);
         }
+    }
+
+    const handleOpenNotificationDropdown = () => {
+        setNotificationDropdownIsOpen(true);
+    }
+
+    const handleCloseNotificationDropdown = () => {
+        setNotificationDropdownIsOpen(false);
+        setHasUnread(false);
     }
     
     return (
@@ -46,13 +77,43 @@ const DesktopNavbar = () => {
         >
             <Row
                 style={{
-                    gap: '10' 
+                    gap: '10',
+                    alignItems: 'center',
                 }}
             >
                 {!user &&
                     <TextButton onClick={() => handleNavigate('/sign-in')}>
                         Sign In
                     </TextButton>
+                }
+                {user &&
+                    <Column
+                        style={{
+                            position: 'relative'
+                        }}
+                    >
+                        <IconButton
+                            icon={<MdNotifications />}
+                            style={{
+                                color: hasUnread && 'var(--color-error)' 
+                            }}
+                            onClick={handleOpenNotificationDropdown}
+                        />
+                        {
+                            notificationDropdownIsOpen &&
+                            <NotificationTray
+                                handleCloseNotificationDropdown={handleCloseNotificationDropdown}
+                                setNotificationDetails={setNotificationDetails}
+                            />                            
+                        }
+                        {
+                            notificationDetails &&
+                            <NotificationDetails
+                                notification={notificationDetails}
+                                setNotificationDetails={setNotificationDetails}
+                            />
+                        }
+                    </Column>
                 }
                 {user &&
                     <TextButton onClick={() => handleNavigate('/projects')}>
