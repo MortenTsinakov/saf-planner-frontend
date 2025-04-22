@@ -112,11 +112,11 @@ export const deleteScreenplay = (get, set) => async () => {
  * Download the blob of the screenplay and then deal with downloading
  * it inside the component.
  */
-export const downloadScreenplayAsPDF = (set) => async (id)  => {
+export const downloadScreenplayAsPDF = (set) => async (data)  => {
     try {
         set({ error: null });
 
-        const blob = await downloadScreenplayAsPDFService(id);
+        const blob = await downloadScreenplayAsPDFService(data);
         return blob;
     } catch (err) {
         set({error: {message: err.response?.data?.message || "Downloading screenplay failed"}, status: err.status});
