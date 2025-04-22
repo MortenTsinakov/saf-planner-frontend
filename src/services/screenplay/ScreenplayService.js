@@ -45,9 +45,7 @@ export const deleteScreenplayService = async(id) => {
 /**
  * Download PDF file of the script with given id
  */
-export const downloadScreenplayAsPDFService = async (id) => {
-    const response = await apiClient.get(`/screenplays/export?id=${id}`, {
-        responseType: 'blob'
-    });
+export const downloadScreenplayAsPDFService = async (data) => {
+    const response = await apiClient.post('/screenplays/export', data, {responseType: 'blob'})
     return response.data;
 }

@@ -4,35 +4,17 @@ import { MdArrowRight, MdDelete, MdDownload, MdLightbulb, MdSave, MdZoomIn, MdZo
 import ScriptModeMenu from "./ScriptModeMenu";
 import { useProjectStore } from "stores";
 import { useAlerts } from "hooks";
+import ScreenplayExportPanel from "./ScreenplayExportPanel";
 
 const ScriptwriterToolbar = ({handleZoomIn, handleZoomOut, handleSave, changeMode, handleShowTips}) => {
 
-    const project = useProjectStore((state) => state.project);
     const screenplay = useProjectStore((state) => state.screenplay);
-    const downloadScreenplayAsPDF = useProjectStore((state) => state.downloadScreenplayAsPDF);
     const {addAlert} = useAlerts();
     const [showModeOptions, setShowModeOptions] = useState(false);
+    const [exportPanelIsOpen, setExportPanelIsOpen] = useState(false);
     
     const handleCloseModeOptions = () => {
         setShowModeOptions(false);
-    }
-
-    const getNormalizedFilename = () => {
-        let filename = "";
-        const title = project.title.toLowerCase();
-
-        for (let i = 0; i < title.length; i++) {
-            const code = title.charCodeAt(i);
-            // If character is not alphanumeric then replace it with a -
-            if (!(code > 47 && code < 58) &&
-                !(code > 96 && code < 123)) {
-                    filename += "-"
-            } else {
-                filename += title.charAt(i);
-            }
-        }
-
-        return filename;
     }
 
     const handleDownloadScreenplayClick = async () => {
@@ -41,19 +23,7 @@ const ScriptwriterToolbar = ({handleZoomIn, handleZoomOut, handleSave, changeMod
             return;
         }
 
-        try {
-            const blob = await downloadScreenplayAsPDF(screenplay.id);
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = `${getNormalizedFilename()}.pdf`;
-            link.click();
-    
-            window.URL.revokeObjectURL(url);
-        } catch (err) {
-            console.log(err);
-            addAlert("Download failed", "error");
-        }
+        setExportPanelIsOpen(true);
     }
 
     return (
@@ -117,6 +87,10 @@ const ScriptwriterToolbar = ({handleZoomIn, handleZoomOut, handleSave, changeMod
                     onClick={handleShowTips}
                 />
             </Column>
+            <ScreenplayExportPanel
+                exportPanelIsOpen={exportPanelIsOpen}
+                setExportPanelIsOpen={setExportPanelIsOpen}
+            />
         </Column>
     );
 }
