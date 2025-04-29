@@ -29,15 +29,15 @@ const DesktopNavbar = () => {
     const [notificationDetails, setNotificationDetails] = useState(null);
 
     useEffect(() => {
-        connect();
+        user && connect();
         return () => {
             disconnect();
         }
-    }, [connect, disconnect]);
+    }, [connect, disconnect, user]);
 
     useEffect(() => {
-        fetchUnreadNotifications();
-    }, [fetchUnreadNotifications]);
+        user && fetchUnreadNotifications();
+    }, [fetchUnreadNotifications, user]);
 
     const handleNavigate = (link) => {
         setAccountDropdownIsOpen(false);
@@ -136,7 +136,7 @@ const DesktopNavbar = () => {
                                 style={{width: '250px'}}
                                 onMouseLeave={() => {setAccountDropdownIsOpen(false)}}
                             >
-                                <TextButton onClick={() => handleNavigate('/settings')}>
+                                <TextButton onClick={() => handleNavigate('/account')}>
                                     Settings
                                 </TextButton>
                                 <Divider />

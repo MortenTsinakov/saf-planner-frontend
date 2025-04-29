@@ -4,20 +4,20 @@ import { useEffect } from 'react';
 
 const AxiosErrorHandler = ({children}) => {
 
-    const { signOut } = useAuth();
+    const { frontendSignOut } = useAuth();
 
     useEffect(() => {
         const responseInterceptor = axios.interceptors.response.use(
             response => response,
             async (error) => {
                 console.log(error);
-                signOut();
+                frontendSignOut();
             });
 
             return () => {
                 axios.interceptors.response.eject(responseInterceptor);
             }
-    }, [signOut]);
+    }, [frontendSignOut]);
 
     return children;
 }
