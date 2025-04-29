@@ -82,3 +82,10 @@ export {
     markNotificationAsReadService,
     markAllNotificationsAsReadService,
 } from 'services/notifications/NotificationService';
+
+// Account
+export {
+    updateNameService,
+    updatePasswordService,
+    deleteAccountService,
+} from 'services/account/AccountService';

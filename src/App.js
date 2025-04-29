@@ -6,7 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnonymousRoutes, ProtectedRoutes } from 'routes';
 import { AxiosErrorHandler } from 'services';
-import { SignIn, Page404, SignUp, Project, Projects, ProjectSettings, SharedProject } from 'views';
+import { SignIn, Page404, SignUp, Project, Projects, ProjectSettings, SharedProject, AccountSettings } from 'views';
 
 
 function App() {
@@ -43,6 +43,7 @@ function App() {
                   </Route>
                   {/* Protected routes */}
                   <Route element={<ProtectedRoutes />}>
+                    <Route path='/account' element={<AccountSettings {...props} />} />
                     <Route path='/projects' element={<Projects {...props} />} />
                     <Route path='/project' element={<Project {...props} />} />
                     <Route path='/shared-project' element={<SharedProjectProvider><SharedProject {...props} /></SharedProjectProvider>} />

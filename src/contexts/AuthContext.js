@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInService, signOutService, signUpService } from "services";
+import { deleteAccountService, signInService, signOutService, signUpService, updateNameService, updatePasswordService } from "services";
 import { useProjectStore } from "stores";
 
 const AuthContext = createContext();
@@ -70,21 +70,30 @@ export const AuthProvider = ({children}) => {
     }, [navigate]);
 
     /**
+     * Sign out without contacting backend.
+     * If requests fail or on account deletion it's
+     * not necessary to call the sign-out endpoint in
+     * the backend
+     */
+    const frontendSignOut = useCallback(async() => {
+        useProjectStore.getState().reset();
+        localStorage.clear();
+        setUser(null);
+    }, []);
+
+    /**
      * Sign user out
      */
     const signOut = useCallback(async () => {
-        useProjectStore.getState().reset();
         try {
-            localStorage.clear();
-            setUser(null);
             await signOutService();
-            setError(null);
+            frontendSignOut();
         } catch (err) {
-            setError("Please log in again");
+            console.log("Error with signing out:", err);
         } finally {
             navigate("/");
         }
-    }, [navigate]);
+    }, [navigate, frontendSignOut]);
 
     /**
      * Register new user
@@ -121,6 +130,54 @@ export const AuthProvider = ({children}) => {
         }
     }, [navigate]);
 
+    /**
+     * Update user's first name, last name or both.
+     * On successful update return true, else false.
+     */
+    const updateName = useCallback(async (firstName, lastName) => {
+        try {
+            await updateNameService(firstName, lastName);
+            setUser({
+                ...user,
+                firstName: firstName,
+                lastName: lastName,
+            });
+            localStorage.setItem('user', JSON.stringify({...user, firstName: firstName, lastName: lastName}));
+            return true;
+        } catch (err) {
+            setError(err.response?.data?.message || "Updating name failed");
+            return false;
+        }
+
+    }, [user]);
+
+    /**
+     * Update user's password
+     */
+    const updatePassword = useCallback(async(oldPassword, newPassword) => {
+        try {
+            await updatePasswordService(oldPassword, newPassword);
+            return true;
+        } catch (err) {
+            setError(err.response?.data?.message || "Updating password failed");
+            return false;
+        }
+    }, []);
+
+    /**
+     * Delete user's account
+     */
+    const deleteAccount = useCallback(async(password) => {
+        try {
+            await deleteAccountService(password);
+            frontendSignOut();
+            return true;
+        } catch (err) {
+            setError(err.response?.data?.message || "Deleting account failed");
+            return false;
+        }
+    }, [frontendSignOut]);
+
 
     const value = {
         user,
@@ -129,7 +186,11 @@ export const AuthProvider = ({children}) => {
         setError,
         signIn,
         signOut,
+        frontendSignOut,
         signUp,
+        updateName,
+        updatePassword,
+        deleteAccount,
     };
 
     return (
