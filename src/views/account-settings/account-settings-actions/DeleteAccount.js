@@ -27,7 +27,6 @@ const DeleteAccount = ({setSidebarIsOpen, ...props}) => {
             setSidebarIsOpen(false);
             addAlert("Account was deleted", "info");
         } else {
-            console.log(error);
             addAlert(error || "Account deletion failed", "error");
         }
     }
