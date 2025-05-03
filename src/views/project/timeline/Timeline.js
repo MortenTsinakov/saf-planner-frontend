@@ -33,6 +33,17 @@ const Timeline = ({
 
     useEffect(() => {
         const handleKeyDown = (event) => {
+            const target = event.target;
+
+            const isEditable =
+                target.tagName === 'INPUT' ||
+                target.tagName === 'TEXTAREA' ||
+                target.isContentEditable;
+            
+            if (isEditable) {
+                return;
+            }
+
             switch (event.key) {
                 case "ArrowLeft":
                     selectPreviousFragment();

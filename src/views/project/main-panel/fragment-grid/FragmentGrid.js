@@ -116,6 +116,7 @@ const FragmentGrid = ({
      * where it's dropped.
      */
     const handleDragEnd = async ({active, over}) => {
+        console.log(active, over);
         if (!active || !over) {
             setSidebarState({ ...sidebarState, open: true});
             setActiveId(null);
@@ -130,7 +131,7 @@ const FragmentGrid = ({
              * function. Everything should be set to their original positions.
              */
             if (over.id === NEW_FRAGMENT_ID || over.id === NEW_FRAGMENT_PANEL_ID) {
-                setSidebarState({ ...sidebarState, open: true});
+                handleFragmentCreationDrop({id: FRAGMENT_GRID_ID})
             } else {
                 handleFragmentCreationDrop(over);
             }
@@ -177,6 +178,7 @@ const FragmentGrid = ({
      */
     const handleDragOver = (e) => {
         const {active, over} = e;
+        console.log(active, over);
 
         if (!active || !over) {return;}
 
@@ -251,7 +253,6 @@ const FragmentGrid = ({
                                     alignItems: 'center',
                                     height: '100%',
                                     width: '100%',
-                                    bacakgroundColor: 'blue',
                                 }}
                             >
                                 <Column
@@ -301,6 +302,7 @@ const FragmentGrid = ({
                                     overflow: 'auto',
                                     flex: '1 1 0',
                                     height: '100%',
+                                    paddingBottom: 300,
                                 }}
                             >
                                 {fragments.map(f => (

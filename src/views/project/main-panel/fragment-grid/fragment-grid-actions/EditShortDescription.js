@@ -9,7 +9,7 @@ const EditShortDescription = () => {
     const sidebarStates = possibleSidebarStates;
     const fragmentToEdit = useProjectStore((state) => state.fragmentToEdit);
     const updateFragmentShortDescription = useProjectStore((state) => state.updateFragmentShortDescription);
-    const setSidebarState = useProjectStore((state) => state.fragmentToEdit);
+    const setSidebarState = useProjectStore((state) => state.setSidebarState);
     const [shortDescription, setShortDescription] = useState(fragmentToEdit.shortDescription);
     const {addAlert} = useAlerts();
 
