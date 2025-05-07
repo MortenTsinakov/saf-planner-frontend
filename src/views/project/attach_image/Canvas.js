@@ -109,14 +109,21 @@ const Canvas = forwardRef(({...props}, ref) => {
 
             if (x !== lastX || y !== lastY) {
                 setInputPoints([...inputPoints, [x, y]]);
-                drawLine();
+                const pressure = e.pointerType === 'pen' ? e.pressure : drawingParameters.pressure;
+                drawLine(pressure);
             }
         }
 
     }
 
-    const drawLine = () => {
-        const outlinePoints = getStroke(inputPoints, drawingParameters);
+    const drawLine = (pressure) => {
+        const outlinePoints = getStroke(
+            inputPoints,
+            {
+                ...drawingParameters,
+                pressure: pressure,
+            }
+        );
         const path = getSvgPathFromStroke(outlinePoints);
         setPathData([path, drawingParameters.color]);
     }
@@ -140,10 +147,10 @@ const Canvas = forwardRef(({...props}, ref) => {
                     width: 960,
                     aspectRatio: 16 / 9,
                 }}
-                onMouseDown={penDown}
-                onMouseUp={penUp}
-                onMouseMove={penMove}
-                onMouseLeave={penUp}
+                onPointerDown={penDown}
+                onPointerUp={penUp}
+                onPointerMove={penMove}
+                onPointerLeave={penUp}
             >
                 {allPaths.map((p, index) => (
                     <path key={index} d={p[0]} fill={p[1]} stroke={p[1]} />    
