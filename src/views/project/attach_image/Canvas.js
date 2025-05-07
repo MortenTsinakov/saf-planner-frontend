@@ -90,6 +90,7 @@ const Canvas = forwardRef(({...props}, ref) => {
     }
 
     const penDown = (e) => {
+        e.currentTarget.setPointerCapture(e.pointerId);
         setInputPoints([getMousePosition(e)]);
         setIsDrawing(true);
         setUndoStack([]);
@@ -105,13 +106,9 @@ const Canvas = forwardRef(({...props}, ref) => {
     const penMove = (e) => {
         if (isDrawing && inputPoints.length > 0) {
             const [x, y] = getMousePosition(e);
-            const [lastX, lastY] = inputPoints[inputPoints.length - 1];
-
-            if (x !== lastX || y !== lastY) {
-                setInputPoints([...inputPoints, [x, y]]);
-                const pressure = e.pointerType === 'pen' ? e.pressure : drawingParameters.pressure;
-                drawLine(pressure);
-            }
+            setInputPoints([...inputPoints, [x, y]]);
+            const pressure = e.pointerType === 'pen' ? e.pressure : drawingParameters.pressure;
+            drawLine(pressure);
         }
 
     }
@@ -146,6 +143,7 @@ const Canvas = forwardRef(({...props}, ref) => {
                     borderRadius: 10,
                     width: 960,
                     aspectRatio: 16 / 9,
+                    touchAction: 'none',
                 }}
                 onPointerDown={penDown}
                 onPointerUp={penUp}
