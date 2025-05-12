@@ -113,7 +113,7 @@ const TipsPanel = ({handleCloseTips}) => {
                     Some blocks can be switched to by writing a special sequence on a <u>new line</u> (don't include quotation marks):
                 </Typography>
                 <Typography fontSize='extrasmall'>
-                    <b>Header</b> - write "EXT." or "INT." (doesn't have to uppercase)
+                    <b>Header</b> - write "EXT." or "INT." (doesn't have to be uppercase)
                 </Typography>
                 <Typography fontSize='extrasmall'>
                     <b>Character</b> - press TAB key
