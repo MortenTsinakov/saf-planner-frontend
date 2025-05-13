@@ -15,8 +15,8 @@ const LabelTimeline = ({selectedFragmentIdx}) => {
                 style={{
                     gap: '1rem',
                     justifyContent: 'space-between',
-                    backgroundColor: fragment.id === filteredFragments[selectedFragmentIdx].id && 'var(--background-color-high)',
-                    filter: fragment.id === filteredFragments[selectedFragmentIdx].id && 'brightness(125%)',
+                    backgroundColor: fragment.id === selectedFragmentIdx && 'var(--background-color-high)',
+                    filter: fragment.id === selectedFragmentIdx && 'brightness(125%)',
                     borderRadius: '5px',
                     flex: `${fragment.durationInSeconds} ${fragment.durationInSeconds} auto`,
                 }}
