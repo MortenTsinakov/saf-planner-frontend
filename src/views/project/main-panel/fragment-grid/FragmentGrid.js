@@ -311,7 +311,7 @@ const FragmentGrid = ({
                                         key={f.id}
                                         fragment={f}
                                         isFiltered={filteredFragments.includes(f)}
-                                        isSelected={filteredFragments.length > 0 && f.id === filteredFragments[selectedFragmentIdx].id}
+                                        isSelected={filteredFragments.length > 0 && f.id === selectedFragmentIdx}
                                         {...props}
                                     />
                                 ))}

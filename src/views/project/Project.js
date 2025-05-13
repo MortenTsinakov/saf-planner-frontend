@@ -1,5 +1,5 @@
 import { useAlerts } from 'hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Column, ErrorFallback, Loading, Row } from 'components';
 import Toolbar from './toolbar/Toolbar';
@@ -22,6 +22,16 @@ const Project = () => {
         PRESENTATION: 1,
     });
 
+    // Hooks
+    const fetchProject = useProjectStore((state) => state.fetchProject);
+    const loading = useProjectStore((state) => state.loading);
+    const error = useProjectStore((state) => state.error);
+    const filters = useProjectStore((state) => state.filters);
+    const fragments = useProjectStore((state) => state.fragments);
+    const filteredFragments = useProjectStore((state) => state.filteredFragments);
+    const setFilteredFragments = useProjectStore((state) => state.setFilteredFragments);
+    const {addAlert} = useAlerts();
+
     // Initialize view
     const location = useLocation();
     const navigate = useNavigate();
@@ -30,7 +40,10 @@ const Project = () => {
 
     // Fragment filters
     const [hideNonTimelineFragments, setHideNonTimelineFragments] = useState(false);
-    const [selectedFragmentIdx, setSelectedFragmentIdx] = useState(0);
+    const [selectedFragmentIdx, setSelectedFragmentIdx] = useState(fragments.length > 0 ? fragments[0].id : null);
+    // A hack to avoid using state variable inside an expensive useEffect that
+    // would run every time the user changes active fragment.
+    const selectedFragmentIdxRef = useRef(null);
 
     // Current project mode
     const [projectMode, setProjectMode] = useState(projectModes.PLAN_MODE);
@@ -42,20 +55,12 @@ const Project = () => {
     const [readAllPanelSettings, setReadAllPanelSettings] = useState({width: 350, isOpen: true});
     const [timelinePanelSettings, setTimelinePanelSettings] = useState({isOpen: true});
 
-    // Hooks
-    const fetchProject = useProjectStore((state) => state.fetchProject);
-    const loading = useProjectStore((state) => state.loading);
-    const error = useProjectStore((state) => state.error);
-    const filters = useProjectStore((state) => state.filters);
-    const fragments = useProjectStore((state) => state.fragments);
-    const setFilteredFragments = useProjectStore((state) => state.setFilteredFragments);
-    const {addAlert} = useAlerts();
-
     useEffect(() => {
         fetchProject(projectId);
         
     }, [fetchProject, projectId]);
 
+    // Filter fragments according to set filters
     useEffect(() => {
         const filterFragments = () => {
             if (filters.length === 0) {
@@ -71,17 +76,32 @@ const Project = () => {
                 for (const label of fragment.labels) {
                     if (filters.includes(label.id)) {
                         filteredFragments.push(fragment);
-                        break;
                     }
                 }
             }
-
             return filteredFragments;
         }
         
         setFilteredFragments(filterFragments());
-        setSelectedFragmentIdx(0);
     }, [filters, fragments, setFilteredFragments]);
+
+    // If selected fragment is filtered out, set a new fragment as selected
+    useEffect(() => {
+        console.log("Selecting new fragment");
+        const selectFragmentFromFiltered = () => {
+            if (filteredFragments.find(f => f.id === selectedFragmentIdxRef.current)) {
+                return;
+            }
+            if (filteredFragments.length > 0) {
+                setSelectedFragmentIdx(filteredFragments[0].id);
+            }
+        }
+        selectFragmentFromFiltered();
+    }, [filteredFragments]);
+
+    useEffect(() => {
+        selectedFragmentIdxRef.current = selectedFragmentIdx;
+    }, [selectedFragmentIdx]);
 
     useEffect(() => {
         if (error) {
@@ -142,7 +162,6 @@ const Project = () => {
                         <ReadAllPanel
                             readAllPanelSettings={readAllPanelSettings}
                             setReadAllPanelSettings={setReadAllPanelSettings}
-                            selectedFragmentIdx={selectedFragmentIdx}
                         />
                         <Row style={{flex: 1, gap: 0}}>
                             <Column

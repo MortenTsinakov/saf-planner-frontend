@@ -24,11 +24,25 @@ const Timeline = ({
     };
 
     const selectPreviousFragment = useCallback(() => {
-        setSelectedFragmentIdx(Math.max(0, selectedFragmentIdx - 1));
-    }, [selectedFragmentIdx, setSelectedFragmentIdx]);
+        for (let i = 0; i < filteredFragments.length; i++) {
+            if (filteredFragments[i].id === selectedFragmentIdx) {
+                if (i > 0) {
+                    setSelectedFragmentIdx(filteredFragments[i - 1].id);
+                }
+                break;
+            }
+        }
+    }, [filteredFragments, selectedFragmentIdx, setSelectedFragmentIdx]);
 
     const selectNextFragment = useCallback(() => {
-        setSelectedFragmentIdx(Math.min(filteredFragments.length - 1, selectedFragmentIdx + 1));
+        for (let i = 0; i < filteredFragments.length; i++) {
+            if (filteredFragments[i].id === selectedFragmentIdx) {
+                if (i < filteredFragments.length - 1) {
+                    setSelectedFragmentIdx(filteredFragments[i + 1].id);
+                }
+                break;
+            }
+        }
     }, [filteredFragments, selectedFragmentIdx, setSelectedFragmentIdx]);
 
     useEffect(() => {
@@ -76,14 +90,6 @@ const Timeline = ({
 
         calculateCurrentDuration();
     }, [fragments]);
-
-    useEffect(() => {
-        const findFirstFragmentOnFilterChange = () => {
-            setSelectedFragmentIdx(0);
-        }
-
-        findFirstFragmentOnFilterChange();
-    }, [filteredFragments.length, setSelectedFragmentIdx]);
 
     if (!timelinePanelSettings.isOpen || filteredFragments.length === 0) {
         return;
@@ -167,18 +173,18 @@ const Timeline = ({
                 style={{justifyContent: 'center', alignItems: 'center'}}
             >
                 <IconButton
-                    style={{visibility: selectedFragmentIdx > 0 ? 'visible' : 'hidden'}}
+                    // style={{visibility: selectedFragmentIdx > 0 ? 'visible' : 'hidden'}}
                     icon={<MdArrowLeft />}
                     onClick={selectPreviousFragment}
                     title='Previous fragment (left arrow)'
                 />
-                <Typography
+                {/* <Typography
                     style={{minWidth: '9ch', textAlign: 'center'}}
                 >
                     {selectedFragmentIdx + 1} / {filteredFragments.length}
-                </Typography>
+                </Typography> */}
                 <IconButton
-                    style={{visibility: selectedFragmentIdx + 1 < filteredFragments.length ? 'visible' : 'hidden'}}
+                    // style={{visibility: selectedFragmentIdx + 1 < filteredFragments.length ? 'visible' : 'hidden'}}
                     icon={<MdArrowRight />}
                     onClick={selectNextFragment}
                     title='Next fragment (right arrow)'

@@ -30,7 +30,7 @@ const BasicTimeline = ({
                             display: 'flex',
                             flex: `${f.durationInSeconds} ${f.durationInSeconds} auto`,
                             height: '2rem',
-                            backgroundColor: f.id === filteredFragments[selectedFragmentIdx].id ? 'var(--text-color' : 'gray',
+                            backgroundColor: f.id === selectedFragmentIdx ? 'var(--text-color' : 'gray',
                             borderRadius: 5,
                             border: '1px solid var(--background-color-lowest)'
                         }}

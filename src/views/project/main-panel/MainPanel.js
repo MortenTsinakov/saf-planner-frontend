@@ -10,6 +10,7 @@ const MainPanel = ({
 }) => {
 
     const filteredFragments = useProjectStore((state) => state.filteredFragments);
+    const selectedFragment = filteredFragments.find(f => f.id === selectedFragmentIdx);
 
     if (mainPanelView === mainPanelViews.FRAGMENT_GRID) {
         return (
@@ -21,7 +22,7 @@ const MainPanel = ({
     }
 
     return (
-        <Presentation fragment={filteredFragments[selectedFragmentIdx]} />
+        <Presentation fragment={selectedFragment ? selectedFragment : null} />
     );
 }
  
