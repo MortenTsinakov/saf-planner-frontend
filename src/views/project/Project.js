@@ -76,6 +76,7 @@ const Project = () => {
                 for (const label of fragment.labels) {
                     if (filters.includes(label.id)) {
                         filteredFragments.push(fragment);
+                        break;
                     }
                 }
             }
@@ -87,7 +88,6 @@ const Project = () => {
 
     // If selected fragment is filtered out, set a new fragment as selected
     useEffect(() => {
-        console.log("Selecting new fragment");
         const selectFragmentFromFiltered = () => {
             if (filteredFragments.find(f => f.id === selectedFragmentIdxRef.current)) {
                 return;
