@@ -5,7 +5,7 @@ The prototype was created in collaboration with several independent filmmakers w
 
 ## Short demo of the application
 Here's a short demo that shows the most important features of the app:
-[![Short demo for the application]()](https://www.youtube.com/watch?v=doG_FOz9vNI)
+[![Short demo for the application](/screenshots/demo.png)](https://www.youtube.com/watch?v=doG_FOz9vNI)
 
 ## Developmen
 First, you should start the database and the server (description in back-end repository)
