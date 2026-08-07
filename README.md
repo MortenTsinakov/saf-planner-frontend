@@ -13,7 +13,7 @@ First, you should start the database and the server (description in back-end rep
 To run the front-end, run the following commands:
 ```console
 npm install
-npm run
+npm start
 ```
 
 The app should start on ```localhost:3000```.
