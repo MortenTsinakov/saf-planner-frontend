@@ -3,7 +3,7 @@ This is the repository for the client side of Short Animation Film Planner appli
 
 The prototype was created in collaboration with several independent filmmakers who tested the app and gave valuable feedback.
 
-The back-end repository is here: https://github.com/MortenTsinakov/saf-planner-backend
+The repository for server is here: https://github.com/MortenTsinakov/saf-planner-backend
 
 ## Short demo of the application
 Here's a short demo that shows the most important features of the app:
