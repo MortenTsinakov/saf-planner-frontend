@@ -9,7 +9,7 @@ The back-end repository is here: https://github.com/MortenTsinakov/saf-planner-b
 Here's a short demo that shows the most important features of the app:
 [![Short demo for the application](/screenshots/demo.png)](https://www.youtube.com/watch?v=doG_FOz9vNI)
 
-## Developmen
+## Development
 First, you should start the database and the server (description in back-end repository)
 
 To run the front-end, run the following commands:
